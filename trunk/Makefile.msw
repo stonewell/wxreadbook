@@ -1,0 +1,149 @@
+# Add inputs and outputs from these tool invocations to the build variables 
+WORK_DIR = debug
+
+ifeq ($(RELEASE),1)
+WORK_DIR = release
+endif
+
+SRC_DIR = src
+
+OBJ_DIR = $(WORK_DIR)/objs
+
+BIN_DIR = $(WORK_DIR)/bin
+
+WX_HOME = D:\wxWidgets-2.8.7
+
+CPP_SRCS = \
+$(SRC_DIR)/ReadBookCanvas.cpp \
+$(SRC_DIR)/ReadBookView.cpp \
+$(SRC_DIR)/ReadBookApp.cpp \
+$(SRC_DIR)/ReadBookMainFrm.cpp \
+$(SRC_DIR)/ReadBookDoc.cpp \
+$(SRC_DIR)/ReadBookPreference.cpp \
+$(SRC_DIR)/ReadBookPreferenceDlg.cpp \
+$(SRC_DIR)/ArchiveExplorerDlg.cpp
+
+RC_SRCS = \
+$(SRC_DIR)/wxReadBook.rc 
+
+OBJS = \
+$(OBJ_DIR)/ReadBookCanvas.o \
+$(OBJ_DIR)/ReadBookView.o \
+$(OBJ_DIR)/ReadBookApp.o \
+$(OBJ_DIR)/ReadBookMainFrm.o \
+$(OBJ_DIR)/ReadBookDoc.o \
+$(OBJ_DIR)/ReadBookPreference.o \
+$(OBJ_DIR)/ReadBookPreferenceDlg.o \
+$(OBJ_DIR)/ArchiveExplorerDlg.o
+
+RC_OBJS = \
+$(OBJ_DIR)/wxReadBook_rc.o 
+
+EXE = $(BIN_DIR)/wxReadBook.exe
+
+LIB_SUFFIX = d
+
+ifeq ($(RELEASE),1)
+LIB_SUFFIX = 
+endif
+
+WX_LIBS= -lwxmsw28$(LIB_SUFFIX)_core \
+	-lwxbase28$(LIB_SUFFIX) \
+	-lwxtiff$(LIB_SUFFIX) \
+	-lwxjpeg$(LIB_SUFFIX) \
+	-lwxpng$(LIB_SUFFIX) \
+	-lwxzlib$(LIB_SUFFIX) \
+	-lwxregex$(LIB_SUFFIX) \
+	-lwxexpat$(LIB_SUFFIX)
+
+WIN32_LIBS = -lkernel32 \
+	-luser32 \
+	-lgdi32 \
+	-lcomdlg32 \
+	-lwinspool \
+	-lwinmm \
+	-lshell32 \
+	-lcomctl32 \
+	-lole32 \
+	-loleaut32 \
+	-luuid \
+	-lrpcrt4 \
+	-ladvapi32 \
+	-lwsock32 \
+	-lodbc32
+
+CXX_DEP_FLAGS = -MT$@ -MF$@.d -MMD
+
+CXX_FLAGS = -DHAVE_W32API_H \
+	-DNOPCH \
+	-fexceptions \
+	-D__WXMSW__ \
+	-I"$(WX_HOME)\include" \
+	-I"$(WX_HOME)\lib\gcc_lib\msw$(LIB_SUFFIX)" \
+	-O0 -W -Wall -c -fmessage-length=0 \
+	-Wno-ctor-dtor-privacy -mthreads
+	 
+
+RES_FLAGS = 
+	
+LIBS = $(WX_LIBS) $(WIN32_LIBS)
+
+ifneq ($(RELEASE),1)
+CXX_FLAGS += -D__WXDEBUG__ -g3
+RES_FLAGS += --define __WXDEBUG__
+endif
+
+all: $(OBJ_DIR) $(BIN_DIR)
+
+$(OBJ_DIR):
+	mkdir.exe $(OBJ_DIR)
+	
+$(BIN_DIR):
+	mkdir.exe $(BIN_DIR)
+
+all: $(EXE)
+
+clean:
+	rm -rf $(BIN_DIR)
+	rm -rf $(OBJ_DIR)
+
+# Each subdirectory must supply rules for building sources it contributes
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h
+	@echo 'Building file: $<'
+	g++ $(CXX_FLAGS) \
+	-o"$@" \
+	$(CXX_DEP_FLAGS) \
+	"$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+$(OBJ_DIR)/wxReadBook_rc.o: $(SRC_DIR)/wxReadBook.rc
+	@echo 'Building file: $<'
+	@echo 'Invoking: Windows Res Compiler'
+	windres --use-temp-file \
+	--define __WXMSW__ \
+	$(RES_FLAGS) \
+	--include-dir $(WX_HOME)\lib\gcc_lib\msw$(LIB_SUFFIX) \
+	--include-dir $(WX_HOME)\include \
+	--include-dir .  \
+	--include-dir .\src \
+	--define NOPCH \
+	-i $< \
+	-o $@
+	@echo 'Finished building: $<'
+	@echo ' '
+
+$(EXE): $(OBJS) $(RC_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C++ Linker'
+	g++ -mthreads -Wl,--subsystem,windows -mwindows -o"$@" \
+	$(OBJS) $(RC_OBJS) \
+	-L"$(WX_HOME)\lib\gcc_lib" \
+	$(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+.PHONY: all clean
+
+# Dependencies tracking:
+-include $(OBJ_DIR)/*.d

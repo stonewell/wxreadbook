@@ -1,0 +1,7 @@
+file	BITMAP "res\\file.bmp"
+folder	BITMAP "res\\folder.bmp"
+file32	BITMAP "res\\file32.bmp"
+folder32	BITMAP "res\\folder32.bmp"
+BOOK06 ICON "res\\BOOK06.ICO"
+
+#include "wx\msw\wx.rc"
