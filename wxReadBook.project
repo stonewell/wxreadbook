@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="wxReadBook">
+  <VirtualDirectory Name="Source Files">
+    <File Name="src\ArchiveExplorerDlg.cpp"/>
+    <File Name="src\ReadBookApp.cpp"/>
+    <File Name="src\ReadBookCanvas.cpp"/>
+    <File Name="src\ReadBookDoc.cpp"/>
+    <File Name="src\ReadBookMainFrm.cpp"/>
+    <File Name="src\ReadBookPreference.cpp"/>
+    <File Name="src\ReadBookPreferenceDlg.cpp"/>
+    <File Name="src\ReadBookView.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="Header Files">
+    <File Name="src\ArchiveExplorerDlg.h"/>
+    <File Name="src\ReadBookApp.h"/>
+    <File Name="src\ReadBookCanvas.h"/>
+    <File Name="src\ReadBookDoc.h"/>
+    <File Name="src\ReadBookMainFrm.h"/>
+    <File Name="src\ReadBookPreference.h"/>
+    <File Name="src\ReadBookPreferenceDlg.h"/>
+    <File Name="src\ReadBookView.h"/>
+  </VirtualDirectory>
+  <Dependencies/>
+  <Settings Type="Executable">
+    <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
+      <General OutputFile="" IntermediateDirectory="$(ConfigurationName)" Command="" CommandArguments="" WorkingDirectory="./Debug" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-g">
+        <IncludePath Value="&quot;D:\wxWidgets-2.8.7\include&quot;"/>
+        <IncludePath Value="&quot;D:\wxWidgets-2.8.7\lib\vc_lib\msw&quot;"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_DEBUG"/>
+        <Preprocessor Value="_WINDOWS"/>
+      </Compiler>
+      <Linker Required="yes" Options="-O0">
+        <LibraryPath Value="&quot;D:\wxWidgets-2.8.7\lib\vc_lib&quot;"/>
+        <Library Value="wxmsw28d_core.lib"/>
+        <Library Value="wxbase28d.lib"/>
+        <Library Value="wxtiffd.lib"/>
+        <Library Value="wxjpegd.lib"/>
+        <Library Value="wxpngd.lib"/>
+        <Library Value="wxzlibd.lib"/>
+        <Library Value="wxregexd.lib"/>
+        <Library Value="wxexpatd.lib"/>
+        <Library Value="winmm.lib"/>
+        <Library Value="comctl32.lib"/>
+        <Library Value="rpcrt4.lib"/>
+        <Library Value="wsock32.lib"/>
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName></ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger">
+      <General OutputFile="" IntermediateDirectory="$(ConfigurationName)" Command="" CommandArguments="" WorkingDirectory="./Debug" PauseExecWhenProcTerminates="yes"/>
+      <Compiler Required="yes" Options="-g">
+        <IncludePath Value="&quot;D:\wxWidgets-2.8.7\lib\vc_lib\msw&quot;"/>
+        <IncludePath Value="&quot;D:\wxWidgets-2.8.7\include&quot;"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="NDEBUG"/>
+        <Preprocessor Value="_WINDOWS"/>
+      </Compiler>
+      <Linker Required="yes" Options="-O0">
+        <LibraryPath Value="&quot;D:\wxWidgets-2.8.7\lib\vc_lib&quot;"/>
+        <Library Value="wxmsw28_core.lib"/>
+        <Library Value="wxbase28.lib"/>
+        <Library Value="wxtiff.lib"/>
+        <Library Value="wxjpeg.lib"/>
+        <Library Value="wxpng.lib"/>
+        <Library Value="wxzlib.lib"/>
+        <Library Value="wxregex.lib"/>
+        <Library Value="wxexpat.lib"/>
+        <Library Value="winmm.lib"/>
+        <Library Value="comctl32.lib"/>
+        <Library Value="rpcrt4.lib"/>
+        <Library Value="wsock32.lib"/>
+      </Linker>
+      <ResourceCompiler Required="no" Options=""/>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <CleanCommand></CleanCommand>
+        <BuildCommand></BuildCommand>
+        <SingleFileCommand></SingleFileCommand>
+        <MakefileGenerationCommand></MakefileGenerationCommand>
+        <ThirdPartyToolName></ThirdPartyToolName>
+        <WorkingDirectory></WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild></CustomPostBuild>
+        <CustomPreBuild></CustomPreBuild>
+      </AdditionalRules>
+    </Configuration>
+  </Settings>
+  <VirtualDirectory Name="Resource Files">
+    <File Name="src\wxReadBook.rc"/>
+  </VirtualDirectory>
+</CodeLite_Project>
