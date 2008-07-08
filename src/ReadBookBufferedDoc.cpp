@@ -109,7 +109,10 @@ CReadBookBufferedDoc::CReadBookBufferedDoc(void) :
 m_pFile(NULL),
 m_pInput(NULL),
 m_pConv(NULL),
-m_nLastReadRow(-1)
+m_nLastReadRow(-1),
+m_nCharSize(0),
+m_nMBCharSize(0),
+m_nLineSize(0)
 {
 }
 
@@ -123,9 +126,6 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 {
 	if (m_pInput == NULL || nRow < 0)
 		return EMPTY_STRING;
-
-	if (nRow == 0)
-		int i = 0;
 
 	if (m_LinesMapping.find(nRow) != m_LinesMapping.end())
 	{
@@ -154,12 +154,12 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 		m_pInput->SeekI(offset);
 	}
 
-	wxInt32 count = m_nCharsPerLine;
+	wxInt32 nLineWidth = m_nLineSize;
 
 	wxString strLine = wxT("");
-	wxInt32 i = 0;
+	wxInt32 nReadedWidth = 0;
 
-	wxInt32 saved_i = i;
+	wxInt32 saved_ReadedWidth = nReadedWidth;
 	wxInt32 read_loop = 0;
 	wxFileOffset offset = m_pInput->TellI();
 
@@ -168,11 +168,11 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 	{
 		bool error = false;
 
-		wxInt32 saved_count = count;
+		wxInt32 saved_LineWidth = nLineWidth;
 
 		for(wxInt32 len = 0; len < 9 ; len ++)
 		{
-			count = saved_count;
+			nLineWidth = saved_LineWidth;
 
 			strLine = wxT("");
 			error = false;
@@ -180,8 +180,8 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 			if (offset - len >= 0)
 			{
 				m_pInput->SeekI(offset - len);
-				count += len;
-				i = saved_i;
+				//nLineWidth += len;
+				nReadedWidth = saved_ReadedWidth;
 
 				if (nRow == GetCurrentLine())
 				{
@@ -196,7 +196,7 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 				break;
 			}
 
-			for(;i<count;i++)
+			for(;nReadedWidth<nLineWidth;)
 			{
 				wxChar ch = NextChar();
 
@@ -222,20 +222,34 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 					}
 				}
 
-				if (ch == '\t')
-				{
-					strLine.Append(wxT("    "));
-				}
-				else
-				{
-					strLine.Append(ch);
-				}
-
 				size_t byteCount = 0;
 				while(m_lastBytes[byteCount])
 					byteCount++;
 
-				i += (byteCount - 1);
+				if (byteCount == 1)
+				{
+					nReadedWidth += m_nCharSize;
+				}
+				else
+				{
+					nReadedWidth += m_nMBCharSize;
+				}
+
+				if (nReadedWidth > nLineWidth)
+				{
+					UngetLast();
+				}
+				else
+				{
+					if (ch == '\t')
+					{
+						strLine.Append(wxT("    "));
+					}
+					else
+					{
+						strLine.Append(ch);
+					}
+				}
 			}
 
 			if (!error || m_pInput->Eof())

@@ -173,6 +173,9 @@ void CReadBookBufferedView::CalculateViewSize()
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
 	pBufferedDoc->SetCharsPerLine(charsPerLine);
+	pBufferedDoc->SetLineSize(clientRect.GetWidth());
+	pBufferedDoc->SetMBCharSize(m_mbFontSize.GetWidth());
+	pBufferedDoc->SetCharSize(m_FontSize.GetWidth());
 	m_nViewSize = pBufferedDoc->GetBufferSize();
 }
 
