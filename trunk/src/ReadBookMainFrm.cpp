@@ -17,6 +17,9 @@
 #include "wx/dir.h"
 #include "wx/fontdlg.h"
 #include "wx/filesys.h"
+#include "wx/aboutdlg.h"
+#include "wx/statline.h"
+#include "wx/generic/aboutdlgg.h"
 
 #include "ReadBookApp.h"
 #include "ReadBookMainFrm.h"
@@ -24,6 +27,7 @@
 #include "ReadBookDoc.h"
 #include "ReadBookView.h"
 #include "ReadBookPreferenceDlg.h"
+#include "version.h"
 
 const wxInt32 RECENT_FILE_SIZE = 20;
 
@@ -75,18 +79,42 @@ CReadBookMainFrm::~CReadBookMainFrm()
 	}
 }
 
+class MyAboutDialog : public wxGenericAboutDialog
+{
+public:
+    MyAboutDialog(const wxAboutDialogInfo& info)
+    {
+        Create(info);
+    }
+
+    // add some custom controls
+    virtual void DoAddCustomControls()
+    {
+        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+		wxString strAbout = wxT("Keyboard Short Cut:\n");
+		strAbout += wxT("\tF11  Toggle FullScreenView\n\n");
+		strAbout += wxT("Windows Only Keyboard Short Cut:\n");
+		strAbout += wxT("\tESCAPE Boss Key Hide the Main Frame\n");
+		strAbout += wxT("\tCTRL+ALT+S Restore the Hidden Main Frame\n");
+        AddText(strAbout);
+        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+    }
+};
+
 void CReadBookMainFrm::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    wxString strAbout = wxT("wxReadBook, a Book reader created using wxWidget\n");
-    strAbout += wxT("Author: Jingnan Si\n\n");
-    strAbout += wxT("Keyboard Short Cut:\n");
-    strAbout += wxT("\tF11  Toggle FullScreenView\n\n");
-    strAbout += wxT("Windows Only Keyboard Short Cut:\n");
-    strAbout += wxT("\tESCAPE Boss Key Hide the Main Frame\n");
-    strAbout += wxT("\tCTRL+ALT+S Restore the Hidden Main Frame\n");
+	wxAboutDialogInfo info;
+    info.SetName(_T("wxReadBook"));
+    info.SetVersion(VERSION_NUM_DOT_STRING_T);
+    info.SetDescription(_T("a Book reader created using wxWidget"));
+    info.SetCopyright(_T("(C) 2008-2009 Angel & Stone"));
+    info.AddDeveloper(_T("Jingnan Si"));
+    info.SetWebSite(_T("http://code.google.com/p/wxreadbook/"), 
+		_T("Support site: http://code.google.com/p/wxreadbook/"));
 
-    (void)wxMessageBox(strAbout,
-    		wxT("About wxReadBook"));
+	MyAboutDialog dlg(info);
+
+	dlg.ShowModal();
 }
 
 CReadBookCanvas * CReadBookMainFrm::CreateCanvas(wxView *view, wxFrame *parent)

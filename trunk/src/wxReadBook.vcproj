@@ -633,6 +633,10 @@
 				RelativePath="ReadBookView.h"
 				>
 			</File>
+			<File
+				RelativePath=".\version.h"
+				>
+			</File>
 			<Filter
 				Name="ns"
 				Filter="ns*.h"
