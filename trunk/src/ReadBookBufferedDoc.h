@@ -28,8 +28,16 @@ public:
 	virtual void ShiftStream(wxInt32 delta);
 
 	virtual wxInt32 OffsetToRow(wxInt32 nOffset);
-	wxFileOffset RowToOffset(wxInt32 nRow);
+	virtual wxFileOffset RowToOffset(wxInt32 nRow);
 
+	virtual const wxInt32 GetCharSize() const { return m_nCharSize; }
+	virtual void SetCharSize(wxInt32 charSize) { m_nCharSize = charSize; }
+
+	virtual const wxInt32 GetMBCharSize() const { return m_nMBCharSize; }
+	virtual void SetMBCharSize(wxInt32 mbCharSize) { m_nMBCharSize = mbCharSize; }
+
+	virtual const wxInt32 GetLineSize() const { return m_nLineSize; }
+	virtual void SetLineSize(wxInt32 lineSize) { m_nLineSize = lineSize; }
 protected:
 	virtual wxInt32 GetOffsetRow(wxFileOffset nOffset);
 	virtual bool LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess);
@@ -53,6 +61,10 @@ private:
 	CIntStringMap m_LinesMapping;
 
 	wxMapFileOffset m_RowOffsetMap;
+
+	wxInt32 m_nCharSize;
+	wxInt32 m_nMBCharSize;
+	wxInt32 m_nLineSize;
 
 	void CleanUp();
 	wxChar NextChar();
