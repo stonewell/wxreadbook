@@ -109,10 +109,7 @@ CReadBookBufferedDoc::CReadBookBufferedDoc(void) :
 m_pFile(NULL),
 m_pInput(NULL),
 m_pConv(NULL),
-m_nLastReadRow(-1),
-m_nCharSize(0),
-m_nMBCharSize(0),
-m_nLineSize(0)
+m_nLastReadRow(-1)
 {
 }
 
@@ -154,34 +151,26 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 		m_pInput->SeekI(offset);
 	}
 
-	wxInt32 nLineWidth = m_nLineSize;
-
 	wxString strLine = wxT("");
-	wxInt32 nReadedWidth = 0;
 
-	wxInt32 saved_ReadedWidth = nReadedWidth;
 	wxInt32 read_loop = 0;
 	wxFileOffset offset = m_pInput->TellI();
+
+	wxInt32 charsPerLine = 0;
 
 	bool filter_invalid_char = false;
 	do
 	{
 		bool error = false;
 
-		wxInt32 saved_LineWidth = nLineWidth;
-
 		for(wxInt32 len = 0; len < 9 ; len ++)
 		{
-			nLineWidth = saved_LineWidth;
-
 			strLine = wxT("");
 			error = false;
 
 			if (offset - len >= 0)
 			{
 				m_pInput->SeekI(offset - len);
-				//nLineWidth += len;
-				nReadedWidth = saved_ReadedWidth;
 
 				if (nRow == GetCurrentLine())
 				{
@@ -196,7 +185,7 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 				break;
 			}
 
-			for(;nReadedWidth<nLineWidth;)
+			while(true)
 			{
 				wxChar ch = NextChar();
 
@@ -224,20 +213,27 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 
 				size_t byteCount = 0;
 				while(m_lastBytes[byteCount])
-					byteCount++;
-
-				if (byteCount == 1)
 				{
-					nReadedWidth += m_nCharSize;
+					byteCount++;
+				}
+
+				wxString strLineTmp = strLine;
+				if (ch == '\t')
+				{
+					strLineTmp.Append(wxT("    "));
 				}
 				else
 				{
-					nReadedWidth += m_nMBCharSize;
+					strLineTmp.Append(ch);
 				}
 
-				if (nReadedWidth > nLineWidth)
+				charsPerLine += byteCount;
+
+				if ((charsPerLine >= m_pContentHelper->GetCharsPerLine() - 4) &&
+					!m_pContentHelper->CouldBeShowInSingleLine(strLineTmp))
 				{
 					UngetLast();
+					break;
 				}
 				else
 				{
@@ -250,7 +246,7 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 						strLine.Append(ch);
 					}
 				}
-			}
+			}//while line
 
 			if (!error || m_pInput->Eof())
 			{
@@ -303,11 +299,11 @@ wxFileOffset CReadBookBufferedDoc::RowToOffset(wxInt32 nRow)
 		{
 			wxFileOffset nNearOffset = GetRowOffset(nNearRow);
 
-			offset = nNearOffset + (nRow - nNearRow) * m_nCharsPerLine;
+			offset = nNearOffset + (nRow - nNearRow) * m_pContentHelper->GetCharsPerLine();
 		}
 		else
 		{
-			offset = (wxFileOffset)m_nCharsPerLine * nRow;
+			offset = (wxFileOffset)m_pContentHelper->GetCharsPerLine() * nRow;
 		}
 	}
 
@@ -445,13 +441,6 @@ wxInt32 CReadBookBufferedDoc::GetBufferSize(void) const
 	return m_nFileLength;
 }
 
-void CReadBookBufferedDoc::SetCharsPerLine(wxInt32 charsPerLine)
-{
-	m_nCharsPerLine = charsPerLine;
-
-	m_LinesMapping.clear();
-}
-
 wxChar CReadBookBufferedDoc::NextChar()
 {
 	if (m_pInput == NULL)
@@ -523,10 +512,10 @@ void CReadBookBufferedDoc::ShiftStream(wxInt32 delta)
 	if (m_pInput == NULL)
 		return;
 
-	wxFileOffset offset = (wxFileOffset)m_nCharsPerLine * GetCurrentLine();
+	wxFileOffset offset = (wxFileOffset)m_pContentHelper->GetCharsPerLine() * GetCurrentLine();
 
 	if (offset >= m_nFileLength)
-		offset = m_nFileLength - m_nCharsPerLine;
+		offset = m_nFileLength - m_pContentHelper->GetCharsPerLine();
 
 	m_pInput->SeekI(offset + delta);
 
@@ -542,14 +531,6 @@ wxFileOffset CReadBookBufferedDoc::GetRowOffset(wxInt32 nRow)
 		return -1;
 
 	return it->second;
-}
-
-wxInt32 CReadBookBufferedDoc::GetBufferCurPos(void)
-{
-	if (m_pInput != NULL)
-		return m_pInput->TellI();
-
-	return 0;
 }
 
 wxInt32 CReadBookBufferedDoc::OffsetToRow(wxInt32 nOffset)
@@ -613,17 +594,17 @@ wxInt32 CReadBookBufferedDoc::OffsetToRow(wxInt32 nOffset)
 
 			if (nRow >= 0)
 			{
-				return nRow + (nOffset - maxOff) / m_nCharsPerLine + 1;
+				return nRow + (nOffset - maxOff) / m_pContentHelper->GetCharsPerLine() + 1;
 			}
 		}
 
-		return nOffset / m_nCharsPerLine + 1;
+		return nOffset / m_pContentHelper->GetCharsPerLine() + 1;
 	}
 	else
 	{
 		wxInt32 nRow = GetOffsetRow(findOffset);
 
-		return nRow + (nOffset - findOffset) / m_nCharsPerLine + 1;
+		return nRow + (nOffset - findOffset) / m_pContentHelper->GetCharsPerLine() + 1;
 	}
 }
 

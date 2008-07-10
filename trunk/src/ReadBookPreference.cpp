@@ -192,7 +192,7 @@ void CReadBookPreference::Load( wxInputStream & input )
 	m_cTxtColor.Set(strTxtColor);
 	m_cBkColor.Set(strBkColor);
 
-	m_pLogFont = wxFont::New(nPointSize,nFamily,nStyle,nWeight,Underlined == 1,
+	m_pLogFont = wxFont::New(nPointSize,nFamily,nStyle | wxFONTFLAG_ANTIALIASED,nWeight,Underlined == 1,
 		strFaceName,static_cast<wxFontEncoding>(nEncoding));
 
 	m_pLogFont->SetNoAntiAliasing(noAnti == 1);

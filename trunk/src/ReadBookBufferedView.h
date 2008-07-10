@@ -3,7 +3,7 @@
 #include "ReadBookView.h"
 
 class CReadBookBufferedView :
-	public CReadBookView
+	public CReadBookView, public IContentHelper
 {
     DECLARE_DYNAMIC_CLASS(CReadBookBufferedView)
 
@@ -15,8 +15,11 @@ public:
 	virtual void OnDraw(wxDC *dc);
     virtual void OnKeyDown(wxKeyEvent& event);
 
+	virtual bool CouldBeShowInSingleLine(const wxString & strLine) const;
+	virtual const wxInt32 GetCharsPerLine() const;
 protected:
 	wxInt32 m_nLastLine;
+	wxInt32 m_nCharsPerLine;
 
 	virtual void CalculateViewSize();
 	virtual wxInt32 NormalizeScrollToLine(wxInt32 nCurrentLine);

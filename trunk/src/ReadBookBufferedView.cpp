@@ -164,18 +164,15 @@ void CReadBookBufferedView::CalculateViewSize()
 	m_nLastLineViewSize = 1;
 
 #if wxUSE_UNICODE
-	wxInt32 charsPerLine = (clientRect.GetWidth() / m_mbFontSize.GetWidth()) * 2;
+	m_nCharsPerLine = (clientRect.GetWidth() / m_mbFontSize.GetWidth()) * 2;
 #else
-	wxInt32 charsPerLine = clientRect.GetWidth() / m_FontSize.GetWidth();
+	m_nCharsPerLine = clientRect.GetWidth() / m_FontSize.GetWidth();
 #endif
 
 	CReadBookBufferedDoc * pBufferedDoc = 
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
-	pBufferedDoc->SetCharsPerLine(charsPerLine);
-	pBufferedDoc->SetLineSize(clientRect.GetWidth());
-	pBufferedDoc->SetMBCharSize(m_mbFontSize.GetWidth());
-	pBufferedDoc->SetCharSize(m_FontSize.GetWidth());
+	pBufferedDoc->SetContentHelper(this);
 	m_nViewSize = pBufferedDoc->GetBufferSize();
 }
 
@@ -222,7 +219,7 @@ wxInt32 CReadBookBufferedView::NormalizeScrollToLine(wxInt32 nCurrentLine)
 	m_nViewSize = pBufferedDoc->GetBufferSize();
 
 	if (pBufferedDoc->GetBufferSize() <= 
-		pBufferedDoc->RowToOffset(nCurrentLine) + pBufferedDoc->GetCharsPerLine())
+		pBufferedDoc->RowToOffset(nCurrentLine) + GetCharsPerLine())
 	{
 		if (m_nLastLine > 0)
 		{
@@ -230,7 +227,7 @@ wxInt32 CReadBookBufferedView::NormalizeScrollToLine(wxInt32 nCurrentLine)
 		}
 
 		return pBufferedDoc->OffsetToRow(pBufferedDoc->GetBufferSize() -
-			pBufferedDoc->GetCharsPerLine());
+			GetCharsPerLine());
 	}
 
 	return nCurrentLine;
@@ -255,7 +252,7 @@ void CReadBookBufferedView::CalculateScrollSize(void)
 	CReadBookBufferedDoc * pBufferedDoc = 
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
-	int pos = pBufferedDoc->GetBufferCurPos();
+	int pos = pBufferedDoc->RowToOffset(pBufferedDoc->GetCurrentLine());
 
 	m_pCanvas->SetScrollbar(wxVERTICAL,
 		pos,
@@ -278,4 +275,31 @@ wxInt32 CReadBookBufferedView::ScrollPosToLine(wxInt32 nPos)
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
 	return pBufferedDoc->OffsetToRow(nPos);
+}
+
+bool CReadBookBufferedView::CouldBeShowInSingleLine(const wxString & strLine) const
+{
+	wxRect clientRect = m_pCanvas->GetClientRect();
+
+	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
+	clientRect.Deflate(colMargin,0);
+
+	wxClientDC dc(m_pCanvas);
+
+	wxDC * pDC = &dc;
+
+	const wxFont & pOldFont = pDC->GetFont();
+	wxFont * pFont = wxGetApp().GetPreference()->GetFont();
+	pDC->SetFont(*pFont);
+
+	wxSize lineSize = dc.GetTextExtent(strLine);
+
+	pDC->SetFont(pOldFont);	
+
+	return lineSize.GetX() <= clientRect.GetWidth();
+}
+
+const wxInt32 CReadBookBufferedView::GetCharsPerLine() const
+{
+	return m_nCharsPerLine;
 }
