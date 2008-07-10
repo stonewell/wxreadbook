@@ -268,10 +268,8 @@ void CReadBookBufferedView::UpdateScrollPos(void)
 	CReadBookBufferedDoc * pBufferedDoc = 
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
-	//int pos = 60000 * pBufferedDoc->GetBufferCurPos() / m_nViewSize;
-
 	m_pCanvas->SetScrollPos(wxVERTICAL, 
-		pBufferedDoc->GetBufferCurPos());
+		pBufferedDoc->RowToOffset(pBufferedDoc->GetCurrentLine()));
 }
 
 wxInt32 CReadBookBufferedView::ScrollPosToLine(wxInt32 nPos)

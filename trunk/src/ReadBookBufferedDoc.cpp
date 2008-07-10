@@ -283,6 +283,11 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 
 	SaveLine(m_nLastReadRow, strLine);
 
+	if (!m_pInput->Eof())
+	{
+		m_RowOffsetMap[nRow + 1] = m_pInput->TellI();
+	}
+
 	return m_LinesMapping[nRow];
 }
 
@@ -614,8 +619,12 @@ wxInt32 CReadBookBufferedDoc::OffsetToRow(wxInt32 nOffset)
 
 		return nOffset / m_nCharsPerLine + 1;
 	}
+	else
+	{
+		wxInt32 nRow = GetOffsetRow(findOffset);
 
-	return GetOffsetRow(findOffset);
+		return nRow + (nOffset - findOffset) / m_nCharsPerLine + 1;
+	}
 }
 
 wxInt32 CReadBookBufferedDoc::GetOffsetRow(wxFileOffset nOffset)
