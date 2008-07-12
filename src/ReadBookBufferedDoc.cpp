@@ -620,3 +620,17 @@ wxInt32 CReadBookBufferedDoc::GetOffsetRow(wxFileOffset nOffset)
 
 	return -1;
 }
+
+void CReadBookBufferedDoc::SetContentHelper(const IContentHelper * pContentHelper)
+{
+	m_pContentHelper = pContentHelper;
+	m_LinesMapping.clear();
+
+	wxInt32 offset = GetOffsetRow(GetCurrentLine());
+	m_RowOffsetMap.clear();
+
+	if (offset >= 0)
+	{
+		m_RowOffsetMap[GetCurrentLine()] = offset;
+	}
+}

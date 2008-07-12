@@ -386,7 +386,7 @@ wxArrayString * CReadBookView::GetLineStrings(wxInt32 row)
 		wxArrayString * lines = new wxArrayString();
 
 		//if (!GetReadBookDoc()->IsEmptyLine(line))
-		lines->Add(line);
+		lines->Add(TransformHtml(line));
 
 		return lines;
 	}
