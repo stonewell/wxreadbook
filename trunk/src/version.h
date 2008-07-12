@@ -5,9 +5,9 @@
 
 #define MAJOR_VERSION      1
 #define MINOR_VERSION      0
-#define RELEASE_NUMBER     2
+#define RELEASE_NUMBER     3
 #define SUBRELEASE_NUMBER  0
-#define VERSION_STRING   _T("wxReadBook 1.0.2")
+#define VERSION_STRING   _T("wxReadBook 1.0.3")
 
 #define VERSION_NUM_STRING_T \
   wxMAKE_VERSION_STRING_T(MAJOR_VERSION, MINOR_VERSION, RELEASE_NUMBER)

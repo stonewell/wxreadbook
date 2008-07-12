@@ -33,7 +33,7 @@ public:
 	virtual wxFileOffset RowToOffset(wxInt32 nRow);
 
 	const IContentHelper * GetContentHelper() const { return m_pContentHelper; }
-	void SetContentHelper(const IContentHelper * pContentHelper) { m_pContentHelper = pContentHelper; }
+	void SetContentHelper(const IContentHelper * pContentHelper);
 protected:
 	virtual wxInt32 GetOffsetRow(wxFileOffset nOffset);
 	virtual bool LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess);
