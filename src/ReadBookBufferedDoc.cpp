@@ -433,6 +433,7 @@ void CReadBookBufferedDoc::CleanUp()
 
 	m_LinesMapping.clear();
 	m_nLastReadRow = -1;
+
 	m_RowOffsetMap.clear();
 }
 
@@ -626,7 +627,7 @@ void CReadBookBufferedDoc::SetContentHelper(const IContentHelper * pContentHelpe
 	m_pContentHelper = pContentHelper;
 	m_LinesMapping.clear();
 
-	wxInt32 offset = GetOffsetRow(GetCurrentLine());
+ 	wxInt32 offset = GetRowOffset(GetCurrentLine());
 	m_RowOffsetMap.clear();
 
 	if (offset >= 0)
