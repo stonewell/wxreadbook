@@ -240,6 +240,7 @@ void CReadBookMainFrm::Init()
     RegisterHotKey(m_nHotKeyId, wxMOD_CONTROL | wxMOD_ALT, 'S');
     Connect(m_nHotKeyId, wxEVT_HOTKEY, wxCharEventHandler(CReadBookMainFrm::OnHotKeyShowWindow));
 #endif
+	m_pCanvas->SetFocus();
 }
 
 void CReadBookMainFrm::OnPreference(wxCommandEvent& WXUNUSED(event))
