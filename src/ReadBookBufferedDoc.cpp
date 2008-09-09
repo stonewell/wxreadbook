@@ -187,13 +187,24 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 
 			while(true)
 			{
+
 				wxChar ch = NextChar();
 
-				if (ch == wxEOT)
+				while (ch == wxEOT)
 				{
-					error = true;
-					break;
+					if (!filter_invalid_char)
+					{
+						error = true;
+						break;
+					}
+					else
+					{
+						ch = NextChar();
+					}
 				}
+
+				if (error)
+					break;
 
 				if (EatEOL(ch))
 					break;
@@ -264,6 +275,14 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 			{
 				filter_invalid_char = true;
 			}
+			else
+			{
+				filter_invalid_char = false;
+			}
+		}
+		else
+		{
+			filter_invalid_char = false;
 		}
 
 		if (!error && IsEmptyLine(strLine))
@@ -273,7 +292,7 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 
 		read_loop ++;
 	}
-	while (IsEmptyLine(strLine) && !m_pInput->Eof());
+	while (IsEmptyLine(strLine) && !m_pInput->Eof() || filter_invalid_char);
 
 	m_nLastReadRow = nRow;
 
