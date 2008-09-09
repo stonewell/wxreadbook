@@ -190,7 +190,7 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 
 				wxChar ch = NextChar();
 
-				while (ch == wxEOT)
+				while (ch == wxEOT && !m_pInput->Eof())
 				{
 					if (!filter_invalid_char)
 					{
