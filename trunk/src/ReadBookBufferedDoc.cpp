@@ -203,6 +203,9 @@ const wxString & CReadBookBufferedDoc::GetLine(wxInt32 nRow)
 					}
 				}
 
+				if (m_pInput->Eof())
+					break;
+
 				if (error)
 					break;
 
