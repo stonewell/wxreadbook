@@ -315,17 +315,24 @@ wxFileOffset CReadBookBufferedDoc::RowToOffset(wxInt32 nRow)
 		
 	if (offset < 0)
 	{
-		wxInt32 nNearRow = FindNearRow(nRow);
-
-		if (nNearRow >= 0)
+		if (nRow == 0)
 		{
-			wxFileOffset nNearOffset = GetRowOffset(nNearRow);
-
-			offset = nNearOffset + (nRow - nNearRow) * m_pContentHelper->GetCharsPerLine();
+			offset = 0;
 		}
 		else
 		{
-			offset = (wxFileOffset)m_pContentHelper->GetCharsPerLine() * nRow;
+			wxInt32 nNearRow = FindNearRow(nRow);
+
+			if (nNearRow >= 0)
+			{
+				wxFileOffset nNearOffset = GetRowOffset(nNearRow);
+
+				offset = nNearOffset + (nRow - nNearRow) * m_pContentHelper->GetCharsPerLine();
+			}
+			else
+			{
+				offset = (wxFileOffset)m_pContentHelper->GetCharsPerLine() * nRow;
+			}
 		}
 	}
 
