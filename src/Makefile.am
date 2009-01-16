@@ -80,3 +80,7 @@ EXTRA_DIST = res/file.bmp res/file32.bmp \
         res/folder.bmp res/folder32.bmp \
 	res/file.xpm res/file32.xpm \
 	res/folder.xpm res/folder32.xpm
+
+all-local:
+	$(STRIP) wxReadBook
+	cp wxReadBook ..
