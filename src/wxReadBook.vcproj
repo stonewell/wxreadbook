@@ -282,7 +282,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.7\include&quot;;&quot;D:\wxWidgets-2.8.7\lib\vc_lib\mswu&quot;"
+				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswu&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WXMSW__"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -295,7 +295,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.7\include&quot;"
+				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -304,7 +304,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw28u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.7\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.9\lib\vc_lib&quot;"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="2"
