@@ -1,6 +1,7 @@
 AC_INIT([wxReadBook], [1.0], [jingnan.si@gmail.com])
 AC_CONFIG_SRCDIR(src/ReadBookApp.cpp)
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+
 AC_PROG_CC
 AC_PROG_CXX
 AC_C_CONST
@@ -47,9 +48,19 @@ AC_CHECK_HEADERS(["wx/wx.h"],
 	[AC_MSG_FAILURE(wx/wx.h is not found)]
 	)
 
+# Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_HEADER_STDC
+AC_CHECK_FUNCS([memset])
+AC_CHECK_FUNCS([sqrt])
+
 AC_CONFIG_FILES([
 	Makefile
+	doc/Makefile
 	src/Makefile
+	src/res/Makefile
 ])
 
 AC_OUTPUT

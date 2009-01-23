@@ -1,2 +1,3 @@
-SUBDIRS = src
-EXTRA_DIST = Makefile.msw
+SUBDIRS = src doc
+EXTRA_DIST = Makefile.msw \
+	wxReadBook.sln
