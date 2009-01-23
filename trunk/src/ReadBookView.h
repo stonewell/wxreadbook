@@ -50,7 +50,10 @@ public:
     ViewModeEnum GetViewMode() const { return m_ViewMode; }
     void SetViewMode(ViewModeEnum ViewMode);
 
-    CReadBookDoc * GetReadBookDoc() 
+    bool IsDisplayChineseSimplify() const { return m_bDisplayChineseSimplify; }
+    void SetDisplayChineseSimplify(bool bDisplayChineseSimplify);
+
+	CReadBookDoc * GetReadBookDoc() 
 	{ return (CReadBookDoc *)(GetDocument()); }
 
 	void Recalculate(void);
@@ -79,6 +82,8 @@ protected:
 #ifdef _UNICODE
 	wxSize m_mbFontSize;
 #endif
+
+	bool m_bDisplayChineseSimplify;
 
 	wxInt16 GetPageSize(void);
 	wxInt16 SetPageSize(wxInt16 nPageSize);

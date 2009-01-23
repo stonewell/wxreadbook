@@ -23,6 +23,7 @@
 
 #if wxUSE_UNICODE
 #include "nsDetector.h"
+#include "GBBig5Table.h"
 #endif
 
 const CReadBookView::LineNumberMapping ZeroMap = {0,0};
@@ -45,7 +46,8 @@ m_pFrame(NULL),
 m_pCanvas(NULL),
 m_ViewMode(CReadBookView::Text),
 m_bInScript(false),
-m_ClientSize(0,0)
+m_ClientSize(0,0),
+m_bDisplayChineseSimplify(true)
 {
 }
 
@@ -814,6 +816,18 @@ wxString CReadBookView::TransformHtml(const wxString & line)
 	tmpLine.Replace(wxT("&amp;"), wxT("&"), true);
 	tmpLine.Replace(wxT("&copy;"), wxT("&"), true);
 
+	if (m_bDisplayChineseSimplify)
+	{
+		wxChar tmp1[2], tmp2[2];
+
+		for(int i=0;i<gb2big5TableSize;i+=2)
+		{
+			tmp1[0] = gb2big5[i + 1]; tmp1[1] = 0;
+			tmp2[0] = gb2big5[i], tmp2[1] = 0;
+
+			tmpLine.Replace(tmp1, tmp2);
+		}
+	}
 	return tmpLine;
 }
 
@@ -899,4 +913,11 @@ bool CReadBookView::CalculateFontSize()
 wxInt32 CReadBookView::ScrollPosToLine(wxInt32 nPos)
 {
 	return nPos;
+}
+
+void CReadBookView::SetDisplayChineseSimplify(bool bDisplayChineseSimplify)
+{
+	m_bDisplayChineseSimplify = bDisplayChineseSimplify;
+
+	m_pCanvas->Refresh();
 }
