@@ -3,6 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxReadBook", "src\wxReadBook.vcproj", "{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{4A0A9E70-FA3A-4FF1-91A0-77F5888F9C4F}"
+	ProjectSection(SolutionItems) = preProject
+		doc\gb2big5.cs = doc\gb2big5.cs
+		doc\gb2big5.txt = doc\gb2big5.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Unicode|Pocket PC 2003 (ARMV4) = Debug - Unicode|Pocket PC 2003 (ARMV4)

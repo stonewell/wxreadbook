@@ -252,7 +252,7 @@ wxUint32 CReadBookDoc::GuessDataEncoding(wxInputStream * pInput)
 			String charsets = ob.m_bDone ? ob.m_Charset : ppCharsets[0];
 			if (charsets.compare(wxT("windows-1252")) == 0)
 			{
-				for(int i = 0;i<ppCharsets.size();i++)
+				for(size_t i = 0;i<ppCharsets.size();i++)
 				{
 					if (ppCharsets[i].compare(wxT("windows-1252")) != 0)
 					{

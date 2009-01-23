@@ -38,8 +38,10 @@ BEGIN_EVENT_TABLE(CReadBookMainFrm, wxDocParentFrame)
     EVT_MENU(IDM_PREFERENCE, CReadBookMainFrm::OnPreference)
     EVT_MENU(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtml)
     EVT_MENU(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsText)
+    EVT_MENU(IDM_VIEW_SIMPLIFY, CReadBookMainFrm::OnViewSimplify)
     EVT_UPDATE_UI(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtmlUpdateUI)
     EVT_UPDATE_UI(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsTextUpdateUI)
+    EVT_UPDATE_UI(IDM_VIEW_SIMPLIFY, CReadBookMainFrm::OnViewSimplifyUpdateUI)
     EVT_MENU(IDM_NEXT_FILE, CReadBookMainFrm::OnNextFile)
     EVT_MENU(IDM_PREV_FILE, CReadBookMainFrm::OnPrevFile)
     EVT_MENU(IDM_BOOKMARKS, CReadBookMainFrm::OnBookMarks)
@@ -209,6 +211,8 @@ void CReadBookMainFrm::Init()
     pViewMenu->Append(IDM_NEXT_FILE, wxT("Next File"));
     pViewMenu->Append(IDM_PREV_FILE, wxT("Previous File"));
 #if wxUSE_UNICODE
+    pViewMenu->AppendSeparator();
+    pViewMenu->AppendCheckItem(IDM_VIEW_SIMPLIFY, wxT("Display Simplify Chinese"));
     pViewMenu->AppendSeparator();
     pViewMenu->AppendSubMenu(pEncodingMenu, wxT("Encoding..."));
 #endif
@@ -564,4 +568,24 @@ void CReadBookMainFrm::OnAddBookMark(wxCommandEvent& event)
 
 void CReadBookMainFrm::OnClearBookMarks(wxCommandEvent& event)
 {
+}
+
+void CReadBookMainFrm::OnViewSimplify(wxCommandEvent& WXUNUSED(event))
+{
+	if (m_pCanvas && m_pCanvas->GetView())
+	{
+		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
+
+		pView->SetDisplayChineseSimplify(!pView->IsDisplayChineseSimplify());
+	}
+}
+
+void CReadBookMainFrm::OnViewSimplifyUpdateUI(wxUpdateUIEvent& event)
+{
+	if (m_pCanvas && m_pCanvas->GetView())
+	{
+		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
+
+		event.Check(pView->IsDisplayChineseSimplify());
+	}
 }
