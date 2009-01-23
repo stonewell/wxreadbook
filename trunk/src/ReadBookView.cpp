@@ -816,18 +816,18 @@ wxString CReadBookView::TransformHtml(const wxString & line)
 	tmpLine.Replace(wxT("&amp;"), wxT("&"), true);
 	tmpLine.Replace(wxT("&copy;"), wxT("&"), true);
 
-	if (m_bDisplayChineseSimplify)
+#if wxUSE_UNICODE
+	wxChar tmp1[2], tmp2[2];
+
+	for(int i=0;i<gb2big5TableSize;i+=2)
 	{
-		wxChar tmp1[2], tmp2[2];
+		tmp1[0] = m_bDisplayChineseSimplify ? gb2big5[i + 1] : gb2big5[i]; tmp1[1] = 0;
+		tmp2[0] = m_bDisplayChineseSimplify ? gb2big5[i] : gb2big5[i + 1]; tmp2[1] = 0;
 
-		for(int i=0;i<gb2big5TableSize;i+=2)
-		{
-			tmp1[0] = gb2big5[i + 1]; tmp1[1] = 0;
-			tmp2[0] = gb2big5[i], tmp2[1] = 0;
-
-			tmpLine.Replace(tmp1, tmp2);
-		}
+		tmpLine.Replace(tmp1, tmp2);
 	}
+#endif
+
 	return tmpLine;
 }
 
