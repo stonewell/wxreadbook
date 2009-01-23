@@ -2727,3 +2727,4 @@ wxChar gb2big5[] =
 };
 
 int gb2big5TableSize = sizeof(gb2big5) / sizeof(wxChar);
+

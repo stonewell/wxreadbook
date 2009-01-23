@@ -5,3 +5,4 @@ extern wxChar gb2big5[];
 extern int gb2big5TableSize;
 
 #endif
+
