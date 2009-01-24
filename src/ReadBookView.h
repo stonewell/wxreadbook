@@ -33,6 +33,13 @@ public:
 		Text
 	};
 
+	enum DisplayAsEnum
+	{
+		DisplayAsOriginal,
+		DisplayAsSimplify,
+		DisplayAsTraditional
+	};
+
 	WX_DECLARE_HASH_MAP( wxInt32, LineNumberMapping, wxIntegerHash, wxIntegerEqual, CLineNumberMap);
 
     CReadBookView(void);
@@ -50,8 +57,8 @@ public:
     ViewModeEnum GetViewMode() const { return m_ViewMode; }
     void SetViewMode(ViewModeEnum ViewMode);
 
-    bool IsDisplayChineseSimplify() const { return m_bDisplayChineseSimplify; }
-    void SetDisplayChineseSimplify(bool bDisplayChineseSimplify);
+    DisplayAsEnum GetDisplayAs() const { return m_DisplayAs; }
+    void SetDisplayAs(DisplayAsEnum displayAs);
 
 	CReadBookDoc * GetReadBookDoc() 
 	{ return (CReadBookDoc *)(GetDocument()); }
@@ -83,7 +90,7 @@ protected:
 	wxSize m_mbFontSize;
 #endif
 
-	bool m_bDisplayChineseSimplify;
+	DisplayAsEnum m_DisplayAs;
 
 	wxInt16 GetPageSize(void);
 	wxInt16 SetPageSize(wxInt16 nPageSize);

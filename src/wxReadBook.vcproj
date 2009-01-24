@@ -359,7 +359,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.7\include&quot;;&quot;D:\wxWidgets-2.8.7\lib\vc_lib\mswud&quot;;..\LibCharDetect"
+				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswud&quot;;..\LibCharDetect"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -374,7 +374,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.7\include&quot;"
+				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -383,7 +383,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="wxmsw28ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.7\lib\vc_lib&quot;"
+				AdditionalLibraryDirectories="&quot;D:\wxWidgets-2.8.9\lib\vc_lib&quot;"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				SubSystem="2"
