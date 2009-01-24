@@ -5,24 +5,24 @@
 
 class CReadBookDoc : public wxDocument
 {
-    DECLARE_DYNAMIC_CLASS(CReadBookDoc)
+	DECLARE_DYNAMIC_CLASS(CReadBookDoc)
 
 private:
 	wxString m_strFileName;
 	wxInt32 m_nCurrentLine;
 
 public:
-    CReadBookDoc(void);
-    virtual ~CReadBookDoc(void);
+	CReadBookDoc(void);
+	virtual ~CReadBookDoc(void);
 
 public:
 	virtual bool OnCreate(const wxString& path, long flags);
 	virtual bool OnNewDocument();
-    virtual bool OnSaveDocument(const wxString& filename);
-    virtual bool OnOpenDocument(const wxString& filename);
-    virtual bool IsModified(void) const;
-    virtual bool OnCloseDocument();
-    virtual void Modify(bool mod);
+	virtual bool OnSaveDocument(const wxString& filename);
+	virtual bool OnOpenDocument(const wxString& filename);
+	virtual bool IsModified(void) const;
+	virtual bool OnCloseDocument();
+	virtual void Modify(bool mod);
 
 public:
 	const wxString & GetFileName() const { return m_strFileName; }
@@ -37,6 +37,9 @@ public:
 	virtual wxInt32 GetBufferSize(void) const;
 
 	void ReloadByEncoding(wxMBConv * conv);
+
+	void UpdateDisplay(wxReadBook::DisplayAsEnum displayAs,
+		wxReadBook::ViewModeEnum viewMode);
 
 protected:
 	virtual bool OpenDocument(const wxString & filename, wxMBConv * conv, bool bGuess);

@@ -44,10 +44,10 @@ END_EVENT_TABLE()
 CReadBookView::CReadBookView() :
 m_pFrame(NULL),
 m_pCanvas(NULL),
-m_ViewMode(CReadBookView::Text),
+m_ViewMode(wxReadBook::Text),
 m_bInScript(false),
 m_ClientSize(0,0),
-m_DisplayAs(CReadBookView::DisplayAsOriginal)
+m_DisplayAs(wxReadBook::DisplayAsOriginal)
 {
 }
 
@@ -214,11 +214,11 @@ void CReadBookView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 
 	if (fn.GetExt().CmpNoCase(wxT("html")) == 0 || fn.GetExt().CmpNoCase(wxT("htm")) == 0)
 	{
-		m_ViewMode = CReadBookView::Html;
+		m_ViewMode = wxReadBook::Html;
 	}
 	else
 	{
-		m_ViewMode = CReadBookView::Text;
+		m_ViewMode = wxReadBook::Text;
 	}
 
 	m_bInScript = false;
@@ -384,7 +384,7 @@ wxArrayString * CReadBookView::GetLineStrings(wxInt32 row)
 {
 	const wxString & line = GetReadBookDoc()->GetLine(row);
 
-	if (m_ViewMode == CReadBookView::Text) {
+	if (m_ViewMode == wxReadBook::Text) {
 		wxArrayString * lines = new wxArrayString();
 
 		//if (!GetReadBookDoc()->IsEmptyLine(line))
@@ -723,12 +723,16 @@ void CReadBookView::OnSize(wxSizeEvent& WXUNUSED(event))
 	Recalculate();
 }
 
-void CReadBookView::SetViewMode(ViewModeEnum ViewMode)
+void CReadBookView::SetViewMode(wxReadBook::ViewModeEnum ViewMode)
 {
 	m_ViewMode = ViewMode;
 	m_bInScript = false;
 
 	Recalculate();
+
+	CReadBookDoc* pDoc = GetReadBookDoc();
+
+	pDoc->UpdateDisplay(m_DisplayAs, m_ViewMode);
 
 	m_pCanvas->Refresh();
 }
@@ -818,14 +822,14 @@ wxString CReadBookView::TransformHtml(const wxString & line)
 
 #if wxUSE_UNICODE
 
-	if (m_DisplayAs != CReadBookView::DisplayAsOriginal)
+	if (m_DisplayAs != wxReadBook::DisplayAsOriginal)
 	{
 		wxChar tmp1[2], tmp2[2];
 
 		for(int i=0;i<gb2big5TableSize;i+=2)
 		{
-			tmp1[0] = m_DisplayAs == CReadBookView::DisplayAsSimplify ? gb2big5[i + 1] : gb2big5[i]; tmp1[1] = 0;
-			tmp2[0] = m_DisplayAs == CReadBookView::DisplayAsSimplify ? gb2big5[i] : gb2big5[i + 1]; tmp2[1] = 0;
+			tmp1[0] = m_DisplayAs == wxReadBook::DisplayAsSimplify ? gb2big5[i + 1] : gb2big5[i]; tmp1[1] = 0;
+			tmp2[0] = m_DisplayAs == wxReadBook::DisplayAsSimplify ? gb2big5[i] : gb2big5[i + 1]; tmp2[1] = 0;
 
 			tmpLine.Replace(tmp1, tmp2);
 		}
@@ -919,9 +923,13 @@ wxInt32 CReadBookView::ScrollPosToLine(wxInt32 nPos)
 	return nPos;
 }
 
-void CReadBookView::SetDisplayAs(DisplayAsEnum displayAs)
+void CReadBookView::SetDisplayAs(wxReadBook::DisplayAsEnum displayAs)
 {
 	m_DisplayAs = displayAs;
 
 	m_pCanvas->Refresh();
+
+	CReadBookDoc* pDoc = GetReadBookDoc();
+
+	pDoc->UpdateDisplay(m_DisplayAs, m_ViewMode);
 }

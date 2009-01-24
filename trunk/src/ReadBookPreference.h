@@ -3,6 +3,24 @@
 
 #include <wx/datstrm.h>
 
+namespace wxReadBook
+{
+	enum DisplayAsEnum
+	{
+		DisplayAsUnknown,
+		DisplayAsOriginal,
+		DisplayAsSimplify,
+		DisplayAsTraditional
+	};
+
+	enum ViewModeEnum
+	{
+		ViewModeUnknown,
+		Html,
+		Text
+	};
+}
+
 class CFileInfo
 {
 public:
@@ -16,6 +34,8 @@ public:
 	wxString m_strFileName;
 	wxInt32 m_nCurrentLine;
 	wxInt32 m_nFilePos;
+	wxReadBook::DisplayAsEnum m_nDisplayAs;
+	wxReadBook::ViewModeEnum m_nViewMode;
 };
 
 WX_DECLARE_LIST(CFileInfo, CFileInfoList);
@@ -59,7 +79,11 @@ public:
 	wxInt16 GetColumnMargin() const;
 	void SetColumnMargin(wxInt16 nColMargin);
 
-	void SetFileInfo(const wxString & strFileName, wxInt32 nCurrentLine, wxInt32 nFilePos);
+	void SetFileInfo(const wxString & strFileName, 
+		wxInt32 nCurrentLine, 
+		wxInt32 nFilePos,
+		wxReadBook::DisplayAsEnum displayAs = wxReadBook::DisplayAsUnknown,
+		wxReadBook::ViewModeEnum viewMode = wxReadBook::ViewModeUnknown);
 	wxInt32 GetFileInfo(const wxString & strFileName, CFileInfo ** ppFileInfo = NULL);
 
 	const wxString & GetLastFile() const { return m_strLastFile; }

@@ -219,27 +219,31 @@ const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir)
 
 	isUrlDir = true;
 
-	wxFileName name(filename);
+	wxString tmpfilename = filename;
+	
+	tmpfilename.Replace(wxT("\\"), wxT("/"));
+
+	wxFileName name(tmpfilename);
 
 	if (filename.Lower().EndsWith(wxT(".tar.gz")))
 	{
-		url = filename + wxT("#gzip:#tar:/");
+		url = name.GetFullPath() + wxT("#gzip:#tar:/");
 	}
 	else if (name.GetExt().CmpNoCase(wxT("zip")) == 0)
 	{
-		url = filename + wxT("#zip:/");
+		url = name.GetFullPath() + wxT("#zip:/");
 	}
 	else if (name.GetExt().CmpNoCase(wxT("gz")) == 0)
 	{
-		url = filename + wxT("#gzip:/");
+		url = name.GetFullPath() + wxT("#gzip:/");
 	}
 	else if (name.GetExt().CmpNoCase(wxT("tar")) == 0)
 	{
-		url = filename + wxT("#tar:/");
+		url = name.GetFullPath() + wxT("#tar:/");
 	}
 	else
 	{
-		url = filename;
+		url = name.GetFullPath();
 
 		isUrlDir = false;
 	}

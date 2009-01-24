@@ -177,7 +177,7 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 
 		if (arDlg.ShowModal() == wxID_OK)
 		{
-			url = arDlg.GetSelectedFilePath();
+			url = FileNameToUrl(arDlg.GetSelectedFilePath(), isDir);
 		}
 		else
 		{
@@ -207,6 +207,21 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 	CReadBookMainFrm * pMainFrame = (CReadBookMainFrm *)(GetMainFrame());
 	pMainFrame->SetTitle(m_strFileName);
 	pMainFrame->AddRecentFile(m_strFileName);
+
+	if (pFileInfo != NULL)
+	{
+		CReadBookView * pView = (CReadBookView *)pMainFrame->GetCanvas()->GetView();
+
+		if (pView != NULL)
+		{
+			wxReadBook::DisplayAsEnum displayAs = pFileInfo->m_nDisplayAs;
+
+			pView->SetViewMode(pFileInfo->m_nViewMode);
+
+			//UpdateViewMode will replace display as, so use the saved display as
+			pView->SetDisplayAs(displayAs);
+		}
+	}
 
 	return true;
 }
@@ -368,4 +383,14 @@ wxMBConv * CReadBookDoc::GetSuitableMBConv(wxInputStream * pInput, wxMBConv * pD
 wxFileOffset CReadBookDoc::GetRowOffset(wxInt32 nRow)
 {
 	return -1;
+}
+
+void CReadBookDoc::UpdateDisplay(wxReadBook::DisplayAsEnum displayAs,
+								 wxReadBook::ViewModeEnum viewMode)
+{
+	::wxGetApp().GetPreference()->SetFileInfo(m_strFileName, 
+		m_nCurrentLine, 
+		GetRowOffset(m_nCurrentLine),
+		displayAs,
+		viewMode);
 }

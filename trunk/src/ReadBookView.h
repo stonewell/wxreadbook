@@ -27,19 +27,6 @@ public:
 		wxInt32 nViewLineCountBegin;
 	};
 
-	enum ViewModeEnum
-	{
-		Html,
-		Text
-	};
-
-	enum DisplayAsEnum
-	{
-		DisplayAsOriginal,
-		DisplayAsSimplify,
-		DisplayAsTraditional
-	};
-
 	WX_DECLARE_HASH_MAP( wxInt32, LineNumberMapping, wxIntegerHash, wxIntegerEqual, CLineNumberMap);
 
     CReadBookView(void);
@@ -54,11 +41,11 @@ public:
     void OnSize(wxSizeEvent& event);
 	void OnMouseWheel(wxMouseEvent & event);
 
-    ViewModeEnum GetViewMode() const { return m_ViewMode; }
-    void SetViewMode(ViewModeEnum ViewMode);
+    wxReadBook::ViewModeEnum GetViewMode() const { return m_ViewMode; }
+    void SetViewMode(wxReadBook::ViewModeEnum ViewMode);
 
-    DisplayAsEnum GetDisplayAs() const { return m_DisplayAs; }
-    void SetDisplayAs(DisplayAsEnum displayAs);
+	wxReadBook::DisplayAsEnum GetDisplayAs() const { return m_DisplayAs; }
+    void SetDisplayAs(wxReadBook::DisplayAsEnum displayAs);
 
 	CReadBookDoc * GetReadBookDoc() 
 	{ return (CReadBookDoc *)(GetDocument()); }
@@ -80,7 +67,7 @@ protected:
 
 	wxSize m_FontSize;
 
-	ViewModeEnum m_ViewMode;
+	wxReadBook::ViewModeEnum m_ViewMode;
 
 	bool m_bInScript;
 
@@ -90,7 +77,7 @@ protected:
 	wxSize m_mbFontSize;
 #endif
 
-	DisplayAsEnum m_DisplayAs;
+	wxReadBook::DisplayAsEnum m_DisplayAs;
 
 	wxInt16 GetPageSize(void);
 	wxInt16 SetPageSize(wxInt16 nPageSize);

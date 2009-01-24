@@ -297,7 +297,7 @@ void CReadBookMainFrm::OnViewAsHtml(wxCommandEvent& WXUNUSED(event))
 	{
 		CReadBookView * pView = (CReadBookView *)(m_pCanvas->GetView());
 
-		pView->SetViewMode(CReadBookView::Html);
+		pView->SetViewMode(wxReadBook::Html);
 	}
 }
 
@@ -307,7 +307,7 @@ void CReadBookMainFrm::OnViewAsText(wxCommandEvent& WXUNUSED(event))
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		pView->SetViewMode(CReadBookView::Text);
+		pView->SetViewMode(wxReadBook::Text);
 	}
 }
 
@@ -317,7 +317,7 @@ void CReadBookMainFrm::OnViewAsHtmlUpdateUI(wxUpdateUIEvent& event)
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		event.Check(pView->GetViewMode() == CReadBookView::Html);
+		event.Check(pView->GetViewMode() == wxReadBook::Html);
 	}
 }
 
@@ -327,7 +327,7 @@ void CReadBookMainFrm::OnViewAsTextUpdateUI(wxUpdateUIEvent& event)
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		event.Check(pView->GetViewMode() == CReadBookView::Text);
+		event.Check(pView->GetViewMode() == wxReadBook::Text);
 	}
 }
 
@@ -381,12 +381,15 @@ wxMenu * CReadBookMainFrm::CreateRecentFilesMenu()
         if (pFile != NULL)
         {
             wxString itemName = wxT("");
-            itemName.Printf(wxT("%d. %s"), count + 1, pFile->GetLocation().c_str());
+
+			wxString location = pFile->GetLocation();
+
+            itemName.Printf(wxT("%d. %s"), count + 1, pInfo->m_strFileName.c_str());
 
             wxMenuItem * pItem =
                 pMenu->Append(IDM_RECENT_FILE + count, itemName);
 
-            pItem->SetHelp(pFile->GetLocation());
+            pItem->SetHelp(pInfo->m_strFileName);
 
             count++;
 
@@ -592,7 +595,7 @@ void CReadBookMainFrm::OnViewDisplayOriginal(wxCommandEvent& WXUNUSED(event))
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		pView->SetDisplayAs(CReadBookView::DisplayAsOriginal);
+		pView->SetDisplayAs(wxReadBook::DisplayAsOriginal);
 	}
 }
 
@@ -602,7 +605,7 @@ void CReadBookMainFrm::OnViewDisplaySimplify(wxCommandEvent& WXUNUSED(event))
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		pView->SetDisplayAs(CReadBookView::DisplayAsSimplify);
+		pView->SetDisplayAs(wxReadBook::DisplayAsSimplify);
 	}
 }
 
@@ -612,7 +615,7 @@ void CReadBookMainFrm::OnViewDisplayTraditional(wxCommandEvent& WXUNUSED(event))
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		pView->SetDisplayAs(CReadBookView::DisplayAsTraditional);
+		pView->SetDisplayAs(wxReadBook::DisplayAsTraditional);
 	}
 }
 
@@ -622,7 +625,7 @@ void CReadBookMainFrm::OnViewDisplayOriginalUpdateUI(wxUpdateUIEvent& event)
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		event.Check(pView->GetDisplayAs() == CReadBookView::DisplayAsOriginal);
+		event.Check(pView->GetDisplayAs() == wxReadBook::DisplayAsOriginal);
 	}
 }
 
@@ -632,7 +635,7 @@ void CReadBookMainFrm::OnViewDisplaySimplifyUpdateUI(wxUpdateUIEvent& event)
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		event.Check(pView->GetDisplayAs() == CReadBookView::DisplayAsSimplify);
+		event.Check(pView->GetDisplayAs() == wxReadBook::DisplayAsSimplify);
 	}
 }
 void CReadBookMainFrm::OnViewDisplayTraditionalUpdateUI(wxUpdateUIEvent& event)
@@ -641,6 +644,6 @@ void CReadBookMainFrm::OnViewDisplayTraditionalUpdateUI(wxUpdateUIEvent& event)
 	{
 		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
-		event.Check(pView->GetDisplayAs() == CReadBookView::DisplayAsTraditional);
+		event.Check(pView->GetDisplayAs() == wxReadBook::DisplayAsTraditional);
 	}
 }
