@@ -47,7 +47,7 @@ m_pCanvas(NULL),
 m_ViewMode(CReadBookView::Text),
 m_bInScript(false),
 m_ClientSize(0,0),
-m_bDisplayChineseSimplify(true)
+m_DisplayAs(CReadBookView::DisplayAsOriginal)
 {
 }
 
@@ -817,14 +817,18 @@ wxString CReadBookView::TransformHtml(const wxString & line)
 	tmpLine.Replace(wxT("&copy;"), wxT("&"), true);
 
 #if wxUSE_UNICODE
-	wxChar tmp1[2], tmp2[2];
 
-	for(int i=0;i<gb2big5TableSize;i+=2)
+	if (m_DisplayAs != CReadBookView::DisplayAsOriginal)
 	{
-		tmp1[0] = m_bDisplayChineseSimplify ? gb2big5[i + 1] : gb2big5[i]; tmp1[1] = 0;
-		tmp2[0] = m_bDisplayChineseSimplify ? gb2big5[i] : gb2big5[i + 1]; tmp2[1] = 0;
+		wxChar tmp1[2], tmp2[2];
 
-		tmpLine.Replace(tmp1, tmp2);
+		for(int i=0;i<gb2big5TableSize;i+=2)
+		{
+			tmp1[0] = m_DisplayAs == CReadBookView::DisplayAsSimplify ? gb2big5[i + 1] : gb2big5[i]; tmp1[1] = 0;
+			tmp2[0] = m_DisplayAs == CReadBookView::DisplayAsSimplify ? gb2big5[i] : gb2big5[i + 1]; tmp2[1] = 0;
+
+			tmpLine.Replace(tmp1, tmp2);
+		}
 	}
 #endif
 
@@ -915,9 +919,9 @@ wxInt32 CReadBookView::ScrollPosToLine(wxInt32 nPos)
 	return nPos;
 }
 
-void CReadBookView::SetDisplayChineseSimplify(bool bDisplayChineseSimplify)
+void CReadBookView::SetDisplayAs(DisplayAsEnum displayAs)
 {
-	m_bDisplayChineseSimplify = bDisplayChineseSimplify;
+	m_DisplayAs = displayAs;
 
 	m_pCanvas->Refresh();
 }

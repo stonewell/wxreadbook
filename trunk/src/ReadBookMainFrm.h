@@ -21,10 +21,14 @@ public:
 	void OnPreference(wxCommandEvent& event);
 	void OnViewAsHtml(wxCommandEvent& event);
 	void OnViewAsText(wxCommandEvent& event);
-	void OnViewSimplify(wxCommandEvent& event);
+	void OnViewDisplayOriginal(wxCommandEvent& event);
+	void OnViewDisplaySimplify(wxCommandEvent& event);
+	void OnViewDisplayTraditional(wxCommandEvent& event);
 	void OnViewAsHtmlUpdateUI(wxUpdateUIEvent& event);
 	void OnViewAsTextUpdateUI(wxUpdateUIEvent& event);
-	void OnViewSimplifyUpdateUI(wxUpdateUIEvent& event);
+	void OnViewDisplayOriginalUpdateUI(wxUpdateUIEvent& event);
+	void OnViewDisplaySimplifyUpdateUI(wxUpdateUIEvent& event);
+	void OnViewDisplayTraditionalUpdateUI(wxUpdateUIEvent& event);
 	void OnNextFile(wxCommandEvent& event);
 	void OnPrevFile(wxCommandEvent& event);
 	void OnRecentFile(wxCommandEvent& event);
@@ -86,7 +90,9 @@ enum MenuIDEnum
 	IDM_CLEAR_BOOKMARKS, 
 	IDM_HIDE,
 	IDM_FULL_SCREEN,
-	IDM_VIEW_SIMPLIFY,
+	IDM_VIEW_DISPLAY_ORIGINAL,
+	IDM_VIEW_DISPLAY_SIMPLIFY,
+	IDM_VIEW_DISPLAY_TRADITIONAL,
 
 	IDM_ENCODE_UNKNOWN,
 	IDM_ENCODE_ID_START,
