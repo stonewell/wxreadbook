@@ -35,7 +35,9 @@ WX_DEFINE_LIST(CFileInfoList);
 CFileInfo::CFileInfo(void) :
 m_strFileName(wxT("")),
 m_nCurrentLine(0),
-m_nFilePos(0)
+m_nFilePos(0),
+m_nDisplayAs(wxReadBook::DisplayAsOriginal),
+m_nViewMode(wxReadBook::Text)
 {
 }
 
@@ -45,18 +47,42 @@ CFileInfo::~CFileInfo(void)
 
 void CFileInfo::Store(wxDataOutputStream & archive)
 {
-	archive << m_strFileName;
+	bool isDir = false;
+
+	archive << FileNameToUrl(m_strFileName, isDir);
 
 	archive << m_nCurrentLine;
 	archive << m_nFilePos;
+
+	wxInt32 tmpVal = m_nDisplayAs;
+
+	archive << tmpVal;
+
+	tmpVal = m_nViewMode;
+
+	archive << tmpVal;
 }
 
 void CFileInfo::Load(wxInt32 version, wxDataInputStream & archive)
 {
 	archive >> m_strFileName;
 
+	bool isDir = false;
+	m_strFileName = FileNameToUrl(m_strFileName, isDir);
+
 	archive >> m_nCurrentLine;
 	archive >> m_nFilePos;
+
+	if (version >= 2)
+	{
+		wxInt32 tmpVal = 0;
+
+		archive >> tmpVal;
+		m_nDisplayAs = (wxReadBook::DisplayAsEnum)tmpVal;
+
+		archive >> tmpVal;
+		m_nViewMode = (wxReadBook::ViewModeEnum)tmpVal;
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -64,7 +90,7 @@ void CFileInfo::Load(wxInt32 version, wxDataInputStream & archive)
 ////CReadBookPreference
 ////
 ////////////////////////////////////////////////////////////
-const wxInt32 PREFERENCE_VERSION = 1;
+const wxInt32 PREFERENCE_VERSION = 2;
 
 CReadBookPreference::CReadBookPreference(void):
 m_pLogFont(NULL)
@@ -216,7 +242,11 @@ void CReadBookPreference::Load( wxInputStream & input )
 
 		if (!key.IsEmpty() && pFile != NULL)
 		{
-			SetFileInfo(key,pFileInfo->m_nCurrentLine,pFileInfo->m_nFilePos);
+			SetFileInfo(pFileInfo->m_strFileName,
+				pFileInfo->m_nCurrentLine,
+				pFileInfo->m_nFilePos,
+				pFileInfo->m_nDisplayAs,
+				pFileInfo->m_nViewMode);
 		}
 
 		if (pFile != NULL)
@@ -271,7 +301,9 @@ void CReadBookPreference::Store( wxOutputStream & output )
 
 void CReadBookPreference::SetFileInfo(const wxString & strFileName,
 									  wxInt32 nCurrentLine,
-									  wxInt32 nFilePos)
+									  wxInt32 nFilePos,
+									  wxReadBook::DisplayAsEnum displayAs,
+									  wxReadBook::ViewModeEnum viewMode)
 {
 	CFileInfo * pFileInfo = NULL;
 
@@ -292,6 +324,12 @@ void CReadBookPreference::SetFileInfo(const wxString & strFileName,
 	pFileInfo->m_strFileName = strFileName;
 	pFileInfo->m_nCurrentLine = nCurrentLine;
 	pFileInfo->m_nFilePos = nFilePos;
+
+	if (displayAs != wxReadBook::DisplayAsUnknown)
+		pFileInfo->m_nDisplayAs = displayAs;
+
+	if (viewMode != wxReadBook::ViewModeUnknown)
+		pFileInfo->m_nViewMode = viewMode;
 
 	if (bCreateNew)
 	{
