@@ -40,7 +40,7 @@ public:
 	virtual ~CArchiveExplorerDlg();
 
 private:
-	wxString m_strArchiveUrl;
+	wxString m_strarchiveUrl;
 	wxBitmap m_bmpFile;
 	wxBitmap m_bmpFile32;
 	wxBitmap m_bmpFolder;

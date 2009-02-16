@@ -359,7 +359,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswud&quot;;..\LibCharDetect"
+				AdditionalIncludeDirectories="..\..\7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswud&quot;;..\LibCharDetect"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -835,6 +835,26 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<AssemblyReference
+			RelativePath="System.dll"
+			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+		/>
+		<AssemblyReference
+			RelativePath="System.Data.dll"
+			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
+		/>
+		<AssemblyReference
+			RelativePath="System.Drawing.dll"
+			AssemblyName="System.Drawing, Version=2.0.0.0, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+		/>
+		<AssemblyReference
+			RelativePath="System.Windows.Forms.dll"
+			AssemblyName="System.Windows.Forms, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+		/>
+		<AssemblyReference
+			RelativePath="System.XML.dll"
+			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -996,6 +1016,26 @@
 				</File>
 				<File
 					RelativePath=".\nsVerifier.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="7Zip"
+				>
+				<File
+					RelativePath=".\7Zip\7ZipClassFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\7Zip\7ZipEntry.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\7Zip\7ZipInputStream.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\7Zip\7ZipOutputStream.cpp"
 					>
 				</File>
 			</Filter>
@@ -1171,6 +1211,26 @@
 				</File>
 				<File
 					RelativePath=".\nsVerifier.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="7Zip"
+				>
+				<File
+					RelativePath=".\7Zip\7ZipClassFactory.h"
+					>
+				</File>
+				<File
+					RelativePath=".\7Zip\7ZipEntry.h"
+					>
+				</File>
+				<File
+					RelativePath=".\7Zip\7ZipInputStream.h"
+					>
+				</File>
+				<File
+					RelativePath=".\7Zip\7ZipOutputStream.h"
 					>
 				</File>
 			</Filter>
