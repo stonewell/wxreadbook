@@ -95,16 +95,6 @@ protected:
 private:
     wxArchiveEntry* DoClone() const             { return ZipClone(); }
 
-    size_t ReadLocal(wxInputStream& stream, wxMBConv& conv);
-    size_t WriteLocal(wxOutputStream& stream, wxMBConv& conv) const;
-
-    size_t ReadCentral(wxInputStream& stream, wxMBConv& conv);
-    size_t WriteCentral(wxOutputStream& stream, wxMBConv& conv) const;
-
-    size_t ReadDescriptor(wxInputStream& stream);
-    size_t WriteDescriptor(wxOutputStream& stream, wxUint32 crc,
-                           wxFileOffset compressedSize, wxFileOffset size);
-
     wxUint8      m_SystemMadeBy;       // one of enum C7ZipSystem
     wxUint8      m_VersionMadeBy;      // major * 10 + minor
 

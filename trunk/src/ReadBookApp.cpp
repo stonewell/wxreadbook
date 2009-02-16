@@ -247,7 +247,7 @@ const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir)
 	}
 	else
 	{
-		url = name.GetFullPath();
+		url = tmpfilename;//name.GetFullPath();
 
 		isUrlDir = false;
 	}

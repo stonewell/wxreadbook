@@ -22,6 +22,8 @@
 #include "7ZipInputStream.h"
 #include "7ZipClassFactory.h"
 
+wxString g_CurrentUrl = wxT("");
+
 // constructor
 //
 C7ZipInputStream::C7ZipInputStream(wxInputStream& stream,
@@ -44,6 +46,28 @@ void C7ZipInputStream::Init()
 	m_p7ZipArchive = NULL;
 	
 	m_7ZipLibrary.Initialize();
+
+	if (m_7ZipLibrary.OpenArchive(this, &m_p7ZipArchive))
+	{
+		unsigned int numItems = 0;
+		if (m_p7ZipArchive->GetItemCount(&numItems))
+		{
+			for(unsigned int i = 0;i<numItems;i++)
+			{
+				C7ZipArchiveItem * pArchiveItem = NULL;
+
+				if (m_p7ZipArchive->GetItemInfo(i, &pArchiveItem))
+				{
+					C7ZipEntry * pEntry = new C7ZipEntry(pArchiveItem->GetFullPath().c_str());
+
+					pEntry->SetIsDir(pArchiveItem->IsDir());
+					pEntry->SetExternalAttributes(pArchiveItem->GetArchiveIndex());
+
+					m_Entries.push_back(pEntry);
+				}
+			}
+		}
+	}
 }
 
 C7ZipInputStream::~C7ZipInputStream()
@@ -55,6 +79,8 @@ C7ZipInputStream::~C7ZipInputStream()
 	}
 
 	m_7ZipLibrary.Deinitialize();
+
+	m_Entries.clear();
 }
 
 // Can be overriden to add support for additional decompression methods
@@ -71,27 +97,14 @@ bool C7ZipInputStream::CloseDecompressor(wxInputStream *decomp)
 
 size_t C7ZipInputStream::OnSysRead(void *buffer, size_t size)
 {
-	return 0;
+	return m_parent_i_stream->Read(buffer, size).LastRead();
 }
 
 C7ZipEntry *C7ZipInputStream::GetNextEntry()
 {
-	C7ZipEntry * pEntries[] = {
-		new C7ZipEntry(wxT("a.txt")),
-		new C7ZipEntry(wxT("b.txt")),
-		new C7ZipEntry(wxT("c\\1.txt")),
-		new C7ZipEntry(wxT("c\\2.txt")),
-		new C7ZipEntry(wxT("c")),
-	};
-
-	if (m_nCurrentEntryIndex < sizeof(pEntries) / sizeof(C7ZipEntry*))
+	if (m_nCurrentEntryIndex < m_Entries.size())
 	{
-		if (m_nCurrentEntryIndex == sizeof(pEntries) / sizeof(C7ZipEntry*) - 1)
-		{
-			pEntries[m_nCurrentEntryIndex]->SetIsDir(true);
-		}
-
-		return pEntries[m_nCurrentEntryIndex++];
+		return m_Entries[m_nCurrentEntryIndex++];
 	}
 
 	return NULL;
@@ -107,7 +120,65 @@ bool C7ZipInputStream::CloseEntry()
 	return false;
 }
 
-wxFileOffset C7ZipInputStream::GetLength() const
+wstring C7ZipInputStream::GetFullPath() const
 {
+	return g_CurrentUrl.c_str();
+}
+
+int C7ZipInputStream::Read(void *data, unsigned int size, unsigned int *processedSize)
+{
+	wxArchiveInputStream::Read(data, size);
+
+	*processedSize = LastRead();
+
 	return 0;
 }
+
+int C7ZipInputStream::Seek(__int64 offset, unsigned int seekOrigin, unsigned __int64 *newPosition)
+{
+	wxSeekMode mode = wxFromStart;
+
+	switch(seekOrigin)
+	{
+	case FILE_CURRENT:
+		mode = wxFromCurrent;
+		break;
+	case FILE_BEGIN:
+		mode = wxFromStart;
+		break;
+	case FILE_END:
+		mode = wxFromEnd;
+		break;
+	default:
+		break;
+	}
+
+	if (this->IsSeekable())
+	{
+		SeekI(offset,mode);
+		if (newPosition != NULL)
+		{
+			*newPosition = TellI();
+		}
+	}
+
+	return 0;
+}
+
+int C7ZipInputStream::GetSize(unsigned __int64 * size)
+{
+	*size = GetLength();
+
+	return 0;
+}
+
+wxFileOffset C7ZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
+{
+	return m_parent_i_stream->SeekI(seek, mode);
+}
+
+wxFileOffset C7ZipInputStream::OnSysTell() const
+{
+	return m_parent_i_stream->TellI();
+}
+
