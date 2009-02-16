@@ -47,7 +47,7 @@ END_EVENT_TABLE()
 
 CArchiveExplorerDlg::CArchiveExplorerDlg(wxWindow * pParent, const wxString & archiveUrl) :
 	wxDialog(pParent, wxID_ANY, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER),
-	m_strArchiveUrl(archiveUrl),
+	m_strarchiveUrl(archiveUrl),
 	m_bmpFile(wxBITMAP(file)),
 	m_bmpFile32(wxBITMAP(file32)),
 	m_bmpFolder(wxBITMAP(folder)),
@@ -75,7 +75,7 @@ CArchiveExplorerDlg::CArchiveExplorerDlg(wxWindow * pParent, const wxString & ar
 	m_pList->SetImageList(&m_ImageList16, wxIMAGE_LIST_SMALL);
 	m_pList->SetImageList(&m_ImageList32, wxIMAGE_LIST_NORMAL);
 
-	InitializeContent(CreateItemData(NULL, m_strArchiveUrl, true));
+	InitializeContent(CreateItemData(NULL, m_strarchiveUrl, true));
 
 	wxButton *ok = new wxButton(this, wxID_OK, _T("OK"));
     ok->SetDefault();
@@ -132,7 +132,7 @@ void CArchiveExplorerDlg::InitializeContent(CArchiveItemData * pParentItem)
 
 	long index = -1;
 
-    if (pParentItem != NULL && pParentItem->GetUrl().CmpNoCase(m_strArchiveUrl) != 0)
+    if (pParentItem != NULL && pParentItem->GetUrl().CmpNoCase(m_strarchiveUrl) != 0)
     {
         CArchiveItemData * pItem = CreateItemData(pParentItem, wxT(".."), true);
         index = m_pList->InsertItem(index + 1, wxT(".."), 0);

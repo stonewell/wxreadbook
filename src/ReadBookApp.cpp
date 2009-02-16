@@ -59,7 +59,7 @@ bool CReadBookApp::OnInit(void)
     //// Create a template relating drawing documents to their views
     (void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook"),
-        wxT("*.txt;*.html;*.htm;*.zip;*.tar;*.gz"),
+        wxT("*.txt;*.html;*.htm;*.zip;*.tar;*.gz;*.rar"),
         wxT(""),
         wxT("rbk"),
         wxT("ReadBook Doc"),
@@ -240,6 +240,10 @@ const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir)
 	else if (name.GetExt().CmpNoCase(wxT("tar")) == 0)
 	{
 		url = name.GetFullPath() + wxT("#tar:/");
+	}
+	else if (name.GetExt().CmpNoCase(wxT("rar")) == 0)
+	{
+		url = name.GetFullPath() + wxT("#rar:/");
 	}
 	else
 	{

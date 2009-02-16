@@ -444,7 +444,10 @@ bool CReadBookBufferedDoc::LoadBuffer(const wxString & url, wxMBConv * conv, boo
 	{
 		m_RowOffsetMap[nRow] = pFileInfo->m_nFilePos;
 
-		m_pInput->SeekI(pFileInfo->m_nFilePos);
+		if (pFileInfo->m_nFilePos >= 0)
+		{
+			m_pInput->SeekI(pFileInfo->m_nFilePos);
+		}
 	}
 
 	return true;
