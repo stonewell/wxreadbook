@@ -2,12 +2,17 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxReadBook", "src\wxReadBook.vcproj", "{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{383D73DB-A55D-4677-826F-16F8BB7CD578} = {383D73DB-A55D-4677-826F-16F8BB7CD578}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{4A0A9E70-FA3A-4FF1-91A0-77F5888F9C4F}"
 	ProjectSection(SolutionItems) = preProject
 		doc\gb2big5.cs = doc\gb2big5.cs
 		doc\gb2big5.txt = doc\gb2big5.txt
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lib7Zip", "..\7Zip\Lib7Zip\Lib7Zip.vcproj", "{383D73DB-A55D-4677-826F-16F8BB7CD578}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +53,21 @@ Global
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Release|Pocket PC 2003 (ARMV4).Deploy.0 = Release|Pocket PC 2003 (ARMV4)
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Release|Win32.ActiveCfg = Release|Win32
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Release|Win32.Build.0 = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug - Unicode|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug - Unicode|Win32.ActiveCfg = Debug|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug - Unicode|Win32.Build.0 = Debug|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug|Win32.ActiveCfg = Debug|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug|Win32.Build.0 = Debug|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode - DLL|Win32.ActiveCfg = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode - DLL|Win32.Build.0 = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode|Win32.ActiveCfg = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode|Win32.Build.0 = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release|Win32.ActiveCfg = Release|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
