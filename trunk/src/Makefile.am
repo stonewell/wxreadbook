@@ -1,4 +1,4 @@
-SUBDIRS = res
+SUBDIRS = 7Zip res
 bin_PROGRAMS = wxReadBook
 wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	nsBIG5Statistics.cpp \
@@ -79,6 +79,7 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	GBBig5Table.cpp \
 	GBBig5Table.h 	
 	
+wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a
 
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc
 

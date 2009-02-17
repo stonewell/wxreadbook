@@ -63,7 +63,7 @@ am_wxReadBook_OBJECTS = ArchiveExplorerDlg.$(OBJEXT) \
 	ReadBookBufferedDoc.$(OBJEXT) ReadBookBufferedView.$(OBJEXT) \
 	GBBig5Table.$(OBJEXT)
 wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
-wxReadBook_LDADD = $(LDADD)
+wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -134,6 +134,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -181,7 +182,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = res
+SUBDIRS = 7Zip res
 wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	nsBIG5Statistics.cpp \
 	BookMarksDlg.cpp \
@@ -261,6 +262,7 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	GBBig5Table.cpp \
 	GBBig5Table.h 	
 
+wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc
 all: all-recursive
 
