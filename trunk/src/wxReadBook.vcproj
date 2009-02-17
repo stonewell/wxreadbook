@@ -359,7 +359,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswud&quot;;..\LibCharDetect"
+				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswud&quot;;..\LibCharDetect"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -526,7 +526,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswu&quot;"
+				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswu&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WXMSW__"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"

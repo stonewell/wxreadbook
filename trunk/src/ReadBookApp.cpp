@@ -1,3 +1,9 @@
+#if _WIN32
+#if _DEBUG
+#include "vld.h"
+#endif
+#endif
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -57,11 +63,44 @@ bool CReadBookApp::OnInit(void)
     m_pDocManager = new wxDocManager;
 
     //// Create a template relating drawing documents to their views
-    (void) new wxDocTemplate(m_pDocManager,
-        wxT("ReadBook"),
-        wxT("*.txt;*.html;*.htm;*.zip;*.tar;*.gz;*.rar"),
+	wxString archiveExts = GetPreference()->GetArchiveFileFilters();
+
+	if (archiveExts.Len() > 0) archiveExts += wxT(";");
+
+	archiveExts += wxT("*.zip;*.tar;*.gz");
+
+	(void) new wxDocTemplate(m_pDocManager,
+        wxT("ReadBook Files"),
+        wxT("*.txt;*.html;*.htm;") + archiveExts,
         wxT(""),
         wxT("rbk"),
+        wxT("ReadBook Doc"),
+        wxT("ReadBook View"),
+        CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
+
+    (void) new wxDocTemplate(m_pDocManager,
+        wxT("ReadBook Text Files"),
+        wxT("*.txt;*.html;*.htm"),
+        wxT(""),
+        wxT("rbk"),
+        wxT("ReadBook Doc"),
+        wxT("ReadBook View"),
+        CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
+
+    (void) new wxDocTemplate(m_pDocManager,
+        wxT("ReadBook Archive Files"),
+        archiveExts,
+        wxT(""),
+        wxT("rbk"),
+        wxT("ReadBook Doc"),
+        wxT("ReadBook View"),
+        CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
+
+	(void) new wxDocTemplate(m_pDocManager,
+        wxT("All Files"),
+        wxT("*.*"),
+        wxT(""),
+        wxT(""),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
         CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
@@ -203,54 +242,99 @@ void CReadBookApp::OpenRelatedFile(const wxString & fileName, wxInt16 nDelta)
 	}
 }
 
+bool IsArchiveExt(const wxString & ext)
+{
+	return ext.CmpNoCase(wxT("zip")) == 0 ||
+		ext .CmpNoCase(wxT("gz")) == 0 ||
+		ext.CmpNoCase(wxT("tar")) == 0 ||
+		wxGetApp().GetPreference()->IsArchiveExt(ext);
+}
+
 bool IsFileNameMatch(const wxFileName & filename)
 {
 	return 	filename.GetExt().CmpNoCase(wxT("txt")) == 0 ||
 			filename.GetExt().CmpNoCase(wxT("html")) == 0  ||
 			filename.GetExt().CmpNoCase(wxT("htm")) == 0  ||
-			filename.GetExt().CmpNoCase(wxT("zip")) == 0  ||
-			filename.GetExt().CmpNoCase(wxT("tar")) == 0  ||
-			filename.GetExt().CmpNoCase(wxT("gz")) == 0;
+			IsArchiveExt(filename.GetExt());
 }
 
 const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir)
 {
-	wxString url = wxEmptyString;
-
-	isUrlDir = true;
-
 	wxString tmpfilename = filename;
 	
 	tmpfilename.Replace(wxT("\\"), wxT("/"));
 
-	wxFileName name(tmpfilename);
+//	wxFileName name(tmpfilename);
 
-	if (filename.Lower().EndsWith(wxT(".tar.gz")))
-	{
-		url = name.GetFullPath() + wxT("#gzip:#tar:/");
-	}
-	else if (name.GetExt().CmpNoCase(wxT("zip")) == 0)
-	{
-		url = name.GetFullPath() + wxT("#zip:/");
-	}
-	else if (name.GetExt().CmpNoCase(wxT("gz")) == 0)
-	{
-		url = name.GetFullPath() + wxT("#gzip:/");
-	}
-	else if (name.GetExt().CmpNoCase(wxT("tar")) == 0)
-	{
-		url = name.GetFullPath() + wxT("#tar:/");
-	}
-	else if (name.GetExt().CmpNoCase(wxT("rar")) == 0)
-	{
-		url = name.GetFullPath() + wxT("#rar:/");
-	}
-	else
-	{
-		url = tmpfilename;//name.GetFullPath();
+	wxString url = tmpfilename;
 
-		isUrlDir = false;
+	size_t pos = tmpfilename.rfind(wxT("."));
+	size_t begin = tmpfilename.Len() - 1;
+
+	while(pos != wxString::npos)
+	{
+		wxString ext = tmpfilename.SubString(pos + 1, begin);
+
+		if (IsArchiveExt(ext))
+		{
+			if (ext.CmpNoCase(wxT("gz")) == 0)
+			{
+				url += wxT("#gzip:");
+			}
+			else
+			{
+				url += wxT("#");
+				url += ext;
+				url += wxT(":");
+			}
+		}
+		else
+		{
+			break;
+		}
+
+		begin = pos - 1;
+
+		pos = tmpfilename.rfind(wxT("."), begin);
 	}
+
+	isUrlDir = url.CmpNoCase(tmpfilename) != 0;
+
+	if (isUrlDir)
+	{
+		url += wxT("/");
+	}
+
+	//if (filename.Lower().EndsWith(wxT(".tar.gz")))
+	//{
+	//	url = tmpfilename + wxT("#gzip:#tar:/");
+	//}
+	//else if (filename.Lower().EndsWith(wxT(".rar.gz")))
+	//{
+	//	url = tmpfilename + wxT("#gzip:#rar:/");
+	//}
+	//else if (name.GetExt().CmpNoCase(wxT("zip")) == 0)
+	//{
+	//	url = tmpfilename + wxT("#zip:/");
+	//}
+	//else if (name.GetExt().CmpNoCase(wxT("gz")) == 0)
+	//{
+	//	url = tmpfilename + wxT("#gzip:/");
+	//}
+	//else if (name.GetExt().CmpNoCase(wxT("tar")) == 0)
+	//{
+	//	url = tmpfilename + wxT("#tar:/");
+	//}
+	//else if (name.GetExt().CmpNoCase(wxT("rar")) == 0)
+	//{
+	//	url = tmpfilename + wxT("#rar:/");
+	//}
+	//else
+	//{
+	//	url = tmpfilename;//name.GetFullPath();
+
+	//	isUrlDir = false;
+	//}
 
 	return url;
 }

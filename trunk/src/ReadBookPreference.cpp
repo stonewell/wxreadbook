@@ -104,6 +104,8 @@ CReadBookPreference::~CReadBookPreference(void)
 
 	if (m_pLogFont != NULL)
 		delete m_pLogFont;
+
+	m_7ZipLibrary.Deinitialize();
 }
 
 void CReadBookPreference::Initialize()
@@ -128,6 +130,10 @@ void CReadBookPreference::Initialize()
 	m_cTxtColor = *wxBLACK;
 	m_cBkColor = *wxWHITE;
 #endif
+
+	m_7ZipLibrary.Initialize();
+
+	m_7ZipLibrary.GetSupportedExts(m_Exts);
 }
 
 void CReadBookPreference::ClearFileInfoMap()
@@ -217,6 +223,9 @@ void CReadBookPreference::Load( wxInputStream & input )
 
 	m_cTxtColor.Set(strTxtColor);
 	m_cBkColor.Set(strBkColor);
+
+	if (m_pLogFont != NULL)
+		delete m_pLogFont;
 
 	m_pLogFont = wxFont::New(nPointSize,nFamily,nStyle | wxFONTFLAG_ANTIALIASED,nWeight,Underlined == 1,
 		strFaceName,static_cast<wxFontEncoding>(nEncoding));
@@ -362,4 +371,27 @@ wxInt32 CReadBookPreference::GetFileInfo(const wxString & strFileName,
 	}
 
 	return 0;
+}
+
+bool CReadBookPreference::IsArchiveExt(const wxString & ext) const
+{
+	for(WStringArray::const_iterator it = m_Exts.begin(); it != m_Exts.end(); it++)
+	{
+		if (ext.CmpNoCase(*it) == 0)
+			return true;
+	}
+
+	return false;
+}
+
+wxString CReadBookPreference::GetArchiveFileFilters()
+{
+	wxString filters = wxEmptyString;
+
+	for(WStringArray::const_iterator it = m_Exts.begin(); it != m_Exts.end(); it++)
+	{
+		filters.Append(wxT("*.")).Append(*it).Append(wxT(";"));
+	}
+
+	return filters.SubString(0, filters.Len() - 2);
 }
