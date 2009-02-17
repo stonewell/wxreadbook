@@ -1,4 +1,6 @@
 SUBDIRS = src doc
 EXTRA_DIST = Makefile.msw \
-	wxReadBook.sln \
-	wxReadBook\ -\ VS2008.sln	
+	wxReadBook.sln 
+
+dist-hook:
+	cp -rf $(srcdir)/wxReadBook*.sln $(distdir)
