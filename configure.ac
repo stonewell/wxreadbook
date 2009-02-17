@@ -7,6 +7,8 @@ AC_PROG_CXX
 AC_C_CONST
 AC_HEADER_STDBOOL
 
+AC_PROG_RANLIB
+
 AC_LANG(C++)
 
 dnl enable debug
@@ -60,6 +62,7 @@ AC_CONFIG_FILES([
 	Makefile
 	doc/Makefile
 	src/Makefile
+	src/7Zip/Makefile
 	src/res/Makefile
 ])
 
