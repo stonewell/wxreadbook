@@ -263,7 +263,7 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	GBBig5Table.h 	
 
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a
-EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc
+EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
 all: all-recursive
 
 .SUFFIXES:
@@ -556,6 +556,9 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
+	  dist-hook
 check-am: all-am
 check: check-recursive
 all-am: Makefile $(PROGRAMS) all-local
@@ -650,7 +653,7 @@ uninstall-am: uninstall-binPROGRAMS
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am all-local check check-am clean clean-binPROGRAMS \
-	clean-generic ctags ctags-recursive distclean \
+	clean-generic ctags ctags-recursive dist-hook distclean \
 	distclean-compile distclean-generic distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-binPROGRAMS install-data install-data-am install-dvi \
@@ -663,6 +666,9 @@ uninstall-am: uninstall-binPROGRAMS
 	ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-binPROGRAMS
 
+
+dist-hook:
+	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
 all-local:
 	$(STRIP) wxReadBook

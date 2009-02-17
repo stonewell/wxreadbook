@@ -81,7 +81,10 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a
 
-EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc wxReadBook\ -\ VS2008.vcproj
+EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
+
+dist-hook:
+	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
 all-local:
 	$(STRIP) wxReadBook
