@@ -543,7 +543,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswu&quot;"
+				AdditionalIncludeDirectories="..\..\lib7zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswu&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WXMSW__"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
