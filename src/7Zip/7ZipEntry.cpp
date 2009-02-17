@@ -72,7 +72,9 @@ C7ZipEntry::C7ZipEntry(const C7ZipEntry& e)
     m_Comment(e.m_Comment),
     m_DiskStart(e.m_DiskStart),
     m_InternalAttributes(e.m_InternalAttributes),
-    m_ExternalAttributes(e.m_ExternalAttributes)
+    m_ExternalAttributes(e.m_ExternalAttributes),
+	m_bIsDir(e.m_bIsDir),
+	m_nArchiveIndex(e.m_nArchiveIndex)
 {
 }
 
@@ -95,6 +97,8 @@ C7ZipEntry& C7ZipEntry::operator=(const C7ZipEntry& e)
         m_DiskStart = e.m_DiskStart;
         m_InternalAttributes = e.m_InternalAttributes;
         m_ExternalAttributes = e.m_ExternalAttributes;
+		m_bIsDir = e.m_bIsDir;
+		m_nArchiveIndex = e.m_nArchiveIndex;
     }
     return *this;
 }

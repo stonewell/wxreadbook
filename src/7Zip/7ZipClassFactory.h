@@ -7,16 +7,16 @@
 class WXDLLIMPEXP_BASE C7ZipClassFactory : public wxArchiveClassFactory
 {
 public:
-    C7ZipClassFactory();
+    C7ZipClassFactory(const wxString & strExt);
 
     C7ZipEntry *NewEntry() const
         { return new C7ZipEntry; }
     C7ZipInputStream *NewStream(wxInputStream& stream) const
-        { return new C7ZipInputStream(stream, GetConv()); }
+        { return new C7ZipInputStream(m_strExt, stream, GetConv()); }
     C7ZipOutputStream *NewStream(wxOutputStream& stream) const
         { return new C7ZipOutputStream(stream, -1, GetConv()); }
     C7ZipInputStream *NewStream(wxInputStream *stream) const
-        { return new C7ZipInputStream(stream, GetConv()); }
+        { return new C7ZipInputStream(m_strExt, stream, GetConv()); }
     C7ZipOutputStream *NewStream(wxOutputStream *stream) const
         { return new C7ZipOutputStream(stream, -1, GetConv()); }
 
@@ -40,7 +40,19 @@ protected:
         { return NewStream(stream); }
 
 private:
+	wxString m_strExt;
+	wxString m_strMimeType;
+	wxString m_strFileExt;
+
+	const wxChar *m_Protocols[2];
+	const wxChar *m_MimeTypes[2];
+	const wxChar *m_FileExts[2];
+
+
+	C7ZipClassFactory() {};
+
     DECLARE_DYNAMIC_CLASS(C7ZipClassFactory)
 };
 
+WX_DECLARE_LIST_WITH_DECL(C7ZipClassFactory, C7ZipClassFactoryPtrList, class WXDLLIMPEXP_BASE);
 #endif

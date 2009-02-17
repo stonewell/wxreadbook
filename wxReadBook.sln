@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{4A0A9E70-FA3
 		doc\gb2big5.txt = doc\gb2big5.txt
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lib7Zip", "..\7Zip\Lib7Zip\Lib7Zip.vcproj", "{383D73DB-A55D-4677-826F-16F8BB7CD578}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lib7Zip", "..\lib7Zip\Lib7Zip\Lib7Zip.vcproj", "{383D73DB-A55D-4677-826F-16F8BB7CD578}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

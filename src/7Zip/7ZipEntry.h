@@ -70,6 +70,9 @@ public:
 
     C7ZipEntry *Clone() const                   { return ZipClone(); }
 
+	unsigned int GetArchiveIndex() const { return m_nArchiveIndex; }
+	void SetArchiveIndex(unsigned int nArchiveIndex) { m_nArchiveIndex = nArchiveIndex; }
+
 protected:
     // protected Get accessors
     int GetVersionNeeded() const                { return m_VersionNeeded; }
@@ -115,6 +118,8 @@ private:
     wxUint32     m_ExternalAttributes; // system specific depends on SystemMadeBy
 
 	bool m_bIsDir;
+
+	unsigned int m_nArchiveIndex;
 
     DECLARE_DYNAMIC_CLASS(C7ZipEntry)
 };

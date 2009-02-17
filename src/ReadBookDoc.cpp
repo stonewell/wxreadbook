@@ -163,8 +163,6 @@ bool CReadBookDoc::OnCloseDocument()
 	return wxDocument::OnCloseDocument();
 }
 
-extern wxString g_CurrentUrl;
-
 bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool bGuess)
 {
 	m_Buffer.Clear();
@@ -172,8 +170,6 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 	bool isDir = true;
 
 	wxString url = FileNameToUrl(filename, isDir);
-
-	g_CurrentUrl = filename;
 
 	if (isDir)
 	{

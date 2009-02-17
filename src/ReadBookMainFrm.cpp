@@ -449,7 +449,12 @@ void CReadBookMainFrm::AddRecentFile(const wxString & strFileName)
     pNewItem->SetHelp(strFileName);
 
     if (m_pRecentFileMenu->GetMenuItemCount() > (size_t)RECENT_FILE_SIZE)
-        m_pRecentFileMenu->Remove(m_pRecentFileMenu->FindItemByPosition(RECENT_FILE_SIZE));
+	{
+        wxMenuItem * pRemovedItem =
+			m_pRecentFileMenu->Remove(m_pRecentFileMenu->FindItemByPosition(RECENT_FILE_SIZE));
+
+		delete pRemovedItem;
+	}
 
     UpdateRecentFilesLabel();
 }

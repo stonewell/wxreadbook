@@ -22,32 +22,81 @@
 #include "7ZipInputStream.h"
 #include "7ZipClassFactory.h"
 
+#include "lib7zip.h"
+
 IMPLEMENT_DYNAMIC_CLASS(C7ZipClassFactory, wxArchiveClassFactory)
+
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(C7ZipClassFactoryPtrList)
 
 /////////////////////////////////////////////////////////////////////////////
 // Class factory
 
-C7ZipClassFactory g_7ZipClassFactory;
-
-C7ZipClassFactory::C7ZipClassFactory()
+C7ZipClassFactory::C7ZipClassFactory(const wxString & strExt) : m_strExt(strExt)
 {
-    if (this == &g_7ZipClassFactory)
-        PushFront();
+    m_Protocols[0] = m_strExt;
+
+	m_strMimeType = L"application/";
+	m_strMimeType += m_strExt;
+
+	m_MimeTypes[0] = m_strMimeType;
+
+	m_strFileExt = L".";
+	m_strFileExt += m_strExt;
+
+	m_FileExts[0] = m_strFileExt;
+
+	m_Protocols[1] = m_MimeTypes[1] = m_FileExts[1] = NULL; 
+
+	PushFront();
 }
 
 const wxChar * const *
 C7ZipClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *protocols[] = { _T("rar"), NULL };
-    static const wxChar *mimetypes[] = { _T("application/rar"), NULL };
-    static const wxChar *fileexts[]  = { _T(".rar"), NULL };
     static const wxChar *empty[]     = { NULL };
 
-    switch (type) {
-        case wxSTREAM_PROTOCOL: return protocols;
-        case wxSTREAM_MIMETYPE: return mimetypes;
-        case wxSTREAM_FILEEXT:  return fileexts;
+    switch (type) 
+	{
+        case wxSTREAM_PROTOCOL: return m_Protocols;
+        case wxSTREAM_MIMETYPE: return m_MimeTypes;
+        case wxSTREAM_FILEEXT:  return m_FileExts;
         default:                return empty;
     }
 }
 
+class C7ZipClassFactoryManager
+{
+public:
+	C7ZipClassFactoryManager()
+	{
+		m_7ZipLibrary.Initialize();
+
+		WStringArray exts;
+
+		if (m_7ZipLibrary.GetSupportedExts(exts))
+		{
+			for(WStringArray::iterator it = exts.begin(); it != exts.end(); it++)
+			{
+				wxString ext = *it;
+
+				C7ZipClassFactory * pFactory = new C7ZipClassFactory(ext);
+
+				m_FactoryList.push_back(pFactory);
+			}
+		}
+	}
+
+	~C7ZipClassFactoryManager()
+	{
+		m_7ZipLibrary.Deinitialize();
+
+		WX_CLEAR_LIST(C7ZipClassFactoryPtrList, m_FactoryList);
+	}
+
+private:
+	C7ZipLibrary m_7ZipLibrary;
+	C7ZipClassFactoryPtrList m_FactoryList;
+};
+
+static C7ZipClassFactoryManager g_7ZipClassFactoryManager;

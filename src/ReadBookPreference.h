@@ -3,6 +3,8 @@
 
 #include <wx/datstrm.h>
 
+#include "lib7zip.h"
+
 namespace wxReadBook
 {
 	enum DisplayAsEnum
@@ -63,6 +65,9 @@ private:
 
 	wxString m_strLastFile;
 
+	C7ZipLibrary m_7ZipLibrary;
+	WStringArray m_Exts;
+
 	void Initialize();
 
 	void ClearFileInfoMap();
@@ -95,6 +100,10 @@ public:
 	void SetBackgroundColor(wxColour color) { m_cBkColor = color; }
 
 	const CFileInfoList * GetFileInfoMap() { return &m_FileInfoList; }
+
+	bool IsArchiveExt(const wxString & ext) const;
+
+	wxString GetArchiveFileFilters();
 };
 #endif
 
