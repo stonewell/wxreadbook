@@ -316,3 +316,4 @@ bool C7ZipInputStream::OpenEntry(C7ZipEntry & entry)
 
 	return true;
 }
+

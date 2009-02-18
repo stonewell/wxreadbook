@@ -63,7 +63,9 @@ am_wxReadBook_OBJECTS = ArchiveExplorerDlg.$(OBJEXT) \
 	ReadBookBufferedDoc.$(OBJEXT) ReadBookBufferedView.$(OBJEXT) \
 	GBBig5Table.$(OBJEXT)
 wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
-wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a
+wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a \
+	$(srcdir)/../libs/lib7zip.a $(srcdir)/../libs/libcppcommon.a \
+	$(srcdir)/../libs/libcppwindows.a
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -183,6 +185,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = 7Zip res
+AM_CXXFLAGS = -I$(srcdir)/../includes
 wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	nsBIG5Statistics.cpp \
 	BookMarksDlg.cpp \
@@ -262,7 +265,11 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	GBBig5Table.cpp \
 	GBBig5Table.h 	
 
-wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a
+wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
+	$(srcdir)/../libs/lib7zip.a \
+	$(srcdir)/../libs/libcppcommon.a \
+	$(srcdir)/../libs/libcppwindows.a
+
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
 all: all-recursive
 
@@ -671,7 +678,6 @@ dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
 all-local:
-	$(STRIP) wxReadBook
 	cp wxReadBook ..
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
