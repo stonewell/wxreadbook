@@ -1,5 +1,8 @@
 SUBDIRS = 7Zip res
 bin_PROGRAMS = wxReadBook
+
+AM_CXXFLAGS = -I$(srcdir)/../includes
+
 wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	nsBIG5Statistics.cpp \
 	BookMarksDlg.cpp \
@@ -79,7 +82,10 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	GBBig5Table.cpp \
 	GBBig5Table.h 	
 	
-wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a
+wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
+	$(srcdir)/../libs/lib7zip.a \
+	$(srcdir)/../libs/libcppcommon.a \
+	$(srcdir)/../libs/libcppwindows.a
 
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
 
@@ -87,5 +93,4 @@ dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
 all-local:
-	$(STRIP) wxReadBook
 	cp wxReadBook ..
