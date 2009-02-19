@@ -99,4 +99,16 @@ private:
 	C7ZipClassFactoryPtrList m_FactoryList;
 };
 
-static C7ZipClassFactoryManager g_7ZipClassFactoryManager;
+C7ZipClassFactoryManager * g_p7ZipClassFactoryManager = NULL;
+
+void Initialize7ZipClassFactories()
+{
+	if (g_p7ZipClassFactoryManager == NULL)
+		g_p7ZipClassFactoryManager = new C7ZipClassFactoryManager();
+}
+
+void Deinitialize7ZipClassFactories()
+{
+	 if (g_p7ZipClassFactoryManager != NULL)
+		delete g_p7ZipClassFactoryManager;
+}
