@@ -52,12 +52,17 @@ CReadBookApp::CReadBookApp(void)
     m_pDocManager = (wxDocManager *) NULL;
 }
 
+extern void Initialize7ZipClassFactories();
+extern void Deinitialize7ZipClassFactories();
+
 bool CReadBookApp::OnInit(void)
 {
 	wxFileSystem::AddHandler(new wxArchiveFSHandler());
 	wxFileSystem::AddHandler(new wxFilterFSHandler);
 
 	LoadPreference();
+
+	Initialize7ZipClassFactories();
 
 	//// Create a document manager
     m_pDocManager = new wxDocManager;
@@ -142,6 +147,8 @@ int CReadBookApp::OnExit(void)
 {
     delete m_pDocManager;
 	SavePreference();
+
+	Deinitialize7ZipClassFactories();
 
     return 0;
 }
