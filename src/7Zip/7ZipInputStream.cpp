@@ -153,6 +153,10 @@ void C7ZipInputStream::Init()
 			}
 		}
 	}
+	else
+	{
+		printf("open archive fail\n");
+	}
 }
 
 C7ZipInputStream::~C7ZipInputStream()
