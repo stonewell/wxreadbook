@@ -1,4 +1,4 @@
-AC_INIT([wxReadBook], [1.2.0], [jingnan.si@gmail.com])
+AC_INIT([wxReadBook], [1.2.1], [jingnan.si@gmail.com])
 AC_CONFIG_SRCDIR(src/ReadBookApp.cpp)
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
