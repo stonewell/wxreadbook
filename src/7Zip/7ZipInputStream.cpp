@@ -37,7 +37,8 @@ public:
             delete m_file;
             m_file_destroy = false;
         }
-        //wxRemoveFile(m_filename);
+
+        wxRemoveFile(m_filename);
     }
 
 protected:
