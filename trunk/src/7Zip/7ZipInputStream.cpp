@@ -322,3 +322,10 @@ bool C7ZipInputStream::OpenEntry(C7ZipEntry & entry)
 	return true;
 }
 
+bool C7ZipInputStream::Eof() const
+{
+    if (m_pEntryStream == NULL)
+        return true;
+
+    return m_pEntryStream->Eof();
+}
