@@ -50,6 +50,7 @@ protected:
     virtual bool CloseEntry();
     //virtual wxFileOffset GetLength() const;
 
+    virtual bool Eof() const;
 private:
     void Init();
     C7ZipEntry *GetNextEntry();
