@@ -336,7 +336,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - Unicode|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -418,7 +418,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - Unicode|Pocket PC 2003 (ARMV4)"
-			OutputDirectory="$(SolutionDir)Pocket PC 2003 (ARMV4)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="Pocket PC 2003 (ARMV4)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -503,7 +503,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release - Unicode|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
