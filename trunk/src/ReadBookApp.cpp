@@ -1,6 +1,8 @@
 #if _WIN32
+#ifndef _WIN32_WCE
 #if _DEBUG
 #include "vld.h"
+#endif
 #endif
 #endif
 
@@ -18,6 +20,7 @@
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
 #endif
 
+#include "wx/generic/filedlgg.h"
 #include "wx/docview.h"
 
 #include "wx/filename.h"
@@ -402,6 +405,21 @@ wxDocTemplate *CReadBookDocManager::SelectDocumentPath(wxDocTemplate **templates
 
     wxWindow* parent = wxFindSuitableParent();
 
+#ifdef _WIN32_WCE
+    wxGenericFileDialog fileDialog(parent,
+                            _("Select a file"),
+                            m_lastDirectory,
+                            wxEmptyString,
+                            descrBuf);
+
+    wxString pathTmp;
+    if ( fileDialog.ShowModal() == wxID_OK )
+    {
+        FilterIndex = fileDialog.GetFilterIndex();
+
+        pathTmp = fileDialog.GetPath();
+    }
+#else
     wxString pathTmp = wxFileSelectorEx(_("Select a file"),
                                         m_lastDirectory,
                                         wxEmptyString,
@@ -409,7 +427,7 @@ wxDocTemplate *CReadBookDocManager::SelectDocumentPath(wxDocTemplate **templates
                                         descrBuf,
                                         0,
                                         parent);
-
+#endif
     wxDocTemplate *theTemplate = (wxDocTemplate *)NULL;
     if (!pathTmp.empty())
     {

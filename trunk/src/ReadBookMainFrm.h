@@ -38,11 +38,12 @@ public:
 	void OnFullScreen(wxCommandEvent& event);
 	void OnEncoding(wxCommandEvent& event);
 	void OnEncodingUpdateUI(wxUpdateUIEvent& event);
-#ifdef __WXMSW__
 	void OnHide(wxCommandEvent& event);
 	void OnHotKeyShowWindow(wxKeyEvent& event);
-#endif
 
+    virtual wxToolBar* OnCreateToolBar(long style,
+                                        wxWindowID id,
+                                        const wxString& name);
 	void Init();
 	void AddRecentFile(const wxString & strFileName);
 
@@ -64,9 +65,7 @@ private:
 
 	wxMBConv * m_pMBConv;
 
-#ifdef __WXMSW__
 	int m_nHotKeyId;
-#endif
 
 	CReadBookCanvas *CreateCanvas(wxView *view, wxFrame *parent);
 
