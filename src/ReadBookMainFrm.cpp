@@ -51,9 +51,7 @@ BEGIN_EVENT_TABLE(CReadBookMainFrm, wxDocParentFrame)
     EVT_MENU(IDM_BOOKMARKS, CReadBookMainFrm::OnBookMarks)
     EVT_MENU(IDM_ADD_BOOKMARK, CReadBookMainFrm::OnAddBookMark)
     EVT_MENU(IDM_CLEAR_BOOKMARKS, CReadBookMainFrm::OnClearBookMarks)
-#ifdef __WXMSW__
     EVT_MENU(IDM_HIDE, CReadBookMainFrm::OnHide)
-#endif
     EVT_MENU(IDM_FULL_SCREEN, CReadBookMainFrm::OnFullScreen)
     EVT_MENU_RANGE(IDM_ENCODE_ID_START, IDM_ENCODE_ID_END, CReadBookMainFrm::OnEncoding)
     EVT_UPDATE_UI_RANGE(IDM_ENCODE_ID_START, IDM_ENCODE_ID_END, CReadBookMainFrm::OnEncodingUpdateUI)
@@ -74,8 +72,8 @@ m_pMBConv(NULL)
 
 CReadBookMainFrm::~CReadBookMainFrm()
 {
-#ifdef __WXMSW__
     UnregisterHotKey(m_nHotKeyId);
+#ifdef __WXMSW__
     ::GlobalDeleteAtom(m_nHotKeyId);
 #endif
 
@@ -178,10 +176,8 @@ void CReadBookMainFrm::Init()
         m_pRecentFileMenuItem->Enable(false);
     }
 
-#ifdef __WXMSW__
     pFileMenu->AppendSeparator();
     pFileMenu->Append(IDM_HIDE, wxT("&Hide\tESCAPE"));
-#endif
 
     pFileMenu->AppendSeparator();
     pFileMenu->Append(wxID_EXIT, wxT("E&xit\tCTRL+X"));
@@ -237,8 +233,10 @@ void CReadBookMainFrm::Init()
     pViewMenu->Append(IDM_CLEAR_BOOKMARKS, wxT("&Clear Bookmarks"));
     pViewMenu->Append(IDM_BOOKMARKS, wxT("Bookmarks..."));
 
+#ifndef _WIN32_WCE
     pViewMenu->AppendSeparator();
     pViewMenu->Append(IDM_FULL_SCREEN, wxT("FullScreen\tF11"));
+#endif
 
     wxMenu *pHelpMenu = new wxMenu;
     pHelpMenu->Append(IDM_ABOUT, wxT("&About"));
@@ -253,13 +251,19 @@ void CReadBookMainFrm::Init()
     //// Associate the menu bar with the g_pMainFrm
     SetMenuBar(pMenuBar);
 
+#ifdef _WIN32_WCE
+    CreateToolBar();
+#endif
+
     //Register System wide hot key
 
 #ifdef __WXMSW__
     m_nHotKeyId = ::GlobalAddAtom(wxT("wxReadBookHotKey_ShowWindow"));
+#else
+    m_nHotKeyId = 0x7F7F;
+#endif
     RegisterHotKey(m_nHotKeyId, wxMOD_CONTROL | wxMOD_ALT, 'S');
     Connect(m_nHotKeyId, wxEVT_HOTKEY, wxCharEventHandler(CReadBookMainFrm::OnHotKeyShowWindow));
-#endif
 	m_pCanvas->SetFocus();
 }
 
@@ -481,7 +485,6 @@ void CReadBookMainFrm::OnFullScreen(wxCommandEvent& event)
     this->ShowFullScreen(!this->IsFullScreen());
 }
 
-#ifdef __WXMSW__
 void CReadBookMainFrm::OnHide(wxCommandEvent& event)
 {
     if (IsShown())
@@ -496,7 +499,6 @@ void CReadBookMainFrm::OnHotKeyShowWindow(wxKeyEvent& event)
         Show();
     }
 }
-#endif
 
 void CReadBookMainFrm::OnEncoding(wxCommandEvent& event)
 {
@@ -651,4 +653,19 @@ void CReadBookMainFrm::OnViewDisplayTraditionalUpdateUI(wxUpdateUIEvent& event)
 
 		event.Check(pView->GetDisplayAs() == wxReadBook::DisplayAsTraditional);
 	}
+}
+
+wxToolBar* CReadBookMainFrm::OnCreateToolBar(long style,
+                                        wxWindowID id,
+                                        const wxString& name)
+{
+#if defined(__WXWINCE__) && defined(__POCKETPC__)
+    return new wxToolMenuBar(this, id,
+                         wxDefaultPosition, wxDefaultSize,
+                         style, name, GetMenuBar());
+#else
+    return new wxToolBar(this, id,
+                         wxDefaultPosition, wxDefaultSize,
+                         style, name);
+#endif
 }
