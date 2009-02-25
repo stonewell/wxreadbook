@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
-
 #ifndef _WIN32
 #define __int64 long long int
 typedef std::basic_string<wchar_t> wstring;
+typedef std::basic_string<char> string;
 #define CLASS_E_CLASSNOTAVAILABLE (0x80040111L)
 #define FILE_BEGIN           0
 #define FILE_CURRENT         1
@@ -29,11 +29,14 @@ public:
 class C7ZipObjectPtrArray : public std::vector<C7ZipObject *>
 {
 public:
-	C7ZipObjectPtrArray();
-	~C7ZipObjectPtrArray();
+	C7ZipObjectPtrArray(bool auto_release = true);
+	virtual ~C7ZipObjectPtrArray();
 
 public:
 	void clear();
+
+private:
+    bool m_bAutoRelease;
 };
 
 class C7ZipArchiveItem : public virtual C7ZipObject
@@ -43,9 +46,9 @@ public:
 	virtual ~C7ZipArchiveItem();
 
 public:
-	virtual wstring GetFullPath() const;
-	virtual bool IsDir() const;
-	virtual unsigned int GetArchiveIndex() const;
+	virtual wstring GetFullPath() const  = 0;
+	virtual bool IsDir() const  = 0;
+	virtual unsigned int GetArchiveIndex() const  = 0;
 };
 
 class C7ZipInStream
@@ -72,12 +75,12 @@ public:
 	virtual ~C7ZipArchive();
 
 public:
-	virtual bool GetItemCount(unsigned int * pNumItems);
-	virtual bool GetItemInfo(unsigned int index, C7ZipArchiveItem ** ppArchiveItem);
-	virtual bool Extract(unsigned int index, C7ZipOutStream * pOutStream);
-	virtual bool Extract(const C7ZipArchiveItem * pArchiveItem, C7ZipOutStream * pOutStream);
+	virtual bool GetItemCount(unsigned int * pNumItems) = 0;
+	virtual bool GetItemInfo(unsigned int index, C7ZipArchiveItem ** ppArchiveItem) = 0;
+	virtual bool Extract(unsigned int index, C7ZipOutStream * pOutStream) = 0;
+	virtual bool Extract(const C7ZipArchiveItem * pArchiveItem, C7ZipOutStream * pOutStream) = 0;
 	
-	virtual void Close();
+	virtual void Close() = 0;
 };
 
 class C7ZipLibrary
@@ -87,13 +90,9 @@ public:
 	~C7ZipLibrary();
 
 private:
-	void * m_h7zipHandler;
 	bool m_bInitialized;
 
-	unsigned char m_pLibData[sizeof(void *) * 7];
-
-	C7ZipObjectPtrArray m_CodecInfoArray;
-
+	C7ZipObjectPtrArray m_InternalObjectsArray;
 protected:
 
 public:
@@ -102,10 +101,11 @@ public:
 
 	bool GetSupportedExts(WStringArray & exts);
 
-#ifdef _WIN32
-	bool OpenArchive(const wstring & filepath, C7ZipArchive ** ppArchive);
-#endif
 	bool OpenArchive(C7ZipInStream * pInStream, C7ZipArchive ** ppArchive);
+
+    const C7ZipObjectPtrArray & GetInternalObjectsArray() { return m_InternalObjectsArray; }
+
+    bool IsInitialized() const { return m_bInitialized; }
 };
 
 #endif
