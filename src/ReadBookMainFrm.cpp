@@ -72,8 +72,8 @@ m_pMBConv(NULL)
 
 CReadBookMainFrm::~CReadBookMainFrm()
 {
-    UnregisterHotKey(m_nHotKeyId);
 #ifdef __WXMSW__
+    UnregisterHotKey(m_nHotKeyId);
     ::GlobalDeleteAtom(m_nHotKeyId);
 #endif
 
@@ -176,8 +176,10 @@ void CReadBookMainFrm::Init()
         m_pRecentFileMenuItem->Enable(false);
     }
 
+#ifdef __WXMSW__
     pFileMenu->AppendSeparator();
     pFileMenu->Append(IDM_HIDE, wxT("&Hide\tESCAPE"));
+#endif
 
     pFileMenu->AppendSeparator();
     pFileMenu->Append(wxID_EXIT, wxT("E&xit\tCTRL+X"));
@@ -259,11 +261,9 @@ void CReadBookMainFrm::Init()
 
 #ifdef __WXMSW__
     m_nHotKeyId = ::GlobalAddAtom(wxT("wxReadBookHotKey_ShowWindow"));
-#else
-    m_nHotKeyId = 0x7F7F;
-#endif
     RegisterHotKey(m_nHotKeyId, wxMOD_CONTROL | wxMOD_ALT, 'S');
     Connect(m_nHotKeyId, wxEVT_HOTKEY, wxCharEventHandler(CReadBookMainFrm::OnHotKeyShowWindow));
+#endif
 	m_pCanvas->SetFocus();
 }
 
