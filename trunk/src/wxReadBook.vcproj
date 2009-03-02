@@ -891,11 +891,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookChar.cpp"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookDoc.cpp"
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookLine.cpp"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookMainFrm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookPage.cpp"
 				>
 			</File>
 			<File
@@ -904,6 +916,14 @@
 			</File>
 			<File
 				RelativePath="ReadBookPreferenceDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookSimpleDoc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookSimpleView.cpp"
 				>
 			</File>
 			<File
@@ -1074,11 +1094,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookChar.h"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookDoc.h"
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookLine.h"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookMainFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookPage.h"
 				>
 			</File>
 			<File
@@ -1087,6 +1119,14 @@
 			</File>
 			<File
 				RelativePath="ReadBookPreferenceDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookSimpleDoc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookSimpleView.h"
 				>
 			</File>
 			<File
