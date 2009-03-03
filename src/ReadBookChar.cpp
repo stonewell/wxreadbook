@@ -22,3 +22,13 @@ CReadBookChar::CReadBookChar(void)
 CReadBookChar::~CReadBookChar(void)
 {
 }
+
+void CReadBookChar::Paint(wxInt32 x, wxInt32 y, wxDC * pDC)
+{
+    pDC->DrawText(m_nChar, x, y);
+}
+
+bool CReadBookChar::IsAscii() const
+{
+    return m_nChar < 255;
+}

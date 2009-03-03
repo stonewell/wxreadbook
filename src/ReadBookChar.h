@@ -17,7 +17,9 @@ public:
 
     void SetData(wxFileOffset offset, wxChar ch) { m_nFileOffset = offset; m_nChar = ch; }
 
-    void Paint(int x, int y, wxDC * pDC);
+    void Paint(wxInt32 x, wxInt32 y, wxDC * pDC);
+
+    bool IsAscii() const;
 };
 
 #endif
