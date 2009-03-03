@@ -6,21 +6,29 @@
 class CReadBookLine
 {
 public:
-    CReadBookLine(void);
+    CReadBookLine(wxUint32 nMaxAsciiCharCount,
+        wxUint32 nAvgAsciiCharWidth,
+        wxUint32 nColMargin);
     virtual ~CReadBookLine(void);
 
 private:
+    wxUint32 m_nMaxAsciiCharCount;
+    wxUint32 m_nAvgAsciiCharWidth;
+    wxUint32 m_nColMargin;
+
+    CReadBookChar ** m_ReadBookChars;
 
 public:
-    bool InsertChar(unsigned int nPos, const CReadBookChar * pChar);
+    bool SetChar(wxUint32 nPos, const CReadBookChar * pChar);
     bool AppendChar(const CReadBookChar * pChar);
-    bool RemoveChar(unsigned int nPos);
-    CReadBookChar * GetChar(unsigned int nPos);
+    bool RemoveChar(wxUint32 nPos,bool destroy = true);
+    CReadBookChar * GetChar(wxUint32 nPos);
 
-    int GetCharCount() const;
+    wxUint32 GetAsciiCharCount() const;
+
     wxFileOffset GetFileOffset() const;
 
-    void Paint(int x, int y, wxDC * pDC, int count = -1);
+    void Paint(wxInt32 x, wxInt32 y, wxDC * pDC, wxInt32 count = -1);
 };
 
 #endif

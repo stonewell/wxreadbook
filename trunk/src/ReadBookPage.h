@@ -6,24 +6,47 @@
 class CReadBookPage
 {
 public:
-    CReadBookPage(void);
+    CReadBookPage(wxUint32 nMaxLineCount,
+        wxUint32 nLineHeight,
+        wxUint32 nLineMargin,
+        wxUint32 nMaxAsciiCharCount,
+        wxUint32 nAvgAsciiCharWidth,
+        wxUint32 nColMargin);
     virtual ~CReadBookPage(void);
 
 private:
+    wxUint32 m_nMaxLineCount;
+    wxUint32 m_nLineHeight;
+    wxUint32 m_nLineMargin;
+
+    wxUint32 m_nMaxAsciiCharCount;
+    wxUint32 m_nAvgAsciiCharWidth;
+    wxUint32 m_nColMargin;
+
+    CReadBookLine ** m_ReadBookLines;
+
+    CReadBookLine * CreateLine(wxUint32 nRow);
 
 public:
-    bool InsertChar(unsigned int nRow, unsigned int nCol, const CReadBookChar * pChar);
+    bool SetChar(wxUint32 nRow, wxUint32 nCol, const CReadBookChar * pChar);
     bool AppendChar(const CReadBookChar * pChar);
-    bool RemoveChar(unsigned int nRow, unsigned int nCol);
+    bool RemoveChar(wxUint32 nRow, wxUint32 nCol, bool destroy = true);
 
-    int GetLineCount() const;
+    bool SetLine(wxUint32 nRow, const CReadBookLine * pLine);
+    bool RemoveLine(wxUint32 nRow, bool destroy = true);
 
-    CReadBookLine * GetLine(unsigned int nRow);
-    CReadBookChar * GetChar(unsigned int nRow, unsigned int nCol);
+    wxInt32 GetLineCount() const;
+
+    CReadBookLine * GetLine(wxUint32 nRow) const;
+    CReadBookChar * GetChar(wxUint32 nRow, wxUint32 nCol) const;
 
     wxFileOffset GetFileOffset() const;
 
-    void Paint(int x, int y, wxDC * pDC);
+    void Paint(wxInt32 x, wxInt32 y, wxDC * pDC);
+
+    wxUint32 GetLineHeight() const { return m_nLineHeight; }
+
+    wxUint32 GetLineMargin() const { return m_nLineMargin; }
 };
 
 #endif
