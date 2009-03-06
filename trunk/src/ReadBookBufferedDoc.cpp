@@ -469,7 +469,7 @@ void CReadBookBufferedDoc::CleanUp()
 	m_RowOffsetMap.clear();
 }
 
-wxInt32 CReadBookBufferedDoc::GetBufferSize(void) const
+wxFileOffset CReadBookBufferedDoc::GetBufferSize(void) const
 {
 	return m_nFileLength;
 }
