@@ -20,7 +20,6 @@ public:
         wxFileOffset & final_offset, 
         bool & end_of_line);
 	virtual wxFileOffset GetBufferSize(void) const;
-    virtual wxFileOffset GetCurrentPosition(void) const;
 
 	virtual void ShiftStream(wxInt32 delta);
 
