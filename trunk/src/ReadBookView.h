@@ -36,10 +36,10 @@ public:
     virtual void OnDraw(wxDC *dc);
     void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
     bool OnClose(bool deleteWindow = true);
-    void OnScrollWin(wxScrollWinEvent& event);
+    virtual void OnScrollWin(wxScrollWinEvent& event);
     virtual void OnKeyDown(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
-	void OnMouseWheel(wxMouseEvent & event);
+	virtual void OnMouseWheel(wxMouseEvent & event);
 
     wxReadBook::ViewModeEnum GetViewMode() const { return m_ViewMode; }
     void SetViewMode(wxReadBook::ViewModeEnum ViewMode);
@@ -82,8 +82,8 @@ protected:
 	wxInt16 GetPageSize(void);
 	wxInt16 SetPageSize(wxInt16 nPageSize);
 
-	wxInt32 ScrollPage(wxInt16 nDelta);
-	wxInt32 ScrollLine(wxInt16 nDelta);
+	virtual wxInt32 ScrollPage(wxInt16 nDelta);
+	virtual wxInt32 ScrollLine(wxInt16 nDelta);
 
 	const LineNumberMapping & ViewLineCountToDocLine(wxInt32 viewLine);
 

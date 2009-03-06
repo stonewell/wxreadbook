@@ -74,28 +74,6 @@ void CReadBookSimpleView::CalculateViewSize()
 	m_nViewSize = pDoc->GetBufferSize();
 }
 
-wxInt32 CReadBookSimpleView::NormalizeScrollToLine(wxInt32 nCurrentLine)
-{
-	CReadBookSimpleDoc * pBufferedDoc = 
-		(CReadBookSimpleDoc *)GetReadBookDoc();
-
-	m_nViewSize = pBufferedDoc->GetBufferSize();
-
-	if (pBufferedDoc->GetBufferSize() <= 
-		pBufferedDoc->RowToOffset(nCurrentLine) + GetCharsPerLine())
-	{
-		if (m_nLastLine > 0)
-		{
-			return m_nLastLine;
-		}
-
-		return pBufferedDoc->OffsetToRow(pBufferedDoc->GetBufferSize() -
-			GetCharsPerLine());
-	}
-
-	return nCurrentLine;
-}
-
 void CReadBookSimpleView::CalculateScrollSize(void)
 {
 	wxRect rect = m_pCanvas->GetClientRect();
@@ -115,7 +93,7 @@ void CReadBookSimpleView::CalculateScrollSize(void)
 	CReadBookSimpleDoc * pBufferedDoc = 
 		(CReadBookSimpleDoc *)GetReadBookDoc();
 
-	int pos = pBufferedDoc->RowToOffset(pBufferedDoc->GetCurrentLine());
+    int pos = pBufferedDoc->GetCurrentPosition();
 
 	m_pCanvas->SetScrollbar(wxVERTICAL,
 		pos,
@@ -132,10 +110,128 @@ void CReadBookSimpleView::UpdateScrollPos(void)
         pBufferedDoc->GetCurrentPosition());
 }
 
-wxInt32 CReadBookSimpleView::ScrollPosToLine(wxInt32 nPos)
+void CReadBookSimpleView::OnScrollWin(wxScrollWinEvent& event)
 {
-	CReadBookSimpleDoc * pBufferedDoc = 
-		(CReadBookSimpleDoc *)GetReadBookDoc();
+	bool doScroll = true;
 
-	return pBufferedDoc->OffsetToRow(nPos);
+	wxFileOffset nCurrentPos = GetReadBookDoc()->GetCurrentPosition();
+
+	if (event.GetEventType() == wxEVT_SCROLLWIN_TOP)
+	{
+		if (nCurrentPos == ScrollToPosition(0))
+		{
+			doScroll = false;
+		}
+	}
+	else if (event.GetEventType() == wxEVT_SCROLLWIN_BOTTOM)
+	{
+		if (nCurrentPos == ScrollToPosition(m_nViewSize))
+		{
+			doScroll = false;
+		}
+	}
+	else if (event.GetEventType() == wxEVT_SCROLLWIN_LINEUP)
+	{
+		if ( nCurrentPos == ScrollSimpleLine(-1))
+		{
+			doScroll = false;
+		}
+	}
+	else if (event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN)
+	{
+		if ( nCurrentPos == ScrollSimpleLine(1))
+		{
+			doScroll = false;
+		}
+	}
+	else if (event.GetEventType() == wxEVT_SCROLLWIN_PAGEUP)
+	{
+		if (nCurrentPos == ScrollSimplePage(-1))
+		{
+			doScroll = false;
+		}
+	}
+	else if (event.GetEventType() == wxEVT_SCROLLWIN_PAGEDOWN)
+	{
+		if (nCurrentPos == ScrollSimplePage(1))
+		{
+			doScroll = false;
+		}
+	}
+	else if (event.GetEventType() == wxEVT_SCROLLWIN_THUMBTRACK)
+	{
+		if (nCurrentPos == ScrollToPosition(event.GetPosition()))
+		{
+			doScroll = false;
+		}
+	}
+	else
+	{
+		doScroll = false;
+	}
+
+	if (doScroll)
+	{
+		UpdateScrollPos();
+
+		m_pCanvas->Refresh();
+	}
 }
+
+void CReadBookSimpleView::OnMouseWheel(wxMouseEvent & event)
+{
+	wxInt32 nDeltaLine = event.GetWheelDelta() /
+		(m_FontSize.GetHeight() + wxGetApp().GetPreference()->GetLineMargin());
+
+	if (nDeltaLine <= 0)
+		nDeltaLine = 1;
+
+	bool doScroll = true;
+
+	wxFileOffset nCurrentLine = GetReadBookDoc()->GetCurrentPosition();
+
+	if (event.GetWheelRotation() < 0)
+	{
+		if (nDeltaLine < 0)
+			nDeltaLine *= -1;
+	}
+	else
+	{
+		if (nDeltaLine > 0)
+			nDeltaLine *= -1;
+	}
+
+	if (event.IsPageScroll())
+	{
+		if (nCurrentLine == ScrollSimplePage(nDeltaLine))
+			doScroll = false;
+	}
+	else
+	{
+		if (nCurrentLine == ScrollSimplePage(nDeltaLine))
+			doScroll = false;
+	}
+
+	if (doScroll)
+	{
+		UpdateScrollPos();
+
+		m_pCanvas->Refresh();
+	}
+}
+
+wxFileOffset CReadBookSimpleView::ScrollSimplePage(wxInt16 nDelta)
+{
+    return 0;
+}
+
+wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
+{
+    return 0;
+}
+
+wxFileOffset CReadBookSimpleView::ScrollToPosition(wxFileOffset nDelta)
+{
+    return 0;
+}
+
