@@ -930,6 +930,10 @@
 				RelativePath="ReadBookView.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\UnicodeHelper.cpp"
+				>
+			</File>
 			<Filter
 				Name="ns"
 				Filter="ns*.cpp"
@@ -1131,6 +1135,10 @@
 			</File>
 			<File
 				RelativePath="ReadBookView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UnicodeHelper.h"
 				>
 			</File>
 			<File

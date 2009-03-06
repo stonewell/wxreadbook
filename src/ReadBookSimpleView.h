@@ -13,14 +13,18 @@ public:
 
 public:
     virtual void OnDraw(wxDC *dc);
+    virtual void OnScrollWin(wxScrollWinEvent& event);
+    virtual void OnMouseWheel(wxMouseEvent & event);
 
 	CReadBookSimpleDoc * GetReadBookDoc() 
 	{ return (CReadBookSimpleDoc *)(GetDocument()); }
 
 protected:
 	virtual void CalculateViewSize();
-	virtual wxInt32 NormalizeScrollToLine(wxInt32 nCurrentLine);
 	virtual void CalculateScrollSize(void);
 	virtual void UpdateScrollPos(void);
-	virtual wxInt32 ScrollPosToLine(wxInt32 nPos);
+
+	virtual wxFileOffset ScrollSimplePage(wxInt16 nDelta);
+	virtual wxFileOffset ScrollSimpleLine(wxInt16 nDelta);
+	virtual wxFileOffset ScrollToPosition(wxFileOffset nDelta);
 };
