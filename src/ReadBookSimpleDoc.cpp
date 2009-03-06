@@ -108,8 +108,7 @@ bool IsValidUnicode(wxChar ch)
 CReadBookSimpleDoc::CReadBookSimpleDoc(void) :
 m_pFile(NULL),
 m_pInput(NULL),
-m_pConv(NULL),
-m_nLastReadRow(-1)
+m_pConv(NULL)
 {
 }
 
@@ -118,45 +117,16 @@ CReadBookSimpleDoc::~CReadBookSimpleDoc(void)
 	CleanUp();
 }
 
-const wxString & EMPTY_STRING = wxT("");
-const wxString & CReadBookSimpleDoc::GetLine(wxInt32 nRow)
+bool CReadBookSimpleDoc::ReadCharAtOffset(wxFileOffset offset, 
+                                          wxChar & ch, 
+                                          wxFileOffset & final_offset,
+                                          bool & end_of_line)
 {
-	if (m_pInput == NULL || nRow < 0)
-		return EMPTY_STRING;
+	if (m_pInput == NULL || m_pInput->Eof())
+		return false;
 
-	if (m_LinesMapping.find(nRow) != m_LinesMapping.end())
-	{
-		wxFileOffset offset = GetRowOffset(nRow + 1);
-
-		if (offset >= 0)
-		{
-			m_pInput->SeekI(offset);
-
-			m_nLastReadRow = nRow;
-
-			return m_LinesMapping[nRow];
-		}
-
-		offset = GetRowOffset(nRow);
-
-		m_pInput->SeekI(offset);
-
-		m_nLastReadRow = nRow - 1;
-	}
-
-	if (!(nRow == m_nLastReadRow + 1 && m_nLastReadRow >= 0))
-	{
-		wxFileOffset offset = RowToOffset(nRow);
-
-		m_pInput->SeekI(offset);
-	}
-
-	wxString strLine = wxT("");
-
+    end_of_line = false;
 	wxInt32 read_loop = 0;
-	wxFileOffset offset = m_pInput->TellI();
-
-	wxInt32 charsPerLine = 0;
 
 	bool filter_invalid_char = false;
 	do
@@ -165,102 +135,61 @@ const wxString & CReadBookSimpleDoc::GetLine(wxInt32 nRow)
 
 		for(wxInt32 len = 0; len < 9 ; len ++)
 		{
-			strLine = wxT("");
 			error = false;
 
 			if (offset - len >= 0)
 			{
 				m_pInput->SeekI(offset - len);
 
-				if (nRow == GetCurrentLine())
-				{
-					wxGetApp().GetPreference()->SetFileInfo(GetFileName(), 
-						GetCurrentLine(), offset - len);
-				}
+				wxGetApp().GetPreference()->SetFileInfo(GetFileName(), 
+					GetCurrentLine(), offset - len);
 
-				m_RowOffsetMap[nRow] = offset - len;
+				final_offset = offset - len;
 			}
 			else
 			{
 				break;
 			}
 
-			while(true)
+			ch = NextChar();
+
+			while (ch == wxEOT && !m_pInput->Eof())
 			{
-
-				wxChar ch = NextChar();
-
-				while (ch == wxEOT && !m_pInput->Eof())
+				if (!filter_invalid_char)
 				{
-					if (!filter_invalid_char)
-					{
-						error = true;
-						break;
-					}
-					else
-					{
-						ch = NextChar();
-					}
-				}
-
-				if (m_pInput->Eof())
-					break;
-
-				if (error)
-					break;
-
-				if (EatEOL(ch))
-					break;
-
-				if (!IsValidUnicode(ch))
-				{
-					if (!filter_invalid_char)
-					{
-						error = true;
-						break;
-					}
-					else
-					{
-						ch = ' ';
-					}
-				}
-
-				size_t byteCount = 0;
-				while(m_lastBytes[byteCount])
-				{
-					byteCount++;
-				}
-
-				wxString strLineTmp = strLine;
-				if (ch == '\t')
-				{
-					strLineTmp.Append(wxT("    "));
-				}
-				else
-				{
-					strLineTmp.Append(ch);
-				}
-
-				charsPerLine += byteCount;
-
-				if ((charsPerLine >= m_pContentHelper->GetCharsPerLine() - 4) &&
-					!m_pContentHelper->CouldBeShowInSingleLine(strLineTmp))
-				{
-					UngetLast();
+					error = true;
 					break;
 				}
 				else
 				{
-					if (ch == '\t')
-					{
-						strLine.Append(wxT("    "));
-					}
-					else
-					{
-						strLine.Append(ch);
-					}
+					ch = NextChar();
 				}
-			}//while line
+			}
+
+            if (!error)
+            {
+                if (ch == wxEOT)
+                    return false;
+
+			    if (EatEOL(ch))
+                {
+                    end_of_line = true;
+				    return true;
+                }
+
+			    if (!IsValidUnicode(ch))
+			    {
+				    if (!filter_invalid_char)
+				    {
+					    error = true;
+					    break;
+				    }
+				    else
+				    {
+					    ch = ' ';
+				    }
+			    }
+            }
 
 			if (!error || m_pInput->Eof())
 			{
@@ -274,7 +203,7 @@ const wxString & CReadBookSimpleDoc::GetLine(wxInt32 nRow)
 		}
 		else if (read_loop > 0)
 		{
-			if (IsEmptyLine(strLine) && !m_pInput->Eof())
+			if (!m_pInput->Eof())
 			{
 				filter_invalid_char = true;
 			}
@@ -288,133 +217,16 @@ const wxString & CReadBookSimpleDoc::GetLine(wxInt32 nRow)
 			filter_invalid_char = false;
 		}
 
-		if (!error && IsEmptyLine(strLine))
-		{
-			offset = m_pInput->TellI();
-		}
-
 		read_loop ++;
 	}
-	while (IsEmptyLine(strLine) && !m_pInput->Eof() || filter_invalid_char);
+	while (ch == wxEOT && !m_pInput->Eof() || filter_invalid_char);
 
-	m_nLastReadRow = nRow;
+    if (ch != wxEOT)
+    {
+        final_offset = m_pInput->TellI();
+    }
 
-	SaveLine(m_nLastReadRow, strLine);
-
-	if (!m_pInput->Eof())
-	{
-		m_RowOffsetMap[nRow + 1] = m_pInput->TellI();
-	}
-
-	return m_LinesMapping[nRow];
-}
-
-wxFileOffset CReadBookSimpleDoc::RowToOffset(wxInt32 nRow)
-{
-	wxFileOffset offset = GetRowOffset(nRow);
-		
-	if (offset < 0)
-	{
-		if (nRow == 0)
-		{
-			offset = 0;
-		}
-		else
-		{
-			wxInt32 nNearRow = FindNearRow(nRow);
-
-			if (nNearRow >= 0)
-			{
-				wxFileOffset nNearOffset = GetRowOffset(nNearRow);
-
-				offset = nNearOffset + (nRow - nNearRow) * m_pContentHelper->GetCharsPerLine();
-			}
-			else
-			{
-				offset = (wxFileOffset)m_pContentHelper->GetCharsPerLine() * nRow;
-			}
-		}
-	}
-
-	if (offset >= m_nFileLength)
-		offset = m_nFileLength;
-
-	if (offset < 0)
-		offset = 0;
-
-	return offset;
-}
-
-wxInt32 CReadBookSimpleDoc::FindNearRow(wxInt32 nRow)
-{
-	wxInt32 minRow = -1;
-	wxInt32 maxRow = m_nFileLength;
-
-	wxMapFileOffset::iterator it = m_RowOffsetMap.begin();
-
-	for(;it != m_RowOffsetMap.end();it++)
-	{
-		if (it->first < nRow && it->first > minRow)
-		{
-			minRow = it->first;
-		}
-
-		if (it->first > nRow && it->first < maxRow)
-		{
-			maxRow = it->first;
-		}
-	}
-
-	if (minRow == -1 && maxRow == m_nFileLength)
-	{
-		return -1;
-	}
-
-	if (minRow == -1)
-		return maxRow;
-
-	if (maxRow == m_nFileLength)
-		return minRow;
-
-	if (nRow - minRow < maxRow - nRow)
-		return minRow;
-
-	return maxRow;
-}
-
-void CReadBookSimpleDoc::SaveLine(wxInt32 nRow, const wxString & strLine)
-{
-	while(m_LinesMapping.size() >= BUFFER_SIZE)
-	{
-		CIntStringMap::iterator it;
-
-		wxInt32 row = m_LinesMapping.begin()->first;
-
-		for(it = m_LinesMapping.begin(); it != m_LinesMapping.end(); it++)
-		{
-			if (it->first < row)
-			{
-				row = it->first;
-			}
-		}
-
-		m_LinesMapping.erase(row);
-	}
-
-	m_LinesMapping[nRow] = strLine;
-
-	wxArrayInt results;
-
-	for(CIntStringMap::iterator it = m_LinesMapping.begin(); it != m_LinesMapping.end(); it++)
-	{
-		if (it->first > nRow)
-		{
-			results.Add(it->first);
-		}
-	}
-
-	for(size_t i = 0;i < results.GetCount(); i++)
-		m_LinesMapping.erase(results[i]);
+	return ch != wxEOT;
 }
 
 bool CReadBookSimpleDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess)
@@ -442,8 +254,6 @@ bool CReadBookSimpleDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool 
 
 	if (pFileInfo != NULL)
 	{
-		m_RowOffsetMap[nRow] = pFileInfo->m_nFilePos;
-
 		if (pFileInfo->m_nFilePos >= 0)
 		{
 			m_pInput->SeekI(pFileInfo->m_nFilePos);
@@ -462,14 +272,9 @@ void CReadBookSimpleDoc::CleanUp()
 	}
 
 	m_pInput = NULL;
-
-	m_LinesMapping.clear();
-	m_nLastReadRow = -1;
-
-	m_RowOffsetMap.clear();
 }
 
-wxInt32 CReadBookSimpleDoc::GetBufferSize(void) const
+wxFileOffset CReadBookSimpleDoc::GetBufferSize(void) const
 {
 	return m_nFileLength;
 }
@@ -544,126 +349,20 @@ void CReadBookSimpleDoc::ShiftStream(wxInt32 delta)
 {
 	if (m_pInput == NULL)
 		return;
-
-	wxFileOffset offset = (wxFileOffset)m_pContentHelper->GetCharsPerLine() * GetCurrentLine();
-
-	if (offset >= m_nFileLength)
-		offset = m_nFileLength - m_pContentHelper->GetCharsPerLine();
-
-	m_pInput->SeekI(offset + delta);
-
-	m_nLastReadRow = GetCurrentLine() - 1;
-	m_LinesMapping.clear();
 }
 
-wxFileOffset CReadBookSimpleDoc::GetRowOffset(wxInt32 nRow)
+bool CReadBookSimpleDoc::ReadChar(wxChar & ch, wxFileOffset & final_offset, bool & end_of_line)
 {
-	wxMapFileOffset::iterator it = m_RowOffsetMap.find(nRow);
+    if (m_pInput == NULL)
+        return false;
 
-	if (it == m_RowOffsetMap.end())
-		return -1;
-
-	return it->second;
+    return ReadCharAtOffset(m_pInput->TellI(), ch, final_offset, end_of_line);
 }
 
-wxInt32 CReadBookSimpleDoc::OffsetToRow(wxInt32 nOffset)
+wxFileOffset CReadBookSimpleDoc::GetCurrentPosition(void) const
 {
-	wxArrayFileOffset sortedArray;
+	if (m_pInput == NULL)
+		return 0;
 
-	wxMapFileOffset::iterator it = m_RowOffsetMap.begin();
-
-	for(;it != m_RowOffsetMap.end();it++)
-	{
-		bool bFound = false;
-
-		wxArrayFileOffset::iterator itSort = sortedArray.begin();
-
-		for(; itSort != sortedArray.end(); itSort++)
-		{
-			if (*itSort > it->second)
-			{
-				sortedArray.insert(itSort, it->second);
-				bFound = true;
-				break;
-			}
-		}
-
-		if (!bFound)
-		{
-			sortedArray.push_back(it->second);
-		}
-	}
-
-	wxArrayFileOffset::iterator itSort = sortedArray.begin();
-
-	bool bFound = false;
-
-	wxFileOffset findOffset = 0;
-
-	for(; itSort != sortedArray.end(); itSort++)
-	{
-		if (*itSort > nOffset)
-		{
-			if (itSort == sortedArray.begin())
-			{
-				findOffset = *itSort;
-			}
-			else
-			{
-				findOffset = *(itSort - 1);
-			}
-			bFound = true;
-			break;
-		}
-	}
-
-	if (!bFound)
-	{
-		if (sortedArray.size() > 0)
-		{
-			wxFileOffset maxOff = *(sortedArray.end() - 1);
-
-			wxInt32 nRow = GetOffsetRow(maxOff);
-
-			if (nRow >= 0)
-			{
-				return nRow + (nOffset - maxOff) / m_pContentHelper->GetCharsPerLine() + 1;
-			}
-		}
-
-		return nOffset / m_pContentHelper->GetCharsPerLine() + 1;
-	}
-	else
-	{
-		wxInt32 nRow = GetOffsetRow(findOffset);
-
-		return nRow + (nOffset - findOffset) / m_pContentHelper->GetCharsPerLine() + 1;
-	}
-}
-
-wxInt32 CReadBookSimpleDoc::GetOffsetRow(wxFileOffset nOffset)
-{
-	wxMapFileOffset::iterator it = m_RowOffsetMap.begin();
-
-	for(;it != m_RowOffsetMap.end();it++)
-	{
-		if (it->second == nOffset)
-			return it->first;
-	}
-
-	return -1;
-}
-
-void CReadBookSimpleDoc::SetContentHelper(const IContentHelper * pContentHelper)
-{
-	m_pContentHelper = pContentHelper;
-	m_LinesMapping.clear();
-
- 	wxInt32 offset = GetRowOffset(GetCurrentLine());
-	m_RowOffsetMap.clear();
-
-	if (offset >= 0)
-	{
-		m_RowOffsetMap[GetCurrentLine()] = offset;
-	}
+    return m_pInput->TellI();
 }

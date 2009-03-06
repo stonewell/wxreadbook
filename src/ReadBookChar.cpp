@@ -30,5 +30,5 @@ void CReadBookChar::Paint(wxInt32 x, wxInt32 y, wxDC * pDC)
 
 bool CReadBookChar::IsAscii() const
 {
-    return m_nChar < 255;
+    return m_nChar <= 0xFF && m_nChar >= 0;
 }

@@ -25,7 +25,7 @@ public:
 
 public:
 	virtual const wxString & GetLine(wxInt32 nRow);
-	virtual wxInt32 GetBufferSize(void) const;
+	virtual wxFileOffset GetBufferSize(void) const;
 
 	virtual void ShiftStream(wxInt32 delta);
 

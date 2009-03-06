@@ -108,7 +108,7 @@ const wxString & CReadBookDoc::GetLine(wxInt32 nRow)
 	return m_Buffer.Item(nRow);
 }
 
-wxInt32 CReadBookDoc::GetBufferSize(void) const
+wxFileOffset CReadBookDoc::GetBufferSize(void) const
 {
 	return m_Buffer.GetCount();
 }
