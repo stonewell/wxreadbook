@@ -281,11 +281,3 @@ bool CReadBookSimpleDoc::ReadChar(wxChar & ch, wxFileOffset & final_offset, bool
 
     return ReadCharAtOffset(m_pInput->TellI(), ch, final_offset, end_of_line);
 }
-
-wxFileOffset CReadBookSimpleDoc::GetCurrentPosition(void) const
-{
-	if (m_pInput == NULL)
-		return 0;
-
-    return m_pInput->TellI();
-}
