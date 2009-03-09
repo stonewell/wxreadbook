@@ -34,6 +34,9 @@ protected:
     virtual wxFileOffset ScrollToLastPage();
 
     virtual wxFileOffset GetCurrentPosition();
+
+    virtual void CalculateLastCharOffset();
 private:
     CReadBookPage * m_pViewPage;
+    wxFileOffset m_nFileEndPosition;
 };
