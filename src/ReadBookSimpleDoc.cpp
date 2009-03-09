@@ -65,9 +65,6 @@ bool CReadBookSimpleDoc::ReadCharAtOffset(wxFileOffset offset,
             {
                 m_pInput->SeekI(offset - len);
 
-                wxGetApp().GetPreference()->SetFileInfo(GetFileName(), 
-                    GetCurrentLine(), offset - len);
-
                 begin_offset = offset - len;
             }
             else

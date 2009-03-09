@@ -129,6 +129,9 @@ wxFileOffset CReadBookLine::GetEndFileOffset() const
 
         if (pChar != NULL)
             return pChar->GetEndFileOffset();
+
+        if (i == 0)
+            break;
     }
 
     return 0;
@@ -170,4 +173,35 @@ wxUint32 CReadBookLine::GetAsciiCharCount() const
     }
 
     return 0;
+}
+
+void CReadBookLine::TrimEmptyChars()
+{
+    wxInt32 nBeginCol = -1;
+    wxInt32 nLastCol = -1;
+
+	for(wxInt32 i = 0; i < (wxInt32)m_nMaxAsciiCharCount; i++)
+    {
+        CReadBookChar * pChar = m_ReadBookChars[i];
+
+        if (pChar != NULL && nBeginCol < 0)
+        {
+            nBeginCol = i;
+        }
+
+        if (nBeginCol == 0)
+            return;
+
+        if (nBeginCol > 0)
+        {
+            m_ReadBookChars[i - nBeginCol] = pChar;
+            nLastCol = i - nBeginCol;
+        }
+    }
+
+    if (nLastCol >= 0)
+    {
+        for(wxInt32 i = nLastCol + 1; i < (wxInt32)m_nMaxAsciiCharCount; i++)
+            m_ReadBookChars[i] = NULL;
+    }
 }

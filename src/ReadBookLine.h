@@ -30,6 +30,7 @@ public:
     wxFileOffset GetEndFileOffset() const;
 
     void Paint(wxInt32 x, wxInt32 y, wxDC * pDC, wxInt32 count = -1);
+    void TrimEmptyChars();
 };
 
 #endif

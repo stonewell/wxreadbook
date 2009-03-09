@@ -388,9 +388,13 @@ wxFileOffset CReadBookDoc::GetRowOffset(wxInt32 nRow)
 void CReadBookDoc::UpdateDisplay(wxReadBook::DisplayAsEnum displayAs,
 								 wxReadBook::ViewModeEnum viewMode)
 {
+    CFileInfo * pFileInfo = NULL;
+
+    ::wxGetApp().GetPreference()->GetFileInfo(m_strFileName, &pFileInfo);
+
 	::wxGetApp().GetPreference()->SetFileInfo(m_strFileName, 
 		m_nCurrentLine, 
-		GetRowOffset(m_nCurrentLine),
+        pFileInfo == NULL ? GetRowOffset(m_nCurrentLine) : pFileInfo->m_nFilePos,
 		displayAs,
 		viewMode);
 }

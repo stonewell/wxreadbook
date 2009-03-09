@@ -238,3 +238,12 @@ void CReadBookPage::TrimEmptyLines()
             m_ReadBookLines[i] = NULL;
     }
 }
+
+void CReadBookPage::NormalizeLines()
+{
+	for(wxInt32 i = 0; i < (wxInt32)m_nMaxLineCount; i++)
+    {
+        if (m_ReadBookLines[i] != NULL)
+            m_ReadBookLines[i]->TrimEmptyChars();
+    }
+}
