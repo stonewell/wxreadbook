@@ -61,7 +61,10 @@ am_wxReadBook_OBJECTS = ArchiveExplorerDlg.$(OBJEXT) \
 	nsSJISVerifier.$(OBJEXT) nsUCS2BEVerifier.$(OBJEXT) \
 	nsUCS2LEVerifier.$(OBJEXT) nsUTF8Verifier.$(OBJEXT) \
 	ReadBookBufferedDoc.$(OBJEXT) ReadBookBufferedView.$(OBJEXT) \
-	GBBig5Table.$(OBJEXT)
+	GBBig5Table.$(OBJEXT) ReadBookSimpleView.$(OBJEXT) \
+	ReadBookSimpleDoc.$(OBJEXT) ReadBookPage.$(OBJEXT) \
+	ReadBookLine.$(OBJEXT) ReadBookChar.$(OBJEXT) \
+	UnicodeHelper.$(OBJEXT)
 wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
 wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a \
 	$(srcdir)/../libs/lib7zip.a $(srcdir)/../libs/libcppcommon.a \
@@ -264,7 +267,19 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookBufferedView.h \
 	ReadBookBufferedView.cpp \
 	GBBig5Table.cpp \
-	GBBig5Table.h 	
+	GBBig5Table.h 	\
+	ReadBookSimpleView.h \
+	ReadBookSimpleView.cpp \
+	ReadBookSimpleDoc.h \
+	ReadBookSimpleDoc.cpp \
+	ReadBookPage.h \
+	ReadBookPage.cpp \
+	ReadBookLine.h \
+	ReadBookLine.cpp \
+	ReadBookChar.h \
+	ReadBookChar.cpp \
+	UnicodeHelper.h \
+	UnicodeHelper.cpp
 
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	$(srcdir)/../libs/lib7zip.a \
@@ -345,11 +360,17 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookBufferedDoc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookBufferedView.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookCanvas.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookChar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookDoc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookLine.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookMainFrm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookPage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookPreference.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookPreferenceDlg.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookSimpleDoc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookSimpleView.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookView.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UnicodeHelper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nsBIG5Statistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nsBIG5Verifier.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nsCP1252Verifier.Po@am__quote@

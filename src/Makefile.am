@@ -80,7 +80,19 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookBufferedView.h \
 	ReadBookBufferedView.cpp \
 	GBBig5Table.cpp \
-	GBBig5Table.h 	
+	GBBig5Table.h 	\
+	ReadBookSimpleView.h \
+	ReadBookSimpleView.cpp \
+	ReadBookSimpleDoc.h \
+	ReadBookSimpleDoc.cpp \
+	ReadBookPage.h \
+	ReadBookPage.cpp \
+	ReadBookLine.h \
+	ReadBookLine.cpp \
+	ReadBookChar.h \
+	ReadBookChar.cpp \
+	UnicodeHelper.h \
+	UnicodeHelper.cpp
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	$(srcdir)/../libs/lib7zip.a \
