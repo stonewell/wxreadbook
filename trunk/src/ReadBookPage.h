@@ -50,6 +50,7 @@ public:
     wxUint32 GetLineMargin() const { return m_nLineMargin; }
 
     void TrimEmptyLines();
+    void NormalizeLines();
 };
 
 #endif
