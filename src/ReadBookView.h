@@ -32,13 +32,13 @@ public:
     CReadBookView(void);
     virtual ~CReadBookView(void);
 
-    bool OnCreate(wxDocument *doc, long flags);
+    virtual bool OnCreate(wxDocument *doc, long flags);
     virtual void OnDraw(wxDC *dc);
-    void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
-    bool OnClose(bool deleteWindow = true);
+    virtual void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
+    virtual bool OnClose(bool deleteWindow = true);
     virtual void OnScrollWin(wxScrollWinEvent& event);
     virtual void OnKeyDown(wxKeyEvent& event);
-    void OnSize(wxSizeEvent& event);
+    virtual void OnSize(wxSizeEvent& event);
 	virtual void OnMouseWheel(wxMouseEvent & event);
 
     wxReadBook::ViewModeEnum GetViewMode() const { return m_ViewMode; }
@@ -84,6 +84,7 @@ protected:
 
 	virtual wxInt32 ScrollPage(wxInt16 nDelta);
 	virtual wxInt32 ScrollLine(wxInt16 nDelta);
+	virtual wxInt32 ScrollToLine(wxInt32 nPos);
 
 	const LineNumberMapping & ViewLineCountToDocLine(wxInt32 viewLine);
 
@@ -97,8 +98,6 @@ protected:
 	wxInt16 GetViewLineCharSize(wxDC * pDC,
 		const wxChar * pBuf, size_t length,
 		size_t startIndex, wxInt16 defaultLineCharSize) const;
-
-	wxInt32 ScrollToLine(wxInt32 nPos);
 
 	virtual void UpdateScrollPos(void);
 

@@ -37,247 +37,253 @@ m_pConv(NULL)
 
 CReadBookSimpleDoc::~CReadBookSimpleDoc(void)
 {
-	CleanUp();
+    CleanUp();
 }
 
 bool CReadBookSimpleDoc::ReadCharAtOffset(wxFileOffset offset, 
                                           wxChar & ch, 
-                                          wxFileOffset & final_offset,
+                                          wxFileOffset & begin_offset,
+                                          wxFileOffset & end_offset,
                                           bool & end_of_line)
 {
-	if (m_pInput == NULL || m_pInput->Eof())
-		return false;
+    if (m_pInput == NULL || m_pInput->Eof())
+        return false;
 
     end_of_line = false;
-	wxInt32 read_loop = 0;
+    wxInt32 read_loop = 0;
 
-	bool filter_invalid_char = false;
-	do
-	{
-		bool error = false;
+    bool filter_invalid_char = false;
+    do
+    {
+        bool error = false;
 
-		for(wxInt32 len = 0; len < 9 ; len ++)
-		{
-			error = false;
+        for(wxInt32 len = 0; len < 9 ; len ++)
+        {
+            error = false;
 
-			if (offset - len >= 0)
-			{
-				m_pInput->SeekI(offset - len);
+            if (offset - len >= 0)
+            {
+                m_pInput->SeekI(offset - len);
 
-				wxGetApp().GetPreference()->SetFileInfo(GetFileName(), 
-					GetCurrentLine(), offset - len);
+                wxGetApp().GetPreference()->SetFileInfo(GetFileName(), 
+                    GetCurrentLine(), offset - len);
 
-				final_offset = offset - len;
-			}
-			else
-			{
-				break;
-			}
+                begin_offset = offset - len;
+            }
+            else
+            {
+                break;
+            }
 
-			ch = NextChar();
+            ch = NextChar();
 
-			while (ch == wxEOT && !m_pInput->Eof())
-			{
-				if (!filter_invalid_char)
-				{
-					error = true;
-					break;
-				}
-				else
-				{
-					ch = NextChar();
-				}
-			}
+            while (ch == wxEOT && !m_pInput->Eof())
+            {
+                if (!filter_invalid_char)
+                {
+                    error = true;
+                    break;
+                }
+                else
+                {
+                    ch = NextChar();
+                }
+            }
 
             if (!error)
             {
                 if (ch == wxEOT)
                     return false;
 
-			    if (EatEOL(ch))
+                if (EatEOL(ch))
                 {
                     end_of_line = true;
-				    return true;
+                    return true;
                 }
 
-			    if (!IsValidUnicode(ch))
-			    {
-				    if (!filter_invalid_char)
-				    {
-					    error = true;
-					    break;
-				    }
-				    else
-				    {
-					    ch = ' ';
-				    }
-			    }
+                if (!IsValidUnicode(ch))
+                {
+                    if (!filter_invalid_char)
+                    {
+                        error = true;
+                        break;
+                    }
+                    else
+                    {
+                        ch = ' ';
+                    }
+                }
             }
 
-			if (!error || m_pInput->Eof())
-			{
-				break;
-			}
-		}//for len
+            if (!error || m_pInput->Eof())
+            {
+                break;
+            }
+        }//for len
 
-		if (error)
-		{
-			filter_invalid_char = true;
-		}
-		else if (read_loop > 0)
-		{
-			if (!m_pInput->Eof())
-			{
-				filter_invalid_char = true;
-			}
-			else
-			{
-				filter_invalid_char = false;
-			}
-		}
-		else
-		{
-			filter_invalid_char = false;
-		}
+        if (error)
+        {
+            filter_invalid_char = true;
+        }
+        else if (read_loop > 0)
+        {
+            if (!filter_invalid_char && !m_pInput->Eof())
+            {
+                filter_invalid_char = true;
+            }
+            else
+            {
+                filter_invalid_char = false;
+            }
+        }
+        else
+        {
+            filter_invalid_char = false;
+        }
 
-		read_loop ++;
-	}
-	while (ch == wxEOT && !m_pInput->Eof() || filter_invalid_char);
+        read_loop ++;
+    }
+    while (ch == wxEOT && !m_pInput->Eof() || filter_invalid_char);
 
     if (ch != wxEOT)
     {
-        final_offset = m_pInput->TellI();
+        end_offset = m_pInput->TellI();
     }
 
-	return ch != wxEOT;
+    return ch != wxEOT;
 }
 
 bool CReadBookSimpleDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess)
 {
-	CleanUp();
+    CleanUp();
 
-	m_FileSystem.ChangePathTo(url, false);
+    m_FileSystem.ChangePathTo(url, false);
 
-	m_pFile = m_FileSystem.OpenFile(url, wxFS_READ | wxFS_SEEKABLE);
+    m_pFile = m_FileSystem.OpenFile(url, wxFS_READ | wxFS_SEEKABLE);
 
-	if (m_pFile == NULL)
-		return false;
+    if (m_pFile == NULL)
+        return false;
 
-	m_pInput = m_pFile->GetStream();
+    m_pInput = m_pFile->GetStream();
 
-	m_pConv = GetSuitableMBConv(m_pInput, conv, bGuess);
+    m_pConv = GetSuitableMBConv(m_pInput, conv, bGuess);
 
-	m_pInput->SeekI(0, wxFromEnd);
-	m_nFileLength = m_pInput->TellI();
-	m_pInput->SeekI(0, wxFromStart);
+    m_pInput->SeekI(0, wxFromEnd);
+    m_nFileLength = m_pInput->TellI();
+    m_pInput->SeekI(0, wxFromStart);
 
-	CFileInfo * pFileInfo = NULL;
+    CFileInfo * pFileInfo = NULL;
 
-	wxInt32 nRow = wxGetApp().GetPreference()->GetFileInfo(url, &pFileInfo);
+    wxInt32 nRow = wxGetApp().GetPreference()->GetFileInfo(url, &pFileInfo);
 
-	if (pFileInfo != NULL)
-	{
-		if (pFileInfo->m_nFilePos >= 0)
-		{
-			m_pInput->SeekI(pFileInfo->m_nFilePos);
-		}
-	}
+    if (pFileInfo != NULL)
+    {
+        if (pFileInfo->m_nFilePos >= 0)
+        {
+            m_pInput->SeekI(pFileInfo->m_nFilePos);
+        }
+    }
 
-	return true;
+    return true;
 }
 
 void CReadBookSimpleDoc::CleanUp()
 {
-	if (m_pFile != NULL)
-	{
-		delete m_pFile;
-		m_pFile = NULL;
-	}
+    if (m_pFile != NULL)
+    {
+        delete m_pFile;
+        m_pFile = NULL;
+    }
 
-	m_pInput = NULL;
+    m_pInput = NULL;
 }
 
 wxFileOffset CReadBookSimpleDoc::GetBufferSize(void) const
 {
-	return m_nFileLength;
+    return m_nFileLength;
 }
 
 wxChar CReadBookSimpleDoc::NextChar()
 {
-	if (m_pInput == NULL)
-		return wxEOT;
+    if (m_pInput == NULL)
+        return wxEOT;
 
 #if wxUSE_UNICODE
-	wxChar wbuf[2];
+    wxChar wbuf[2];
 
-	memset((void*)m_lastBytes, 0, 10);
+    memset((void*)m_lastBytes, 0, 10);
 
-	for(size_t inlen = 0; inlen < 9; inlen++)
-	{
-		// actually read the next character
-		m_lastBytes[inlen] = m_pInput->GetC();
+    for(size_t inlen = 0; inlen < 9; inlen++)
+    {
+        // actually read the next character
+        m_lastBytes[inlen] = m_pInput->GetC();
 
-		if(m_pInput->LastRead() <= 0)
-			return wxEOT;
+        if(m_pInput->LastRead() <= 0)
+            return wxEOT;
 
-		if ( m_pConv->ToWChar(wbuf, WXSIZEOF(wbuf), m_lastBytes, inlen + 1)
-			!= wxCONV_FAILED )
-		{
-			return wbuf[0];
-		}
-	}
+        if ( m_pConv->ToWChar(wbuf, WXSIZEOF(wbuf), m_lastBytes, inlen + 1)
+            != wxCONV_FAILED )
+        {
+            return wbuf[0];
+        }
+    }
 
-	// there should be no encoding which requires more than nine bytes for one character...
-	return wxEOT;
+    // there should be no encoding which requires more than nine bytes for one character...
+    return wxEOT;
 #else
-	m_lastBytes[0] = m_pInput->GetC();
+    m_lastBytes[0] = m_pInput->GetC();
 
-	if(m_pInput->LastRead() <= 0)
-		return wxEOT;
+    if(m_pInput->LastRead() <= 0)
+        return wxEOT;
 
-	return m_lastBytes[0];
+    return m_lastBytes[0];
 #endif
 
 }
 
 void CReadBookSimpleDoc::UngetLast()
 {
-	if (m_pInput == NULL)
-		return;
+    if (m_pInput == NULL)
+        return;
 
-	size_t byteCount = 0;
-	while(m_lastBytes[byteCount]) // pseudo ANSI strlen (even for Unicode!)
-		byteCount++;
-	m_pInput->Ungetch(m_lastBytes, byteCount);
-	memset((void*)m_lastBytes, 0, 10);
+    size_t byteCount = 0;
+    while(m_lastBytes[byteCount]) // pseudo ANSI strlen (even for Unicode!)
+        byteCount++;
+    m_pInput->Ungetch(m_lastBytes, byteCount);
+    memset((void*)m_lastBytes, 0, 10);
 }
 
 bool CReadBookSimpleDoc::EatEOL(const wxChar &c)
 {
-	if (c == wxT('\n')) return true; // eat on UNIX
+    if (c == wxT('\n')) return true; // eat on UNIX
 
-	if (c == wxT('\r')) // eat on both Mac and DOS
-	{
-		wxChar c2 = NextChar();
-		if(c2 == wxEOT) return true; // end of stream reached, had enough :-)
+    if (c == wxT('\r')) // eat on both Mac and DOS
+    {
+        wxChar c2 = NextChar();
+        if(c2 == wxEOT) return true; // end of stream reached, had enough :-)
 
-		if (c2 != wxT('\n')) UngetLast(); // Don't eat on Mac
-		return true;
-	}
+        if (c2 != wxT('\n')) UngetLast(); // Don't eat on Mac
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
-void CReadBookSimpleDoc::ShiftStream(wxInt32 delta)
-{
-	if (m_pInput == NULL)
-		return;
-}
-
-bool CReadBookSimpleDoc::ReadChar(wxChar & ch, wxFileOffset & final_offset, bool & end_of_line)
+bool CReadBookSimpleDoc::ReadChar(wxChar & ch,         
+                                  wxFileOffset & begin_offset, 
+                                  wxFileOffset & end_offset, 
+                                  bool & end_of_line)
 {
     if (m_pInput == NULL)
         return false;
 
-    return ReadCharAtOffset(m_pInput->TellI(), ch, final_offset, end_of_line);
+    return ReadCharAtOffset(m_pInput->TellI(), ch, begin_offset, end_offset, end_of_line);
+}
+
+void CReadBookSimpleDoc::SeekTo(wxFileOffset offset)
+{
+    if (m_pInput == NULL)
+        return;
+
+    m_pInput->SeekI(offset);
 }

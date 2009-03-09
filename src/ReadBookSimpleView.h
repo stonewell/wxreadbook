@@ -2,6 +2,8 @@
 
 #include "ReadBookView.h"
 
+class CReadBookPage;
+
 class CReadBookSimpleView :
 	public CReadBookView
 {
@@ -13,8 +15,10 @@ public:
 
 public:
     virtual void OnDraw(wxDC *dc);
+    virtual void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
     virtual void OnScrollWin(wxScrollWinEvent& event);
     virtual void OnMouseWheel(wxMouseEvent & event);
+    virtual void OnKeyDown(wxKeyEvent& event);
 
 	CReadBookSimpleDoc * GetReadBookDoc() 
 	{ return (CReadBookSimpleDoc *)(GetDocument()); }
@@ -26,5 +30,10 @@ protected:
 
 	virtual wxFileOffset ScrollSimplePage(wxInt16 nDelta);
 	virtual wxFileOffset ScrollSimpleLine(wxInt16 nDelta);
-	virtual wxFileOffset ScrollToPosition(wxFileOffset nDelta);
+	virtual wxFileOffset ScrollToPosition(wxFileOffset nPos);
+    virtual wxFileOffset ScrollToLastPage();
+
+    virtual wxFileOffset GetCurrentPosition();
+private:
+    CReadBookPage * m_pViewPage;
 };

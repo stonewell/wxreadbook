@@ -40,13 +40,16 @@ public:
     CReadBookLine * GetLine(wxUint32 nRow) const;
     CReadBookChar * GetChar(wxUint32 nRow, wxUint32 nCol) const;
 
-    wxFileOffset GetFileOffset() const;
+    wxFileOffset GetBeginFileOffset() const;
+    wxFileOffset GetEndFileOffset() const;
 
     void Paint(wxInt32 x, wxInt32 y, wxDC * pDC);
 
     wxUint32 GetLineHeight() const { return m_nLineHeight; }
 
     wxUint32 GetLineMargin() const { return m_nLineMargin; }
+
+    void TrimEmptyLines();
 };
 
 #endif

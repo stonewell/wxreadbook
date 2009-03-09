@@ -31,7 +31,18 @@ CReadBookLine::~CReadBookLine(void)
 {
 	for(wxUint32 i = 0; i < m_nMaxAsciiCharCount; i++)
 	{
-        delete m_ReadBookChars[i];
+        if (m_ReadBookChars[i] != NULL)
+        {
+            bool ascii = m_ReadBookChars[i]->IsAscii();
+
+            delete m_ReadBookChars[i];
+
+            if (i >= m_nMaxAsciiCharCount - 1)
+                break;
+
+            if (!ascii)
+                i++;
+        }
 	}
 
     delete m_ReadBookChars;
@@ -40,6 +51,9 @@ CReadBookLine::~CReadBookLine(void)
 bool CReadBookLine::SetChar(wxUint32 nPos, const CReadBookChar * pChar)
 {
     if (nPos >= m_nMaxAsciiCharCount)
+        return false;
+
+    if (!pChar->IsAscii() && nPos + 1 >= m_nMaxAsciiCharCount)
         return false;
 
     if (GetChar(nPos) != NULL)
@@ -94,14 +108,27 @@ CReadBookChar * CReadBookLine::GetChar(wxUint32 nPos)
     return NULL;
 }
 
-wxFileOffset CReadBookLine::GetFileOffset() const
+wxFileOffset CReadBookLine::GetBeginFileOffset() const
 {
 	for(wxUint32 i = 0; i < m_nMaxAsciiCharCount; i++)
     {
         CReadBookChar * pChar = m_ReadBookChars[i];
 
         if (pChar != NULL)
-            return pChar->GetFileOffset();
+            return pChar->GetBeginFileOffset();
+    }
+
+    return 0;
+}
+
+wxFileOffset CReadBookLine::GetEndFileOffset() const
+{
+	for(wxUint32 i = m_nMaxAsciiCharCount - 1; i >= 0; i--)
+    {
+        CReadBookChar * pChar = m_ReadBookChars[i];
+
+        if (pChar != NULL)
+            return pChar->GetEndFileOffset();
     }
 
     return 0;
@@ -122,14 +149,12 @@ void CReadBookLine::Paint(wxInt32 x, wxInt32 y, wxDC * pDC, wxInt32 count)
             if (!pChar->IsAscii())
             {
                 x += m_nAvgAsciiCharWidth;
-                x += m_nColMargin;
 
                 i++;
             }
         }
 
         x += m_nAvgAsciiCharWidth;
-        x += m_nColMargin;
     }
 }
 

@@ -303,3 +303,4 @@ const wxInt32 CReadBookBufferedView::GetCharsPerLine() const
 {
 	return m_nCharsPerLine;
 }
+
