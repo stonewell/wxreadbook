@@ -125,7 +125,7 @@ void CReadBookSimpleView::OnScrollWin(wxScrollWinEvent& event)
 	}
 	else if (event.GetEventType() == wxEVT_SCROLLWIN_BOTTOM)
 	{
-		if (nCurrentPos == ScrollToPosition(m_nViewSize))
+		if (nCurrentPos == ScrollToLastPage())
 		{
 			doScroll = false;
 		}
@@ -239,6 +239,8 @@ void CReadBookSimpleView::OnUpdate(wxView *sender, wxObject *hint)
 
     Recalculate();
 
+    CalculateLastCharOffset();
+
     if (pFileInfo != NULL)
     {
         ScrollToPosition(pFileInfo->m_nFilePos);
@@ -320,7 +322,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
 
     if (nDelta > 0)
     {
-        if (m_pViewPage != NULL && m_pViewPage->GetEndFileOffset() >= m_nViewSize)
+        if (m_pViewPage != NULL && m_pViewPage->GetEndFileOffset() >= m_nFileEndPosition)
             return GetCurrentPosition();
 
         wxFileOffset nBeginPos = GetCurrentPosition();
@@ -763,6 +765,93 @@ void CReadBookSimpleView::OnKeyDown(wxKeyEvent& event)
 	}
 }
 
+void CReadBookSimpleView::CalculateLastCharOffset()
+{
+	wxRect rect = m_pCanvas->GetClientRect();
+
+	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
+	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
+
+	rect.Deflate(colMargin,0);
+
+    wxInt32 nCharsPerLine = rect.GetWidth() / m_mbFontSize.GetWidth() * 2;
+
+    CReadBookSimpleDoc * pDoc = GetReadBookDoc();
+
+    wxInt32 nOffsetDelta = m_nPageSize * nCharsPerLine * 4;
+
+    wxFileOffset nBeginPos = m_nViewSize - nOffsetDelta;
+
+    if (nBeginPos < 0) nBeginPos = 0;
+
+    wxFileOffset nEndPos = m_nViewSize;
+
+    pDoc->SeekTo(nBeginPos);
+
+    CReadBookChar ** ppChars = new CReadBookChar *[nOffsetDelta];
+    memset(ppChars, 0, sizeof(CReadBookChar *) * nOffsetDelta);
+
+    wxInt32 nCount = 0;
+
+    bool end_of_file = false;
+    bool end_of_line = false;
+
+    wxChar ch = 0;
+
+    wxFileOffset begin_offset = 0;
+    wxFileOffset end_offset = 0;
+
+    while(true)
+    {
+        if (pDoc->ReadChar(ch, begin_offset, end_offset, end_of_line))
+        {
+            if (begin_offset >= nEndPos)
+                break;
+
+            if (end_of_line)
+            {
+                ppChars[nCount++] = NULL;
+            }
+            else
+            {
+                CReadBookChar * pChar = new CReadBookChar();
+                pChar->SetData(begin_offset, end_offset, ch);
+
+                ppChars[nCount++] = pChar;
+            }
+
+            if (nCount >= nOffsetDelta)
+                break;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if (nCount > 0)
+    {
+        while(ppChars[--nCount] == NULL)
+        {
+            if (nCount == 0)
+                break;
+        }
+
+        if (ppChars[nCount] != NULL)
+        {
+            m_nFileEndPosition = ppChars[nCount]->GetEndFileOffset();
+        }
+    }
+
+    for(wxInt32 i = 0;i < nOffsetDelta; i++)
+    {
+        if (ppChars[i] != NULL)
+            delete ppChars[i];
+    }
+
+    delete ppChars;
+}
+
 wxFileOffset CReadBookSimpleView::ScrollToLastPage()
 {
 	wxRect rect = m_pCanvas->GetClientRect();
@@ -927,6 +1016,8 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
 
     wxGetApp().GetPreference()->SetFileInfo(pDoc->GetFileName(), 
         0, GetCurrentPosition());
+
+    m_nFileEndPosition = m_pViewPage->GetEndFileOffset();
 
     return GetCurrentPosition();
 }
