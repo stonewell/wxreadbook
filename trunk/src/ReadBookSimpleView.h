@@ -36,6 +36,7 @@ protected:
     virtual wxFileOffset GetCurrentPosition();
 
     virtual void CalculateLastCharOffset();
+    virtual void OnSize(wxSizeEvent& event);
 private:
     CReadBookPage * m_pViewPage;
     wxFileOffset m_nFileEndPosition;

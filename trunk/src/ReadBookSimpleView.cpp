@@ -60,10 +60,23 @@ void CReadBookSimpleView::OnDraw(wxDC *pDC)
 
 	pDC->SetBackground(wxBrush(wxGetApp().GetPreference()->GetBackgroundColor()));
 
-    if (m_pViewPage != NULL)
+    if (m_pViewPage == NULL)
     {
-        m_pViewPage->Paint(clientRect.GetLeft(), clientRect.GetTop(), pDC);
+	    CFileInfo * pFileInfo = NULL;
+
+        wxInt32 nRow = wxGetApp().GetPreference()->GetFileInfo(pDoc->GetFileName(), &pFileInfo);
+
+        if (pFileInfo != NULL)
+        {
+            ScrollToPosition(pFileInfo->m_nFilePos);
+        }
+        else
+        {
+            ScrollToPosition(0);
+        }
     }
+
+    m_pViewPage->Paint(clientRect.GetLeft(), clientRect.GetTop(), pDC);
 
 	pDC->SetFont(pOldFont);
 	pDC->SetTextForeground(oldColor);
@@ -1020,4 +1033,14 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
     m_nFileEndPosition = m_pViewPage->GetEndFileOffset();
 
     return GetCurrentPosition();
+}
+
+void CReadBookSimpleView::OnSize(wxSizeEvent& event)
+{
+    Recalculate();
+
+    if (m_pViewPage != NULL)
+        delete m_pViewPage;
+
+    m_pViewPage = NULL;
 }
