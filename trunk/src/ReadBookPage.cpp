@@ -28,6 +28,9 @@ m_nMaxAsciiCharCount(nMaxAsciiCharCount),
 m_nAvgAsciiCharWidth(nAvgAsciiCharWidth),
 m_nColMargin(nColMargin)
 {
+
+//printf("nMaxLineCount=%d\n", nMaxLineCount);
+
     m_ReadBookLines = new CReadBookLine *[nMaxLineCount];
 
     memset(m_ReadBookLines, 0, nMaxLineCount * sizeof(CReadBookLine *));
