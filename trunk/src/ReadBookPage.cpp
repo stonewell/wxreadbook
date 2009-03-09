@@ -35,7 +35,7 @@ m_nColMargin(nColMargin)
 
 CReadBookPage::~CReadBookPage(void)
 {
-    for(wxUint32 i = 0; i < m_nMaxLineCount; i++)
+    for(wxInt32 i = 0; i < (wxInt32)m_nMaxLineCount; i++)
     {
         if (m_ReadBookLines[i] != NULL)
             delete m_ReadBookLines[i];
@@ -95,7 +95,7 @@ wxInt32 CReadBookPage::GetLineCount() const
     if (m_nMaxLineCount == 0)
         return 0;
 
-    for(wxUint32 i = m_nMaxLineCount - 1; i >= 0; i--)
+    for(wxInt32 i = m_nMaxLineCount - 1; i >= 0; i--)
     {
         if (m_ReadBookLines[i] != NULL)
             return i + 1;
@@ -124,14 +124,27 @@ CReadBookChar * CReadBookPage::GetChar(wxUint32 nRow, wxUint32 nCol) const
     return pLine->GetChar(nCol);
 }
 
-wxFileOffset CReadBookPage::GetFileOffset() const
+wxFileOffset CReadBookPage::GetBeginFileOffset() const
 {
-	for(wxUint32 i = 0; i < m_nMaxLineCount; i++)
+	for(wxInt32 i = 0; i < (wxInt32)m_nMaxLineCount; i++)
     {
         CReadBookLine * pLine = m_ReadBookLines[i];
 
         if (pLine != NULL)
-            return pLine->GetFileOffset();
+            return pLine->GetBeginFileOffset();
+    }
+
+    return 0;
+}
+
+wxFileOffset CReadBookPage::GetEndFileOffset() const
+{
+	for(wxInt32 i = m_nMaxLineCount - 1; i >= 0; i--)
+    {
+        CReadBookLine * pLine = m_ReadBookLines[i];
+
+        if (pLine != NULL)
+            return pLine->GetEndFileOffset();
     }
 
     return 0;
@@ -139,7 +152,7 @@ wxFileOffset CReadBookPage::GetFileOffset() const
 
 void CReadBookPage::Paint(wxInt32 x, wxInt32 y, wxDC * pDC)
 {
-	for(wxUint32 i = 0; i < m_nMaxLineCount; i++)
+	for(wxInt32 i = 0; i < (wxInt32)m_nMaxLineCount; i++)
 	{
         wxInt32 nRow = i;
         CReadBookLine * pLine = m_ReadBookLines[i];
@@ -195,3 +208,33 @@ bool CReadBookPage::RemoveLine(wxUint32 nRow, bool destroy)
     return true;
 }
 
+void CReadBookPage::TrimEmptyLines()
+{
+    wxInt32 nBeginLine = -1;
+    wxInt32 nLastLine = -1;
+
+	for(wxInt32 i = 0; i < (wxInt32)m_nMaxLineCount; i++)
+    {
+        CReadBookLine * pLine = m_ReadBookLines[i];
+
+        if (pLine != NULL && nBeginLine < 0)
+        {
+            nBeginLine = i;
+        }
+
+        if (nBeginLine == 0)
+            return;
+
+        if (nBeginLine > 0)
+        {
+            m_ReadBookLines[i - nBeginLine] = pLine;
+            nLastLine = i - nBeginLine;
+        }
+    }
+
+    if (nLastLine >= 0)
+    {
+        for(wxInt32 i = nLastLine + 1; i < (wxInt32)m_nMaxLineCount; i++)
+            m_ReadBookLines[i] = NULL;
+    }
+}

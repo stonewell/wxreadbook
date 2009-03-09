@@ -13,15 +13,18 @@ public:
 
 public:
 	virtual bool ReadChar(wxChar & ch, 
-        wxFileOffset & final_offset, 
+        wxFileOffset & begin_offset, 
+        wxFileOffset & end_offset, 
         bool & end_of_line);
+
 	virtual bool ReadCharAtOffset(wxFileOffset offset, 
         wxChar & ch, 
-        wxFileOffset & final_offset, 
+        wxFileOffset & begin_offset, 
+        wxFileOffset & end_offset, 
         bool & end_of_line);
 	virtual wxFileOffset GetBufferSize(void) const;
 
-	virtual void ShiftStream(wxInt32 delta);
+    virtual void SeekTo(wxFileOffset offset);
 
 protected:
 	virtual bool LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess);

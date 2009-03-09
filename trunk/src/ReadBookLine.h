@@ -26,7 +26,8 @@ public:
 
     wxUint32 GetAsciiCharCount() const;
 
-    wxFileOffset GetFileOffset() const;
+    wxFileOffset GetBeginFileOffset() const;
+    wxFileOffset GetEndFileOffset() const;
 
     void Paint(wxInt32 x, wxInt32 y, wxDC * pDC, wxInt32 count = -1);
 };

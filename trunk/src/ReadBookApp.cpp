@@ -38,6 +38,9 @@
 #include "ReadBookBufferedDoc.h"
 #include "ReadBookBufferedView.h"
 
+#include "ReadBookSimpleDoc.h"
+#include "ReadBookSimpleView.h"
+
 #ifndef __WXMSW__
 #include "res/file.xpm"
 #include "res/file32.xpm"
@@ -101,7 +104,7 @@ bool CReadBookApp::OnInit(void)
         wxT("rbk"),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
+        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
 
     (void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Text Files"),
@@ -110,7 +113,7 @@ bool CReadBookApp::OnInit(void)
         wxT("rbk"),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
+        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
 
     (void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Archive Files"),
@@ -119,7 +122,7 @@ bool CReadBookApp::OnInit(void)
         wxT("rbk"),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
+        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
 
 	(void) new wxDocTemplate(m_pDocManager,
         wxT("All Files"),
@@ -128,7 +131,7 @@ bool CReadBookApp::OnInit(void)
         wxT(""),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookBufferedDoc), CLASSINFO(CReadBookBufferedView));
+        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
 
 #ifdef __WXMAC__
     wxFileName::MacRegisterDefaultTypeAndCreator( wxT("rbk") , 'WXMB' , 'WXMA' ) ;
