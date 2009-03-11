@@ -20,6 +20,7 @@
 #include "ReadBookSimpleView.h"
 #include "ReadBookCanvas.h"
 #include "ReadBookPage.h"
+#include "ReadBookDC.h"
 
 IMPLEMENT_DYNAMIC_CLASS(CReadBookSimpleView, CReadBookView)
 
@@ -44,8 +45,7 @@ void CReadBookSimpleView::OnDraw(wxDC *pDC)
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
 	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
 
-    wxRect clientRect = m_pCanvas->GetClientRect();
-	clientRect.Deflate(colMargin,0);
+	wxRect clientRect = GetClientRect();
 
 	const wxFont & pOldFont = pDC->GetFont();
 
@@ -92,10 +92,7 @@ void CReadBookSimpleView::CalculateViewSize()
 
 void CReadBookSimpleView::CalculateScrollSize(void)
 {
-	wxRect rect = m_pCanvas->GetClientRect();
-
-	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
-	rect.Deflate(colMargin,0);
+	wxRect rect  = GetClientRect();
 
 	m_nPageSize = rect.GetHeight() /
 		(m_FontSize.GetHeight() + wxGetApp().GetPreference()->GetLineMargin());
@@ -322,12 +319,12 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
     if (nDelta == 0)
         return GetCurrentPosition();
 
-	wxRect rect = m_pCanvas->GetClientRect();
+    CReadBookDC dc(m_pCanvas);
+
+	wxRect rect  = GetClientRect();
 
 	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
-
-	rect.Deflate(colMargin,0);
 
     wxInt32 nCharsPerLine = rect.GetWidth() / m_mbFontSize.GetWidth() * 2;
 
@@ -348,6 +345,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
         pDoc->SeekTo(nBeginPos);
 
         CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+            rect.GetWidth(),
             m_mbFontSize.GetHeight(),
             lineMargin,
             nCharsPerLine,
@@ -387,7 +385,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
                     CReadBookChar * pChar = new CReadBookChar();
                     pChar->SetData(begin_offset, end_offset, ch);
 
-                    if (!pPage->SetChar(row, col, pChar))
+                    if (!pPage->SetChar(row, col, pChar,&dc))
                     {
                         pDoc->SeekTo(begin_offset);
                         delete pChar;
@@ -505,6 +503,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
             nCount--;
 
             CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+                rect.GetWidth(),
                 m_mbFontSize.GetHeight(),
                 lineMargin,
                 nCharsPerLine,
@@ -540,7 +539,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
                     if (col < 0)
                         break;
 
-                    pPage->SetChar(row, col, ppChars[nCount]);
+                    pPage->SetChar(row, col, ppChars[nCount], &dc);
                     ppChars[nCount] = NULL;
 
                     nCount--;
@@ -583,6 +582,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
         else if (m_pViewPage == NULL)
         {
             m_pViewPage = new CReadBookPage(m_nPageSize,
+                rect.GetWidth(),
                 m_mbFontSize.GetHeight(),
                 lineMargin,
                 nCharsPerLine,
@@ -610,15 +610,15 @@ wxFileOffset CReadBookSimpleView::ScrollToPosition(wxFileOffset nPos)
     if (nPos == GetCurrentPosition() && m_pViewPage != NULL)
         return nPos;
 
+    CReadBookDC dc(m_pCanvas);
+
     if (nPos < 0)
         nPos = 0;
 
-	wxRect rect = m_pCanvas->GetClientRect();
+	wxRect rect  = GetClientRect();
 
 	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
-
-	rect.Deflate(colMargin,0);
 
     wxInt32 nCharsPerLine = rect.GetWidth() / m_mbFontSize.GetWidth() * 2;
 
@@ -627,6 +627,7 @@ wxFileOffset CReadBookSimpleView::ScrollToPosition(wxFileOffset nPos)
     pDoc->SeekTo(nPos);
 
     CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+        rect.GetWidth(),
         m_mbFontSize.GetHeight(),
         lineMargin,
         nCharsPerLine,
@@ -666,7 +667,7 @@ wxFileOffset CReadBookSimpleView::ScrollToPosition(wxFileOffset nPos)
                 CReadBookChar * pChar = new CReadBookChar();
                 pChar->SetData(begin_offset, end_offset, ch);
 
-                if (!pPage->SetChar(row, col, pChar))
+                if (!pPage->SetChar(row, col, pChar,&dc))
                 {
                     pDoc->SeekTo(begin_offset);
                     delete pChar;
@@ -780,12 +781,10 @@ void CReadBookSimpleView::OnKeyDown(wxKeyEvent& event)
 
 void CReadBookSimpleView::CalculateLastCharOffset()
 {
-	wxRect rect = m_pCanvas->GetClientRect();
+	wxRect rect  = GetClientRect();
 
 	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
-
-	rect.Deflate(colMargin,0);
 
     wxInt32 nCharsPerLine = rect.GetWidth() / m_mbFontSize.GetWidth() * 2;
 
@@ -867,12 +866,12 @@ void CReadBookSimpleView::CalculateLastCharOffset()
 
 wxFileOffset CReadBookSimpleView::ScrollToLastPage()
 {
-	wxRect rect = m_pCanvas->GetClientRect();
+    CReadBookDC dc(m_pCanvas);
+
+	wxRect rect  = GetClientRect();
 
 	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
-
-	rect.Deflate(colMargin,0);
 
     wxInt32 nCharsPerLine = rect.GetWidth() / m_mbFontSize.GetWidth() * 2;
 
@@ -934,6 +933,7 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
         nCount--;
 
         CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+            rect.GetWidth(),
             m_mbFontSize.GetHeight(),
             lineMargin,
             nCharsPerLine,
@@ -969,7 +969,7 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
                 if (col < 0)
                     break;
 
-                pPage->SetChar(row, col, ppChars[nCount]);
+                pPage->SetChar(row, col, ppChars[nCount], &dc);
                 ppChars[nCount] = NULL;
 
                 nCount--;
@@ -1012,6 +1012,7 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
     else if (m_pViewPage == NULL)
     {
         m_pViewPage = new CReadBookPage(m_nPageSize,
+            rect.GetWidth(),
             m_mbFontSize.GetHeight(),
             lineMargin,
             nCharsPerLine,
@@ -1043,4 +1044,28 @@ void CReadBookSimpleView::OnSize(wxSizeEvent& event)
         delete m_pViewPage;
 
     m_pViewPage = NULL;
+}
+
+void CReadBookSimpleView::PreferenceChanged()
+{
+    Recalculate();
+
+    if (m_pViewPage != NULL)
+        delete m_pViewPage;
+
+    m_pViewPage = NULL;
+}
+
+wxRect CReadBookSimpleView::GetClientRect()
+{
+	wxRect rect = m_pCanvas->GetClientRect();
+
+	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
+	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
+
+	rect.Deflate(colMargin,0);
+
+    rect.SetWidth(rect.GetWidth());
+
+    return rect;
 }

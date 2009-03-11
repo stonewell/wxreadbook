@@ -24,7 +24,7 @@ public:
         m_nChar = ch; 
     }
 
-    void Paint(wxInt32 x, wxInt32 y, wxDC * pDC);
+    wxSize Paint(wxInt32 x, wxInt32 y, wxDC * pDC);
 
     bool IsAscii() const;
 };

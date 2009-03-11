@@ -19,6 +19,7 @@ public:
     virtual void OnScrollWin(wxScrollWinEvent& event);
     virtual void OnMouseWheel(wxMouseEvent & event);
     virtual void OnKeyDown(wxKeyEvent& event);
+    virtual void PreferenceChanged();
 
 	CReadBookSimpleDoc * GetReadBookDoc() 
 	{ return (CReadBookSimpleDoc *)(GetDocument()); }
@@ -37,6 +38,8 @@ protected:
 
     virtual void CalculateLastCharOffset();
     virtual void OnSize(wxSizeEvent& event);
+    virtual wxRect GetClientRect();
+
 private:
     CReadBookPage * m_pViewPage;
     wxFileOffset m_nFileEndPosition;

@@ -15,9 +15,11 @@
 #include "ReadBookApp.h"
 #include "ReadBookLine.h"
 
-CReadBookLine::CReadBookLine(wxUint32 nMaxAsciiCharCount,
-        wxUint32 nAvgAsciiCharWidth,
-        wxUint32 nColMargin) :
+CReadBookLine::CReadBookLine(wxInt32 nLineWidth,
+                             wxInt32 nMaxAsciiCharCount,
+        wxInt32 nAvgAsciiCharWidth,
+        wxInt32 nColMargin) :
+m_nLineWidth(nLineWidth),
 m_nMaxAsciiCharCount(nMaxAsciiCharCount),
 m_nAvgAsciiCharWidth(nAvgAsciiCharWidth),
 m_nColMargin(nColMargin)
@@ -29,7 +31,7 @@ m_nColMargin(nColMargin)
 
 CReadBookLine::~CReadBookLine(void)
 {
-	for(wxUint32 i = 0; i < m_nMaxAsciiCharCount; i++)
+	for(wxInt32 i = 0; i < m_nMaxAsciiCharCount; i++)
 	{
         if (m_ReadBookChars[i] != NULL)
         {
@@ -48,7 +50,7 @@ CReadBookLine::~CReadBookLine(void)
     delete m_ReadBookChars;
 }
 
-bool CReadBookLine::SetChar(wxUint32 nPos, const CReadBookChar * pChar)
+bool CReadBookLine::SetChar(wxInt32 nPos, const CReadBookChar * pChar, wxDC * pDC)
 {
     if (nPos >= m_nMaxAsciiCharCount)
         return false;
@@ -67,15 +69,46 @@ bool CReadBookLine::SetChar(wxUint32 nPos, const CReadBookChar * pChar)
     if (!pChar->IsAscii())
         m_ReadBookChars[nPos + 1] = m_ReadBookChars[nPos];
 
+    wxInt32 width = 0;
+
+    wxInt32 charCount = GetAsciiCharCount();
+
+    for(wxInt32 i = 0;i < charCount;i ++)
+    {
+        CReadBookChar * pTmpChar = m_ReadBookChars[i];
+
+        if (pTmpChar == NULL)
+        {
+            width += pDC->GetTextExtent(L" ").GetWidth();
+        }
+        else
+        {
+            width += pDC->GetTextExtent(pTmpChar->GetChar()).GetWidth();
+
+            if (!pTmpChar->IsAscii())
+                i++;
+        }
+    }
+
+    if (width > m_nLineWidth)
+    {
+        m_ReadBookChars[nPos] = NULL;
+
+        if (!pChar->IsAscii())
+            m_ReadBookChars[nPos + 1] = NULL;
+
+        return false;
+    }
+
     return true;
 }
 
-bool CReadBookLine::AppendChar(const CReadBookChar * pChar)
+bool CReadBookLine::AppendChar(const CReadBookChar * pChar, wxDC * pDC)
 {
-    return SetChar(GetAsciiCharCount(), pChar);
+    return SetChar(GetAsciiCharCount(), pChar, pDC);
 }
 
-bool CReadBookLine::RemoveChar(wxUint32 nPos,bool destroy)
+bool CReadBookLine::RemoveChar(wxInt32 nPos,bool destroy)
 {
     CReadBookChar * pChar = GetChar(nPos);
 
@@ -100,7 +133,7 @@ bool CReadBookLine::RemoveChar(wxUint32 nPos,bool destroy)
     return true;
 }
 
-CReadBookChar * CReadBookLine::GetChar(wxUint32 nPos)
+CReadBookChar * CReadBookLine::GetChar(wxInt32 nPos)
 {
     if (nPos < m_nMaxAsciiCharCount)
         return m_ReadBookChars[nPos];
@@ -110,7 +143,7 @@ CReadBookChar * CReadBookLine::GetChar(wxUint32 nPos)
 
 wxFileOffset CReadBookLine::GetBeginFileOffset() const
 {
-	for(wxUint32 i = 0; i < m_nMaxAsciiCharCount; i++)
+	for(wxInt32 i = 0; i < m_nMaxAsciiCharCount; i++)
     {
         CReadBookChar * pChar = m_ReadBookChars[i];
 
@@ -123,7 +156,7 @@ wxFileOffset CReadBookLine::GetBeginFileOffset() const
 
 wxFileOffset CReadBookLine::GetEndFileOffset() const
 {
-	for(wxUint32 i = m_nMaxAsciiCharCount - 1; i >= 0; i--)
+	for(wxInt32 i = m_nMaxAsciiCharCount - 1; i >= 0; i--)
     {
         CReadBookChar * pChar = m_ReadBookChars[i];
 
@@ -141,29 +174,33 @@ void CReadBookLine::Paint(wxInt32 x, wxInt32 y, wxDC * pDC, wxInt32 count)
 {
     if (count < 0) count = m_nMaxAsciiCharCount;
 
+    wxInt32 spaceWidth = pDC->GetTextExtent(L" ").GetWidth();
+
     for(wxInt32 i = 0; i < count; i++)
     {
         CReadBookChar * pChar = m_ReadBookChars[i];
 
         if (pChar != NULL)
         {
-            pChar->Paint(x, y, pDC);
+            wxSize size = pChar->Paint(x, y, pDC);
 
             if (!pChar->IsAscii())
             {
-                x += m_nAvgAsciiCharWidth;
-
                 i++;
             }
-        }
 
-        x += m_nAvgAsciiCharWidth;
+            x += size.GetWidth();
+        }
+        else
+        {
+            x += spaceWidth;
+        }
     }
 }
 
-wxUint32 CReadBookLine::GetAsciiCharCount() const
+wxInt32 CReadBookLine::GetAsciiCharCount() const
 {
-    for(wxUint32 i = m_nMaxAsciiCharCount; i >= 0; i--)
+    for(wxInt32 i = m_nMaxAsciiCharCount - 1; i >= 0; i--)
     {
         if (m_ReadBookChars[i] != NULL)
             return i + 1;

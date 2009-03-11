@@ -31,7 +31,8 @@ IMPLEMENT_DYNAMIC_CLASS(CReadBookSimpleDoc, CReadBookDoc)
 CReadBookSimpleDoc::CReadBookSimpleDoc(void) :
 m_pFile(NULL),
 m_pInput(NULL),
-m_pConv(NULL)
+m_pConv(NULL),
+m_nFileLength(0)
 {
 }
 

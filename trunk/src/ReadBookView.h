@@ -52,6 +52,8 @@ public:
 
 	void Recalculate(void);
 
+    virtual void PreferenceChanged();
+
     DECLARE_EVENT_TABLE()
 
 protected:

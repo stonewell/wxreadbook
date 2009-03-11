@@ -1,4 +1,4 @@
-#include "wx/wxprec.h"
+﻿#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -47,7 +47,14 @@ m_pCanvas(NULL),
 m_ViewMode(wxReadBook::Text),
 m_bInScript(false),
 m_ClientSize(0,0),
-m_DisplayAs(wxReadBook::DisplayAsOriginal)
+m_DisplayAs(wxReadBook::DisplayAsOriginal),
+m_nPageSize(0),
+m_nLastLineViewSize(0),
+m_nViewSize(0),
+#ifdef _UNICODE
+m_mbFontSize(0,0),
+#endif
+m_FontSize(0,0)
 {
 }
 
@@ -932,4 +939,9 @@ void CReadBookView::SetDisplayAs(wxReadBook::DisplayAsEnum displayAs)
 	CReadBookDoc* pDoc = GetReadBookDoc();
 
 	pDoc->UpdateDisplay(m_DisplayAs, m_ViewMode);
+}
+
+void CReadBookView::PreferenceChanged()
+{
+    Recalculate();
 }
