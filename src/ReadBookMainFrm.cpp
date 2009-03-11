@@ -287,7 +287,7 @@ void CReadBookMainFrm::OnPreference(wxCommandEvent& WXUNUSED(event))
 			{
 				CReadBookView * pView = (CReadBookView *)(m_pCanvas->GetView());
 
-				pView->Recalculate();
+				pView->PreferenceChanged();
 			}
 
 			m_pCanvas->Refresh();

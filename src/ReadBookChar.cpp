@@ -23,9 +23,12 @@ CReadBookChar::~CReadBookChar(void)
 {
 }
 
-void CReadBookChar::Paint(wxInt32 x, wxInt32 y, wxDC * pDC)
+wxSize CReadBookChar::Paint(wxInt32 x, wxInt32 y, wxDC * pDC)
 {
+    wxSize size = pDC->GetTextExtent(m_nChar);
     pDC->DrawText(m_nChar, x, y);
+
+    return size;
 }
 
 bool CReadBookChar::IsAscii() const

@@ -82,10 +82,9 @@ bool CReadBookApp::OnInit(void)
 {
 	wxFileSystem::AddHandler(new wxArchiveFSHandler());
 	wxFileSystem::AddHandler(new wxFilterFSHandler);
+	Initialize7ZipClassFactories();
 
 	LoadPreference();
-
-	Initialize7ZipClassFactories();
 
 	//// Create a document manager
     m_pDocManager = new CReadBookDocManager;

@@ -15,22 +15,21 @@
 #include "ReadBookApp.h"
 #include "ReadBookPage.h"
 
-CReadBookPage::CReadBookPage(wxUint32 nMaxLineCount,
-        wxUint32 nLineHeight,
-        wxUint32 nLineMargin,
-        wxUint32 nMaxAsciiCharCount,
-        wxUint32 nAvgAsciiCharWidth,
-        wxUint32 nColMargin) :
+CReadBookPage::CReadBookPage(wxInt32 nMaxLineCount,
+        wxInt32 nLineWidth,
+        wxInt32 nLineHeight,
+        wxInt32 nLineMargin,
+        wxInt32 nMaxAsciiCharCount,
+        wxInt32 nAvgAsciiCharWidth,
+        wxInt32 nColMargin) :
 m_nMaxLineCount(nMaxLineCount),
+m_nLineWidth(nLineWidth),
 m_nLineHeight(nLineHeight),
 m_nLineMargin(nLineMargin),
 m_nMaxAsciiCharCount(nMaxAsciiCharCount),
 m_nAvgAsciiCharWidth(nAvgAsciiCharWidth),
 m_nColMargin(nColMargin)
 {
-
-//printf("nMaxLineCount=%d\n", nMaxLineCount);
-
     m_ReadBookLines = new CReadBookLine *[nMaxLineCount];
 
     memset(m_ReadBookLines, 0, nMaxLineCount * sizeof(CReadBookLine *));
@@ -47,7 +46,7 @@ CReadBookPage::~CReadBookPage(void)
     delete m_ReadBookLines;
 }
 
-bool CReadBookPage::SetChar(wxUint32 nRow, wxUint32 nCol, const CReadBookChar * pChar)
+bool CReadBookPage::SetChar(wxInt32 nRow, wxInt32 nCol, const CReadBookChar * pChar, wxDC * pDC)
 {
     CReadBookLine * pLine = GetLine(nRow);
 
@@ -59,10 +58,10 @@ bool CReadBookPage::SetChar(wxUint32 nRow, wxUint32 nCol, const CReadBookChar * 
     if (pLine == NULL)
         return false;
 
-    return pLine->SetChar(nCol, pChar);
+    return pLine->SetChar(nCol, pChar,pDC);
 }
 
-bool CReadBookPage::AppendChar(const CReadBookChar * pChar)
+bool CReadBookPage::AppendChar(const CReadBookChar * pChar, wxDC * pDC)
 {
     wxInt32 nLineCount = GetLineCount();
 
@@ -80,10 +79,10 @@ bool CReadBookPage::AppendChar(const CReadBookChar * pChar)
     if (pLine == NULL)
         return false;
 
-    return pLine->AppendChar(pChar);
+    return pLine->AppendChar(pChar, pDC);
 }
 
-bool CReadBookPage::RemoveChar(wxUint32 nRow, wxUint32 nCol, bool destroy)
+bool CReadBookPage::RemoveChar(wxInt32 nRow, wxInt32 nCol, bool destroy)
 {
     CReadBookLine * pLine = GetLine(nRow);
 
@@ -110,7 +109,7 @@ wxInt32 CReadBookPage::GetLineCount() const
     return 0;
 }
 
-CReadBookLine * CReadBookPage::GetLine(wxUint32 nRow) const
+CReadBookLine * CReadBookPage::GetLine(wxInt32 nRow) const
 {
     if (m_nMaxLineCount > nRow)
         return m_ReadBookLines[nRow];
@@ -118,7 +117,7 @@ CReadBookLine * CReadBookPage::GetLine(wxUint32 nRow) const
     return NULL;
 }
 
-CReadBookChar * CReadBookPage::GetChar(wxUint32 nRow, wxUint32 nCol) const
+CReadBookChar * CReadBookPage::GetChar(wxInt32 nRow, wxInt32 nCol) const
 {
     CReadBookLine * pLine = GetLine(nRow);
 
@@ -170,7 +169,7 @@ void CReadBookPage::Paint(wxInt32 x, wxInt32 y, wxDC * pDC)
 	}
 }
 
-CReadBookLine * CReadBookPage::CreateLine(wxUint32 nRow)
+CReadBookLine * CReadBookPage::CreateLine(wxInt32 nRow)
 {
     CReadBookLine * pLine = GetLine(nRow);
 
@@ -178,14 +177,14 @@ CReadBookLine * CReadBookPage::CreateLine(wxUint32 nRow)
 
     if (nRow >= m_nMaxLineCount) return NULL;
 
-    pLine = new CReadBookLine(m_nMaxAsciiCharCount, m_nAvgAsciiCharWidth, m_nColMargin);
+    pLine = new CReadBookLine(m_nLineWidth, m_nMaxAsciiCharCount, m_nAvgAsciiCharWidth, m_nColMargin);
 
     m_ReadBookLines[nRow] = pLine;
 
     return pLine;
 }
 
-bool CReadBookPage::SetLine(wxUint32 nRow, const CReadBookLine * pLine)
+bool CReadBookPage::SetLine(wxInt32 nRow, const CReadBookLine * pLine)
 {
     if (NULL != GetLine(nRow))
     {
@@ -197,7 +196,7 @@ bool CReadBookPage::SetLine(wxUint32 nRow, const CReadBookLine * pLine)
     return true;
 }
 
-bool CReadBookPage::RemoveLine(wxUint32 nRow, bool destroy)
+bool CReadBookPage::RemoveLine(wxInt32 nRow, bool destroy)
 {
     CReadBookLine * pLine = GetLine(nRow);
 

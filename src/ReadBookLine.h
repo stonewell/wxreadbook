@@ -6,25 +6,27 @@
 class CReadBookLine
 {
 public:
-    CReadBookLine(wxUint32 nMaxAsciiCharCount,
-        wxUint32 nAvgAsciiCharWidth,
-        wxUint32 nColMargin);
+    CReadBookLine(wxInt32 nLineWidth,
+        wxInt32 nMaxAsciiCharCount,
+        wxInt32 nAvgAsciiCharWidth,
+        wxInt32 nColMargin);
     virtual ~CReadBookLine(void);
 
 private:
-    wxUint32 m_nMaxAsciiCharCount;
-    wxUint32 m_nAvgAsciiCharWidth;
-    wxUint32 m_nColMargin;
+    wxInt32 m_nLineWidth;
+    wxInt32 m_nMaxAsciiCharCount;
+    wxInt32 m_nAvgAsciiCharWidth;
+    wxInt32 m_nColMargin;
 
     CReadBookChar ** m_ReadBookChars;
 
 public:
-    bool SetChar(wxUint32 nPos, const CReadBookChar * pChar);
-    bool AppendChar(const CReadBookChar * pChar);
-    bool RemoveChar(wxUint32 nPos,bool destroy = true);
-    CReadBookChar * GetChar(wxUint32 nPos);
+    bool SetChar(wxInt32 nPos, const CReadBookChar * pChar, wxDC * pDC);
+    bool AppendChar(const CReadBookChar * pChar, wxDC * pDC);
+    bool RemoveChar(wxInt32 nPos,bool destroy = true);
+    CReadBookChar * GetChar(wxInt32 nPos);
 
-    wxUint32 GetAsciiCharCount() const;
+    wxInt32 GetAsciiCharCount() const;
 
     wxFileOffset GetBeginFileOffset() const;
     wxFileOffset GetEndFileOffset() const;
