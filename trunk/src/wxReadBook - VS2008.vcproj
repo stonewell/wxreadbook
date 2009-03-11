@@ -5,10 +5,6 @@
 	Name="wxReadBook"
 	ProjectGUID="{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}"
 	RootNamespace="wxReadBook"
-	SccProjectName="Svn"
-	SccAuxPath="Svn"
-	SccLocalPath="Svn"
-	SccProvider="SubversionScc"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -349,7 +345,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - Unicode|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -372,7 +368,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\lib7zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswud&quot;;..\LibCharDetect"
+				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswud&quot;;..\LibCharDetect"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -430,7 +426,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug - Unicode|Pocket PC 2003 (ARMV4)"
-			OutputDirectory="$(SolutionDir)Pocket PC 2003 (ARMV4)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="Pocket PC 2003 (ARMV4)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -455,7 +451,7 @@
 				Name="VCCLCompilerTool"
 				ExecutionBucket="7"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\evc_armv4_lib\winced&quot;"
+				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\evc_armv4_lib\winced&quot;"
 				PreprocessorDefinitions="_DEBUG;WIN32_PLATFORM_PSPC;_WIN32_WCE=$(CEVER);UNDER_CE;WINCE;$(ARCHFAM);$(_ARCHFAM_);__WXWINCE__;__WXDEBUG__;$(PLATFORMDEFINES);POCKETPC2003_UI_MODEL"
 				MinimalRebuild="true"
 				RuntimeLibrary="1"
@@ -520,7 +516,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release - Unicode|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -543,7 +539,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\lib7zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswu&quot;"
+				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\vc_lib\mswu&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WXMSW__"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -601,7 +597,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release - Unicode|Pocket PC 2003 (ARMV4)"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -627,7 +623,7 @@
 				Name="VCCLCompilerTool"
 				ExecutionBucket="7"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\evc_armv4_lib\wince\&quot;"
+				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\evc_armv4_lib\wince\&quot;"
 				PreprocessorDefinitions="NDEBUG;WIN32_PLATFORM_PSPC;_WIN32_WCE=$(CEVER);UNDER_CE;WINCE;$(ARCHFAM);$(_ARCHFAM_);WINDOWSCE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -657,7 +653,7 @@
 				StackCommitSize="4096"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				LinkTimeCodeGeneration="0"
+				LinkTimeCodeGeneration="1"
 				EntryPointSymbol=""
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -921,11 +917,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookChar.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookDC.cpp"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookDoc.cpp"
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookLine.cpp"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookMainFrm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookPage.cpp"
 				>
 			</File>
 			<File
@@ -937,7 +949,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookSimpleDoc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookSimpleView.cpp"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UnicodeHelper.cpp"
 				>
 			</File>
 			<Filter
@@ -1104,11 +1128,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookChar.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookDC.h"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookDoc.h"
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookLine.h"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookMainFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookPage.h"
 				>
 			</File>
 			<File
@@ -1120,7 +1160,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ReadBookSimpleDoc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookSimpleView.h"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UnicodeHelper.h"
 				>
 			</File>
 			<File
