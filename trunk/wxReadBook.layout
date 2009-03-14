@@ -1,55 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="src\ArchiveExplorerDlg.cpp" open="1" top="0" tabpos="4">
+	<File name="src/ArchiveExplorerDlg.cpp" open="1" top="0" tabpos="4">
 		<Cursor position="1919" topLine="21" />
 	</File>
-	<File name="src\ArchiveExplorerDlg.h" open="1" top="0" tabpos="5">
+	<File name="src/ArchiveExplorerDlg.h" open="1" top="0" tabpos="5">
 		<Cursor position="1633" topLine="40" />
 	</File>
-	<File name="src\ReadBookApp.cpp" open="0" top="0" tabpos="5">
+	<File name="src/ReadBookApp.cpp" open="0" top="0" tabpos="5">
 		<Cursor position="1013" topLine="41" />
 	</File>
-	<File name="src\ReadBookApp.h" open="0" top="0" tabpos="6">
+	<File name="src/ReadBookApp.h" open="0" top="0" tabpos="6">
 		<Cursor position="501" topLine="8" />
 	</File>
-	<File name="src\ReadBookCanvas.cpp" open="0" top="0" tabpos="8">
+	<File name="src/ReadBookCanvas.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="545" topLine="9" />
 	</File>
-	<File name="src\ReadBookCanvas.h" open="0" top="0" tabpos="9">
+	<File name="src/ReadBookCanvas.h" open="0" top="0" tabpos="9">
 		<Cursor position="454" topLine="0" />
 	</File>
-	<File name="src\ReadBookDoc.cpp" open="0" top="0" tabpos="2">
+	<File name="src/ReadBookDoc.cpp" open="0" top="0" tabpos="2">
 		<Cursor position="1779" topLine="84" />
 	</File>
-	<File name="src\ReadBookDoc.h" open="0" top="0" tabpos="7">
+	<File name="src/ReadBookDoc.h" open="0" top="0" tabpos="7">
 		<Cursor position="692" topLine="12" />
 	</File>
-	<File name="src\ReadBookMainFrm.cpp" open="1" top="1" tabpos="1">
+	<File name="src/ReadBookMainFrm.cpp" open="1" top="0" tabpos="1">
 		<Cursor position="2323" topLine="57" />
 	</File>
-	<File name="src\ReadBookMainFrm.h" open="1" top="0" tabpos="3">
+	<File name="src/ReadBookMainFrm.h" open="1" top="0" tabpos="3">
 		<Cursor position="1064" topLine="15" />
 	</File>
-	<File name="src\ReadBookPreference.cpp" open="0" top="0" tabpos="11">
+	<File name="src/ReadBookPreference.cpp" open="0" top="0" tabpos="11">
 		<Cursor position="1859" topLine="84" />
 	</File>
-	<File name="src\ReadBookPreference.h" open="0" top="0" tabpos="9">
+	<File name="src/ReadBookPreference.h" open="0" top="0" tabpos="9">
 		<Cursor position="1141" topLine="40" />
 	</File>
-	<File name="src\ReadBookPreferenceDlg.cpp" open="0" top="0" tabpos="4">
+	<File name="src/ReadBookPreferenceDlg.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="6887" topLine="204" />
 	</File>
-	<File name="src\ReadBookPreferenceDlg.h" open="0" top="0" tabpos="0">
+	<File name="src/ReadBookPreferenceDlg.h" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="4" />
 	</File>
-	<File name="src\ReadBookView.cpp" open="1" top="0" tabpos="2">
+	<File name="src/ReadBookSimpleView.cpp" open="1" top="1" tabpos="6">
+		<Cursor position="19956" topLine="828" />
+	</File>
+	<File name="src/ReadBookView.cpp" open="1" top="0" tabpos="2">
 		<Cursor position="14337" topLine="685" />
 	</File>
-	<File name="src\ReadBookView.h" open="0" top="0" tabpos="3">
+	<File name="src/ReadBookView.h" open="0" top="0" tabpos="3">
 		<Cursor position="1645" topLine="11" />
 	</File>
-	<File name="src\res\BOOK06.xpm" open="0" top="0" tabpos="0">
+	<File name="src/res/BOOK06.xpm" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="262" />
 	</File>
 </CodeBlocks_layout_file>

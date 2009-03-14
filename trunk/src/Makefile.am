@@ -92,7 +92,10 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookChar.h \
 	ReadBookChar.cpp \
 	UnicodeHelper.h \
-	UnicodeHelper.cpp
+	UnicodeHelper.cpp \
+	ReadBookDC.h \
+	ReadBookDC.cpp \
+	version.h
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	$(srcdir)/../libs/lib7zip.a \
