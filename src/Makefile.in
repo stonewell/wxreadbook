@@ -64,7 +64,7 @@ am_wxReadBook_OBJECTS = ArchiveExplorerDlg.$(OBJEXT) \
 	GBBig5Table.$(OBJEXT) ReadBookSimpleView.$(OBJEXT) \
 	ReadBookSimpleDoc.$(OBJEXT) ReadBookPage.$(OBJEXT) \
 	ReadBookLine.$(OBJEXT) ReadBookChar.$(OBJEXT) \
-	UnicodeHelper.$(OBJEXT)
+	UnicodeHelper.$(OBJEXT) ReadBookDC.$(OBJEXT)
 wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
 wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a \
 	$(srcdir)/../libs/lib7zip.a $(srcdir)/../libs/libcppcommon.a \
@@ -279,7 +279,9 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookChar.h \
 	ReadBookChar.cpp \
 	UnicodeHelper.h \
-	UnicodeHelper.cpp
+	UnicodeHelper.cpp \
+	ReadBookDC.h \
+	ReadBookDC.cpp 
 
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	$(srcdir)/../libs/lib7zip.a \
@@ -361,6 +363,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookBufferedView.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookCanvas.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookChar.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookDC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookDoc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookLine.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookMainFrm.Po@am__quote@
