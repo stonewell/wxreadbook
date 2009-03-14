@@ -527,6 +527,8 @@ void CReadBookMainFrm::OnEncodingUpdateUI(wxUpdateUIEvent& event)
 	event.Check(m_nEncoding == event.GetId());
 }
 
+extern wxMBConv* new_wxMBConv_iconv( const wxChar* name );
+
 void CReadBookMainFrm::UpdateEncoding(wxUint32 id)
 {
 	if (m_nEncoding == id && m_pMBConv != NULL)
@@ -541,12 +543,14 @@ void CReadBookMainFrm::UpdateEncoding(wxUint32 id)
 	{
 	case IDM_ENCODE_GB:
 		{
-			m_pMBConv = new wxCSConv(wxFONTENCODING_CP936);
+			//m_pMBConv = new wxCSConv(wxFONTENCODING_CP936);
+			m_pMBConv = new_wxMBConv_iconv(wxT("GB18030"));
 			break;
 		}
 	case IDM_ENCODE_BIG5:
 		{
-			m_pMBConv = new wxCSConv(wxFONTENCODING_CP950);
+			//m_pMBConv = new wxCSConv(wxFONTENCODING_CP950);
+			m_pMBConv = new_wxMBConv_iconv(wxT("BIG5"));
 			break;
 		}
 	case IDM_ENCODE_UTF7:
