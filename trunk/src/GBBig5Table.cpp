@@ -2728,3 +2728,23 @@ wxChar gb2big5[] =
 
 int gb2big5TableSize = sizeof(gb2big5) / sizeof(wxChar);
 
+wxChar TranslateChar(const wxChar & ch, bool to_gb)
+{
+#if wxUSE_UNICODE
+
+	wxChar tmp1, tmp2;
+
+	for(int i=0;i<gb2big5TableSize;i+=2)
+	{
+		tmp1 = to_gb ? gb2big5[i + 1] : gb2big5[i];
+		tmp2 = to_gb ? gb2big5[i] : gb2big5[i + 1];
+
+		if (ch == tmp1)
+			return tmp2;
+	}
+
+	return ch;
+#else
+	return ch;
+#endif
+}

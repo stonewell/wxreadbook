@@ -14,8 +14,11 @@
 
 #include "ReadBookApp.h"
 #include "ReadBookChar.h"
+#include "ReadBookView.h"
+#include "GBBig5Table.h"
 
-CReadBookChar::CReadBookChar(void)
+CReadBookChar::CReadBookChar(CReadBookView * pView) :
+m_pView(pView)
 {
 }
 
@@ -26,7 +29,15 @@ CReadBookChar::~CReadBookChar(void)
 wxSize CReadBookChar::Paint(wxInt32 x, wxInt32 y, wxDC * pDC)
 {
     wxSize size = pDC->GetTextExtent(m_nChar);
-    pDC->DrawText(m_nChar, x, y);
+
+	if (m_pView->GetDisplayAs() != wxReadBook::DisplayAsOriginal)
+	{
+		pDC->DrawText(TranslateChar(m_nChar, m_pView->GetDisplayAs() == wxReadBook::DisplayAsSimplify), x, y);
+	}
+	else
+	{
+		pDC->DrawText(m_nChar, x, y);
+	}
 
     return size;
 }

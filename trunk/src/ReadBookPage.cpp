@@ -14,14 +14,17 @@
 
 #include "ReadBookApp.h"
 #include "ReadBookPage.h"
+#include "ReadBookView.h"
 
-CReadBookPage::CReadBookPage(wxInt32 nMaxLineCount,
+CReadBookPage::CReadBookPage(CReadBookView * pView, 
+		wxInt32 nMaxLineCount,
         wxInt32 nLineWidth,
         wxInt32 nLineHeight,
         wxInt32 nLineMargin,
         wxInt32 nMaxAsciiCharCount,
         wxInt32 nAvgAsciiCharWidth,
         wxInt32 nColMargin) :
+m_pView(pView),
 m_nMaxLineCount(nMaxLineCount),
 m_nLineWidth(nLineWidth),
 m_nLineHeight(nLineHeight),
@@ -177,7 +180,7 @@ CReadBookLine * CReadBookPage::CreateLine(wxInt32 nRow)
 
     if (nRow >= m_nMaxLineCount) return NULL;
 
-    pLine = new CReadBookLine(m_nLineWidth, m_nMaxAsciiCharCount, m_nAvgAsciiCharWidth, m_nColMargin);
+    pLine = new CReadBookLine(m_pView,m_nLineWidth, m_nMaxAsciiCharCount, m_nAvgAsciiCharWidth, m_nColMargin);
 
     m_ReadBookLines[nRow] = pLine;
 
@@ -249,3 +252,4 @@ void CReadBookPage::NormalizeLines()
             m_ReadBookLines[i]->TrimEmptyChars();
     }
 }
+

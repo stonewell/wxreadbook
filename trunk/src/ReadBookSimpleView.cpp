@@ -344,7 +344,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
 
         pDoc->SeekTo(nBeginPos);
 
-        CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+        CReadBookPage * pPage = new CReadBookPage(this,m_nPageSize,
             rect.GetWidth(),
             m_mbFontSize.GetHeight(),
             lineMargin,
@@ -382,7 +382,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
                     if (end_of_line)
                         break;
 
-                    CReadBookChar * pChar = new CReadBookChar();
+                    CReadBookChar * pChar = new CReadBookChar(this);
                     pChar->SetData(begin_offset, end_offset, ch);
 
                     if (!pPage->SetChar(row, col, pChar,&dc))
@@ -483,7 +483,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
                 }
                 else
                 {
-                    CReadBookChar * pChar = new CReadBookChar();
+                    CReadBookChar * pChar = new CReadBookChar(this);
                     pChar->SetData(begin_offset, end_offset, ch);
 
                     ppChars[nCount++] = pChar;
@@ -502,7 +502,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
         {
             nCount--;
 
-            CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+            CReadBookPage * pPage = new CReadBookPage(this,m_nPageSize,
                 rect.GetWidth(),
                 m_mbFontSize.GetHeight(),
                 lineMargin,
@@ -581,7 +581,7 @@ wxFileOffset CReadBookSimpleView::ScrollSimpleLine(wxInt16 nDelta)
         }// if nCount > 0
         else if (m_pViewPage == NULL)
         {
-            m_pViewPage = new CReadBookPage(m_nPageSize,
+            m_pViewPage = new CReadBookPage(this,m_nPageSize,
                 rect.GetWidth(),
                 m_mbFontSize.GetHeight(),
                 lineMargin,
@@ -626,7 +626,7 @@ wxFileOffset CReadBookSimpleView::ScrollToPosition(wxFileOffset nPos)
 
     pDoc->SeekTo(nPos);
 
-    CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+    CReadBookPage * pPage = new CReadBookPage(this, m_nPageSize,
         rect.GetWidth(),
         m_mbFontSize.GetHeight(),
         lineMargin,
@@ -664,7 +664,7 @@ wxFileOffset CReadBookSimpleView::ScrollToPosition(wxFileOffset nPos)
                 if (end_of_line)
                     break;
 
-                CReadBookChar * pChar = new CReadBookChar();
+                CReadBookChar * pChar = new CReadBookChar(this);
                 pChar->SetData(begin_offset, end_offset, ch);
 
                 if (!pPage->SetChar(row, col, pChar,&dc))
@@ -775,6 +775,7 @@ void CReadBookSimpleView::OnKeyDown(wxKeyEvent& event)
 
 	if (doScroll)
 	{
+		UpdateScrollPos();
 		m_pCanvas->Refresh();
 	}
 }
@@ -826,7 +827,7 @@ void CReadBookSimpleView::CalculateLastCharOffset()
             }
             else
             {
-                CReadBookChar * pChar = new CReadBookChar();
+                CReadBookChar * pChar = new CReadBookChar(this);
                 pChar->SetData(begin_offset, end_offset, ch);
 
                 ppChars[nCount++] = pChar;
@@ -913,7 +914,7 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
             }
             else
             {
-                CReadBookChar * pChar = new CReadBookChar();
+                CReadBookChar * pChar = new CReadBookChar(this);
                 pChar->SetData(begin_offset, end_offset, ch);
 
                 ppChars[nCount++] = pChar;
@@ -932,7 +933,7 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
     {
         nCount--;
 
-        CReadBookPage * pPage = new CReadBookPage(m_nPageSize,
+        CReadBookPage * pPage = new CReadBookPage(this, m_nPageSize,
             rect.GetWidth(),
             m_mbFontSize.GetHeight(),
             lineMargin,
@@ -1011,7 +1012,7 @@ wxFileOffset CReadBookSimpleView::ScrollToLastPage()
     }
     else if (m_pViewPage == NULL)
     {
-        m_pViewPage = new CReadBookPage(m_nPageSize,
+        m_pViewPage = new CReadBookPage(this, m_nPageSize,
             rect.GetWidth(),
             m_mbFontSize.GetHeight(),
             lineMargin,
