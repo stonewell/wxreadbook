@@ -527,7 +527,7 @@ void CReadBookMainFrm::OnEncodingUpdateUI(wxUpdateUIEvent& event)
 	event.Check(m_nEncoding == event.GetId());
 }
 
-#if defined(_WIN32) || defined(WINDOWSCE)
+#if !defined(_WIN32) || !defined(WINDOWSCE)
 extern wxMBConv* new_wxMBConv_iconv( const wxChar* name );
 #endif
 
