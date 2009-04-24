@@ -2728,19 +2728,48 @@ wxChar gb2big5[] =
 
 int gb2big5TableSize = sizeof(gb2big5) / sizeof(wxChar);
 
-wxChar TranslateChar(const wxChar & ch, bool to_gb)
-{
-#if wxUSE_UNICODE
+bool mapping_initialized = false;
 
-	wxChar tmp1, tmp2;
+WX_DECLARE_HASH_MAP( wxInt32, wxInt32, wxIntegerHash, wxIntegerEqual, CInt2IntMap);
+
+CInt2IntMap big52gb_mapping;
+CInt2IntMap gb2big5_mapping;
+
+void InitializeMapping(void)
+{
+	if (mapping_initialized) return;
+
+	big52gb_mapping.clear();
+	gb2big5_mapping.clear();
 
 	for(int i=0;i<gb2big5TableSize;i+=2)
 	{
-		tmp1 = to_gb ? gb2big5[i + 1] : gb2big5[i];
-		tmp2 = to_gb ? gb2big5[i] : gb2big5[i + 1];
+		big52gb_mapping[gb2big5[i + 1]] = gb2big5[i];
+		gb2big5_mapping[gb2big5[i]] = gb2big5[i + 1];
+	}
 
-		if (ch == tmp1)
-			return tmp2;
+	mapping_initialized = true;
+}
+
+wxChar TranslateChar(const wxChar & ch, bool to_gb)
+{
+	if (!mapping_initialized)
+		InitializeMapping();
+
+#if wxUSE_UNICODE
+	if (to_gb)
+	{
+		CInt2IntMap::const_iterator it = big52gb_mapping.find(ch);
+
+		if (it != big52gb_mapping.end())
+			return it->second;
+	}
+	else
+	{
+		CInt2IntMap::const_iterator it = gb2big5_mapping.find(ch);
+
+		if (it != gb2big5_mapping.end())
+			return it->second;
 	}
 
 	return ch;
