@@ -1,13 +1,16 @@
 #ifndef __READBOOK_CHAR_H__
 #define __READBOOK_CHAR_H__
 
+class CReadBookView;
+
 class CReadBookChar
 {
 public:
-    CReadBookChar(void);
+    CReadBookChar(CReadBookView * pView);
     virtual ~CReadBookChar(void);
 
 private:
+	CReadBookView * m_pView;
     wxFileOffset m_nBeginFileOffset;
     wxFileOffset m_nEndFileOffset;
     wxChar m_nChar;

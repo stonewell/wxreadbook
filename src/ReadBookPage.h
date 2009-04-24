@@ -3,10 +3,13 @@
 
 #include "ReadBookLine.h"
 
+class CReadBookView;
+
 class CReadBookPage
 {
 public:
-    CReadBookPage(wxInt32 nMaxLineCount,
+    CReadBookPage(CReadBookView * pView, 
+		wxInt32 nMaxLineCount,
         wxInt32 nLineWidth,
         wxInt32 nLineHeight,
         wxInt32 nLineMargin,
@@ -16,6 +19,7 @@ public:
     virtual ~CReadBookPage(void);
 
 private:
+	CReadBookView * m_pView;
     wxInt32 m_nMaxLineCount;
     wxInt32 m_nLineWidth;
     wxInt32 m_nLineHeight;

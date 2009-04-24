@@ -14,231 +14,234 @@
 
 #include "ReadBookApp.h"
 #include "ReadBookLine.h"
+#include "ReadBookView.h"
 
-CReadBookLine::CReadBookLine(wxInt32 nLineWidth,
-                             wxInt32 nMaxAsciiCharCount,
-        wxInt32 nAvgAsciiCharWidth,
-        wxInt32 nColMargin) :
+CReadBookLine::CReadBookLine(CReadBookView * pView,
+							 wxInt32 nLineWidth,
+							 wxInt32 nMaxAsciiCharCount,
+							 wxInt32 nAvgAsciiCharWidth,
+							 wxInt32 nColMargin) :
+m_pView(pView),
 m_nLineWidth(nLineWidth),
 m_nMaxAsciiCharCount(nMaxAsciiCharCount),
 m_nAvgAsciiCharWidth(nAvgAsciiCharWidth),
 m_nColMargin(nColMargin)
 {
-    m_ReadBookChars = new CReadBookChar * [ m_nMaxAsciiCharCount ];
+	m_ReadBookChars = new CReadBookChar * [ m_nMaxAsciiCharCount ];
 
-    memset(m_ReadBookChars, 0, m_nMaxAsciiCharCount * sizeof(CReadBookChar *));
+	memset(m_ReadBookChars, 0, m_nMaxAsciiCharCount * sizeof(CReadBookChar *));
 }
 
 CReadBookLine::~CReadBookLine(void)
 {
 	for(wxInt32 i = 0; i < m_nMaxAsciiCharCount; i++)
 	{
-        if (m_ReadBookChars[i] != NULL)
-        {
-            bool ascii = m_ReadBookChars[i]->IsAscii();
+		if (m_ReadBookChars[i] != NULL)
+		{
+			bool ascii = m_ReadBookChars[i]->IsAscii();
 
-            delete m_ReadBookChars[i];
+			delete m_ReadBookChars[i];
 
-            if (i >= m_nMaxAsciiCharCount - 1)
-                break;
+			if (i >= m_nMaxAsciiCharCount - 1)
+				break;
 
-            if (!ascii)
-                i++;
-        }
+			if (!ascii)
+				i++;
+		}
 	}
 
-    delete m_ReadBookChars;
+	delete m_ReadBookChars;
 }
 
 bool CReadBookLine::SetChar(wxInt32 nPos, const CReadBookChar * pChar, wxDC * pDC)
 {
-    if (nPos >= m_nMaxAsciiCharCount)
-        return false;
+	if (nPos >= m_nMaxAsciiCharCount)
+		return false;
 
-    if (!pChar->IsAscii() && nPos + 1 >= m_nMaxAsciiCharCount)
-        return false;
+	if (!pChar->IsAscii() && nPos + 1 >= m_nMaxAsciiCharCount)
+		return false;
 
-    if (GetChar(nPos) != NULL)
-        return false;
+	if (GetChar(nPos) != NULL)
+		return false;
 
-    if (!pChar->IsAscii() && GetChar(nPos + 1) != NULL)
-        return false;
+	if (!pChar->IsAscii() && GetChar(nPos + 1) != NULL)
+		return false;
 
-    m_ReadBookChars[nPos] = const_cast<CReadBookChar *>(pChar);
+	m_ReadBookChars[nPos] = const_cast<CReadBookChar *>(pChar);
 
-    if (!pChar->IsAscii())
-        m_ReadBookChars[nPos + 1] = m_ReadBookChars[nPos];
+	if (!pChar->IsAscii())
+		m_ReadBookChars[nPos + 1] = m_ReadBookChars[nPos];
 
-    wxInt32 width = 0;
+	wxInt32 width = 0;
 
-    wxInt32 charCount = GetAsciiCharCount();
+	wxInt32 charCount = GetAsciiCharCount();
 
-    for(wxInt32 i = 0;i < charCount;i ++)
-    {
-        CReadBookChar * pTmpChar = m_ReadBookChars[i];
+	for(wxInt32 i = 0;i < charCount;i ++)
+	{
+		CReadBookChar * pTmpChar = m_ReadBookChars[i];
 
-        if (pTmpChar == NULL)
-        {
-            width += pDC->GetTextExtent(L" ").GetWidth();
-        }
-        else
-        {
-            width += pDC->GetTextExtent(pTmpChar->GetChar()).GetWidth();
+		if (pTmpChar == NULL)
+		{
+			width += pDC->GetTextExtent(L" ").GetWidth();
+		}
+		else
+		{
+			width += pDC->GetTextExtent(pTmpChar->GetChar()).GetWidth();
 
-            if (!pTmpChar->IsAscii())
-                i++;
-        }
-    }
+			if (!pTmpChar->IsAscii())
+				i++;
+		}
+	}
 
-    if (width > m_nLineWidth)
-    {
-        m_ReadBookChars[nPos] = NULL;
+	if (width > m_nLineWidth)
+	{
+		m_ReadBookChars[nPos] = NULL;
 
-        if (!pChar->IsAscii())
-            m_ReadBookChars[nPos + 1] = NULL;
+		if (!pChar->IsAscii())
+			m_ReadBookChars[nPos + 1] = NULL;
 
-        return false;
-    }
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 bool CReadBookLine::AppendChar(const CReadBookChar * pChar, wxDC * pDC)
 {
-    return SetChar(GetAsciiCharCount(), pChar, pDC);
+	return SetChar(GetAsciiCharCount(), pChar, pDC);
 }
 
 bool CReadBookLine::RemoveChar(wxInt32 nPos,bool destroy)
 {
-    CReadBookChar * pChar = GetChar(nPos);
+	CReadBookChar * pChar = GetChar(nPos);
 
-    if (pChar == NULL) return true;
+	if (pChar == NULL) return true;
 
-    m_ReadBookChars[nPos] = NULL;
+	m_ReadBookChars[nPos] = NULL;
 
-    if (nPos > 0)
-    {
-        if (m_ReadBookChars[nPos - 1] == pChar)
-            m_ReadBookChars[nPos - 1] = NULL;
-    }
+	if (nPos > 0)
+	{
+		if (m_ReadBookChars[nPos - 1] == pChar)
+			m_ReadBookChars[nPos - 1] = NULL;
+	}
 
-    if (nPos < m_nMaxAsciiCharCount - 1)
-    {
-        if (m_ReadBookChars[nPos + 1] == pChar)
-            m_ReadBookChars[nPos + 1] = NULL;
-    }
+	if (nPos < m_nMaxAsciiCharCount - 1)
+	{
+		if (m_ReadBookChars[nPos + 1] == pChar)
+			m_ReadBookChars[nPos + 1] = NULL;
+	}
 
-    if (destroy) delete pChar;
+	if (destroy) delete pChar;
 
-    return true;
+	return true;
 }
 
 CReadBookChar * CReadBookLine::GetChar(wxInt32 nPos)
 {
-    if (nPos < m_nMaxAsciiCharCount)
-        return m_ReadBookChars[nPos];
+	if (nPos < m_nMaxAsciiCharCount)
+		return m_ReadBookChars[nPos];
 
-    return NULL;
+	return NULL;
 }
 
 wxFileOffset CReadBookLine::GetBeginFileOffset() const
 {
 	for(wxInt32 i = 0; i < m_nMaxAsciiCharCount; i++)
-    {
-        CReadBookChar * pChar = m_ReadBookChars[i];
+	{
+		CReadBookChar * pChar = m_ReadBookChars[i];
 
-        if (pChar != NULL)
-            return pChar->GetBeginFileOffset();
-    }
+		if (pChar != NULL)
+			return pChar->GetBeginFileOffset();
+	}
 
-    return 0;
+	return 0;
 }
 
 wxFileOffset CReadBookLine::GetEndFileOffset() const
 {
 	for(wxInt32 i = m_nMaxAsciiCharCount - 1; i >= 0; i--)
-    {
-        CReadBookChar * pChar = m_ReadBookChars[i];
+	{
+		CReadBookChar * pChar = m_ReadBookChars[i];
 
-        if (pChar != NULL)
-            return pChar->GetEndFileOffset();
+		if (pChar != NULL)
+			return pChar->GetEndFileOffset();
 
-        if (i == 0)
-            break;
-    }
+		if (i == 0)
+			break;
+	}
 
-    return 0;
+	return 0;
 }
 
 void CReadBookLine::Paint(wxInt32 x, wxInt32 y, wxDC * pDC, wxInt32 count)
 {
-    if (count < 0) count = m_nMaxAsciiCharCount;
+	if (count < 0) count = m_nMaxAsciiCharCount;
 
-    wxInt32 spaceWidth = pDC->GetTextExtent(L" ").GetWidth();
+	wxInt32 spaceWidth = pDC->GetTextExtent(L" ").GetWidth();
 
-    for(wxInt32 i = 0; i < count; i++)
-    {
-        CReadBookChar * pChar = m_ReadBookChars[i];
+	for(wxInt32 i = 0; i < count; i++)
+	{
+		CReadBookChar * pChar = m_ReadBookChars[i];
 
-        if (pChar != NULL)
-        {
-            wxSize size = pChar->Paint(x, y, pDC);
+		if (pChar != NULL)
+		{
+			wxSize size = pChar->Paint(x, y, pDC);
 
-            if (!pChar->IsAscii())
-            {
-                i++;
-            }
+			if (!pChar->IsAscii())
+			{
+				i++;
+			}
 
-            x += size.GetWidth();
-        }
-        else
-        {
-            x += spaceWidth;
-        }
-    }
+			x += size.GetWidth();
+		}
+		else
+		{
+			x += spaceWidth;
+		}
+	}
 }
 
 wxInt32 CReadBookLine::GetAsciiCharCount() const
 {
-    for(wxInt32 i = m_nMaxAsciiCharCount - 1; i >= 0; i--)
-    {
-        if (m_ReadBookChars[i] != NULL)
-            return i + 1;
+	for(wxInt32 i = m_nMaxAsciiCharCount - 1; i >= 0; i--)
+	{
+		if (m_ReadBookChars[i] != NULL)
+			return i + 1;
 
-        if (i == 0)
-            break;
-    }
+		if (i == 0)
+			break;
+	}
 
-    return 0;
+	return 0;
 }
 
 void CReadBookLine::TrimEmptyChars()
 {
-    wxInt32 nBeginCol = -1;
-    wxInt32 nLastCol = -1;
+	wxInt32 nBeginCol = -1;
+	wxInt32 nLastCol = -1;
 
 	for(wxInt32 i = 0; i < (wxInt32)m_nMaxAsciiCharCount; i++)
-    {
-        CReadBookChar * pChar = m_ReadBookChars[i];
+	{
+		CReadBookChar * pChar = m_ReadBookChars[i];
 
-        if (pChar != NULL && nBeginCol < 0)
-        {
-            nBeginCol = i;
-        }
+		if (pChar != NULL && nBeginCol < 0)
+		{
+			nBeginCol = i;
+		}
 
-        if (nBeginCol == 0)
-            return;
+		if (nBeginCol == 0)
+			return;
 
-        if (nBeginCol > 0)
-        {
-            m_ReadBookChars[i - nBeginCol] = pChar;
-            nLastCol = i - nBeginCol;
-        }
-    }
+		if (nBeginCol > 0)
+		{
+			m_ReadBookChars[i - nBeginCol] = pChar;
+			nLastCol = i - nBeginCol;
+		}
+	}
 
-    if (nLastCol >= 0)
-    {
-        for(wxInt32 i = nLastCol + 1; i < (wxInt32)m_nMaxAsciiCharCount; i++)
-            m_ReadBookChars[i] = NULL;
-    }
+	if (nLastCol >= 0)
+	{
+		for(wxInt32 i = nLastCol + 1; i < (wxInt32)m_nMaxAsciiCharCount; i++)
+			m_ReadBookChars[i] = NULL;
+	}
 }

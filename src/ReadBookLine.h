@@ -3,16 +3,20 @@
 
 #include "ReadBookChar.h"
 
+class CReadBookView;
+
 class CReadBookLine
 {
 public:
-    CReadBookLine(wxInt32 nLineWidth,
+    CReadBookLine(CReadBookView * pView,
+		wxInt32 nLineWidth,
         wxInt32 nMaxAsciiCharCount,
         wxInt32 nAvgAsciiCharWidth,
         wxInt32 nColMargin);
     virtual ~CReadBookLine(void);
 
 private:
+	CReadBookView * m_pView;
     wxInt32 m_nLineWidth;
     wxInt32 m_nMaxAsciiCharCount;
     wxInt32 m_nAvgAsciiCharWidth;
