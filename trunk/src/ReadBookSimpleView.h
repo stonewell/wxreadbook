@@ -3,6 +3,7 @@
 #include "ReadBookView.h"
 
 class CReadBookPage;
+class CReadBookChar;
 
 class CReadBookSimpleView :
 	public CReadBookView
@@ -28,19 +29,29 @@ protected:
 	virtual void CalculateViewSize();
 	virtual void CalculateScrollSize(void);
 	virtual void UpdateScrollPos(void);
+    virtual void CalculateLastCharOffset();
+    virtual void CalculateFirstCharOffset();
 
 	virtual wxFileOffset ScrollSimplePage(wxInt16 nDelta);
 	virtual wxFileOffset ScrollSimpleLine(wxInt16 nDelta);
-	virtual wxFileOffset ScrollToPosition(wxFileOffset nPos);
-    virtual wxFileOffset ScrollToLastPage();
+	virtual wxFileOffset ScrollToBeginPosition(wxFileOffset nPos, bool bUpdateFileInfo = true);
+	virtual wxFileOffset ScrollToEndPosition(wxFileOffset nPos, bool bUpdateFileInfo = true);
 
     virtual wxFileOffset GetCurrentPosition();
 
-    virtual void CalculateLastCharOffset();
     virtual void OnSize(wxSizeEvent& event);
     virtual wxRect GetClientRect();
 
+	virtual CReadBookPage * CreateReadBookPage();
+	virtual void ReleasePPChars();
+	virtual void CreatePPChars();
+
+	virtual void Recalculate();
 private:
     CReadBookPage * m_pViewPage;
     wxFileOffset m_nFileEndPosition;
+    wxFileOffset m_nFileBeginPosition;
+	wxInt32 m_nCharsPerLine;
+	CReadBookChar ** m_ppChars;
+	wxInt32 m_nPageChars;
 };

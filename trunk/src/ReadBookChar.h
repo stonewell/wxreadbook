@@ -5,7 +5,8 @@ class CReadBookView;
 
 class CReadBookChar
 {
-public:
+private:
+	friend class CReadBookCharCache;
     CReadBookChar(CReadBookView * pView);
     virtual ~CReadBookChar(void);
 
@@ -30,6 +31,9 @@ public:
     wxSize Paint(wxInt32 x, wxInt32 y, wxDC * pDC);
 
     bool IsAscii() const;
+
+	void Init(CReadBookView * pView);
+	void Release();
 };
 
 #endif
