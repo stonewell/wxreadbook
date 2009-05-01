@@ -1,7 +1,7 @@
 #if _WIN32
 #ifndef _WIN32_WCE
 #if _DEBUG
-#include "vld.h"
+//#include "vld.h"
 #endif
 #endif
 #endif
@@ -40,6 +40,8 @@
 
 #include "ReadBookSimpleDoc.h"
 #include "ReadBookSimpleView.h"
+
+#include "ObjectCache.h"
 
 #ifndef __WXMSW__
 #include "res/file.xpm"
@@ -138,6 +140,8 @@ bool CReadBookApp::OnInit(void)
 
     m_pDocManager->SetMaxDocsOpen(1);
 
+	InitObjectCache();
+
     //// Create the main g_pMainFrm window
     g_pMainFrm = new CReadBookMainFrm(m_pDocManager,
         (wxFrame *) NULL,
@@ -167,6 +171,8 @@ bool CReadBookApp::OnInit(void)
 
 int CReadBookApp::OnExit(void)
 {
+	ReleaseObjectCache();
+
     delete m_pDocManager;
 	SavePreference();
 

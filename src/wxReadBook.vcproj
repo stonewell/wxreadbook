@@ -875,6 +875,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ObjectCache.cpp"
+				>
+			</File>
+			<File
 				RelativePath="ReadBookApp.cpp"
 				>
 			</File>
@@ -1083,6 +1087,10 @@
 			</File>
 			<File
 				RelativePath=".\GBBig5Table.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ObjectCache.h"
 				>
 			</File>
 			<File

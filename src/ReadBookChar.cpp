@@ -46,3 +46,12 @@ bool CReadBookChar::IsAscii() const
 {
     return m_nChar <= 0xFF && m_nChar >= 0;
 }
+
+void CReadBookChar::Init(CReadBookView * pView)
+{
+	m_pView = pView;
+}
+
+void CReadBookChar::Release()
+{
+}
