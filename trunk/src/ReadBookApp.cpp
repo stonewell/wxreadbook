@@ -98,6 +98,18 @@ bool CReadBookApp::OnInit(void)
 
 	archiveExts += wxT("*.zip;*.tar;*.gz");
 
+#ifdef _WIN32
+#ifdef _WIN32_WCE
+#define DOC_CLASS CReadBookSimpleDoc
+#define VIEW_CLASS CReadBookSimpleView
+#else
+#define DOC_CLASS CReadBookDoc
+#define VIEW_CLASS CReadBookView
+#endif
+#else
+#define DOC_CLASS CReadBookSimpleDoc
+#define VIEW_CLASS CReadBookSimpleView
+#endif
 	(void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Files"),
         wxT("*.txt;*.html;*.htm;") + archiveExts,
@@ -105,7 +117,7 @@ bool CReadBookApp::OnInit(void)
         wxT("rbk"),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
+        CLASSINFO(DOC_CLASS), CLASSINFO(VIEW_CLASS));
 
     (void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Text Files"),
@@ -114,7 +126,7 @@ bool CReadBookApp::OnInit(void)
         wxT("rbk"),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
+        CLASSINFO(DOC_CLASS), CLASSINFO(VIEW_CLASS));
 
     (void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Archive Files"),
@@ -123,7 +135,7 @@ bool CReadBookApp::OnInit(void)
         wxT("rbk"),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
+        CLASSINFO(DOC_CLASS), CLASSINFO(VIEW_CLASS));
 
 	(void) new wxDocTemplate(m_pDocManager,
         wxT("All Files"),
@@ -132,7 +144,7 @@ bool CReadBookApp::OnInit(void)
         wxT(""),
         wxT("ReadBook Doc"),
         wxT("ReadBook View"),
-        CLASSINFO(CReadBookSimpleDoc), CLASSINFO(CReadBookSimpleView));
+        CLASSINFO(DOC_CLASS), CLASSINFO(VIEW_CLASS));
 
 #ifdef __WXMAC__
     wxFileName::MacRegisterDefaultTypeAndCreator( wxT("rbk") , 'WXMB' , 'WXMA' ) ;

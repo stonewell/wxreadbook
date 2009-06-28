@@ -302,8 +302,8 @@ void CReadBookPage::StripHtml(wxDC * pDC,
 							  int & initial_script_status)
 {
 	wxString tag = wxT("");
-	bool bInHtmlTag = initial_tag_status;
-	bool bInScript = initial_script_status;
+	bool bInHtmlTag = initial_tag_status != 0;
+	bool bInScript = initial_script_status != 0;
 
 	std::vector<CReadBookChar *> chars;
 	std::vector<CReadBookChar *>::iterator it;
