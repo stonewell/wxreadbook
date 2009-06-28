@@ -546,8 +546,8 @@ wxFileOffset CReadBookSimpleView::ScrollToBeginPosition(wxFileOffset nPos, bool 
 
 	bool end_of_file = false;
 	bool end_of_line = false;
-	bool initial_tag_status = false;
-	bool initial_script_status = false;
+	int initial_tag_status = 0;
+	int initial_script_status = 0;
 
 	do
 	{
@@ -658,8 +658,8 @@ wxFileOffset CReadBookSimpleView::ScrollToEndPosition(wxFileOffset nPos,
 
 	wxInt32 tmpLineCount = 0;
 
-	bool initial_tag_status = false;
-	bool initial_script_status = false;
+	int initial_tag_status = 0;
+	int initial_script_status = 0;
 
 	do
 	{

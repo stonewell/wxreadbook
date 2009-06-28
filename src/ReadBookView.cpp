@@ -166,13 +166,15 @@ void CReadBookView::OnDraw(wxDC *pDC)
 			}
 			else
 			{
-				wxInt16 lineCharSize = length * clientRect.GetWidth() / size.GetWidth() + 1;
+				wxInt16 lineCharSize = 0;
+				wxInt16 defualtLineCharSize =
+					length * clientRect.GetWidth() / size.GetWidth() + 1;
 				wxInt64 startIndex = 0;
 
 				while(startIndex < length)
 				{
 					lineCharSize = GetViewLineCharSize(pDC,
-						pBuf,length,startIndex,lineCharSize);
+						pBuf,length,startIndex,defualtLineCharSize);
 
 					if (lineCount >= pDoc->GetCurrentLine())
 					{
@@ -466,9 +468,10 @@ wxInt16 CReadBookView::GetViewLineCharSize(wxDC * pDC,
 		size2 = pDC->GetTextExtent(wxString(&pBuf[startIndex],lineCharSize));
 	}
 
-	if (size2.GetWidth() > clientRect.GetWidth())
+	while (size2.GetWidth() > clientRect.GetWidth() && lineCharSize > 1)
 	{
 		lineCharSize--;
+		size2 = pDC->GetTextExtent(wxString(&pBuf[startIndex],lineCharSize));
 	}
 
 	if (!CheckCharConsistence(pBuf,startIndex,lineCharSize))
