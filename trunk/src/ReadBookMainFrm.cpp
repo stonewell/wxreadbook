@@ -36,6 +36,7 @@ IMPLEMENT_CLASS(CReadBookMainFrm, wxDocParentFrame)
 BEGIN_EVENT_TABLE(CReadBookMainFrm, wxDocParentFrame)
     EVT_MENU(IDM_ABOUT, CReadBookMainFrm::OnAbout)
     EVT_MENU(IDM_PREFERENCE, CReadBookMainFrm::OnPreference)
+    EVT_MENU(IDM_GOTO, CReadBookMainFrm::OnGoto)
     EVT_MENU(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtml)
     EVT_MENU(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsText)
     EVT_MENU(IDM_VIEW_DISPLAY_ORIGINAL, CReadBookMainFrm::OnViewDisplayOriginal)
@@ -195,6 +196,8 @@ void CReadBookMainFrm::Init()
     //pEditMenu->Append(wxID_PASTE, wxT("&Paste"));
     //pEditMenu->AppendSeparator();
     pEditMenu->Append(IDM_PREFERENCE, wxT("&Preference..."));
+    pEditMenu->AppendSeparator();
+    pEditMenu->Append(IDM_GOTO, wxT("&Goto...\tCTRL+G"));
 
 	wxMenu * pEncodingMenu = new wxMenu;
     pEncodingMenu->AppendCheckItem(IDM_ENCODE_GB, wxT("GB2312/GB18030"));
@@ -680,4 +683,11 @@ wxToolBar* CReadBookMainFrm::OnCreateToolBar(long style,
                          wxDefaultPosition, wxDefaultSize,
                          style, name);
 #endif
+}
+
+void CReadBookMainFrm::OnGoto(wxCommandEvent& WXUNUSED(event))
+{
+	CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
+
+	pView->GoTo();
 }

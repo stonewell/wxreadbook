@@ -277,6 +277,15 @@ wxInt32 CReadBookBufferedView::ScrollPosToLine(wxInt32 nPos)
 	return pBufferedDoc->OffsetToRow(nPos);
 }
 
+wxInt32 CReadBookBufferedView:: ScrollLineToPos(wxInt32 nLine)
+{
+	CReadBookBufferedDoc * pBufferedDoc = 
+		(CReadBookBufferedDoc *)GetReadBookDoc();
+
+	return pBufferedDoc->RowToOffset(nLine);
+}
+
+
 bool CReadBookBufferedView::CouldBeShowInSingleLine(const wxString & strLine) const
 {
 	wxRect clientRect = m_pCanvas->GetClientRect();
