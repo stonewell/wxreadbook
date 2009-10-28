@@ -53,6 +53,7 @@ public:
 	void Recalculate(void);
 
     virtual void PreferenceChanged();
+	virtual bool GoTo();
 
     DECLARE_EVENT_TABLE()
 
@@ -110,5 +111,6 @@ protected:
 
 	virtual wxInt32 NormalizeScrollToLine(wxInt32 nLine);
 	virtual wxInt32 ScrollPosToLine(wxInt32 nPos);
+	virtual wxInt32 ScrollLineToPos(wxInt32 nLine);
 };
 #endif /*READBOOKVIEW_H_*/

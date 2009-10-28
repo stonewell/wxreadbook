@@ -26,4 +26,5 @@ protected:
 	virtual void CalculateScrollSize(void);
 	virtual void UpdateScrollPos(void);
 	virtual wxInt32 ScrollPosToLine(wxInt32 nPos);
+	virtual wxInt32 ScrollLineToPos(wxInt32 nLine);
 };

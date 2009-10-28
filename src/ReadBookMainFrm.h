@@ -19,6 +19,7 @@ public:
 
 	void OnAbout(wxCommandEvent& event);
 	void OnPreference(wxCommandEvent& event);
+	void OnGoto(wxCommandEvent& event);
 	void OnViewAsHtml(wxCommandEvent& event);
 	void OnViewAsText(wxCommandEvent& event);
 	void OnViewDisplayOriginal(wxCommandEvent& event);
@@ -92,6 +93,7 @@ enum MenuIDEnum
 	IDM_VIEW_DISPLAY_ORIGINAL,
 	IDM_VIEW_DISPLAY_SIMPLIFY,
 	IDM_VIEW_DISPLAY_TRADITIONAL,
+	IDM_GOTO,
 
 	IDM_ENCODE_UNKNOWN,
 	IDM_ENCODE_ID_START,

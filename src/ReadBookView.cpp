@@ -20,6 +20,7 @@
 #include "ReadBookDoc.h"
 #include "ReadBookView.h"
 #include "ReadBookCanvas.h"
+#include "ReadBookKeys.h"
 
 #if wxUSE_UNICODE
 #include "nsDetector.h"
@@ -644,7 +645,12 @@ void CReadBookView::OnKeyDown(wxKeyEvent& event)
 
 	wxInt32 nCurrentLine = GetReadBookDoc()->GetCurrentLine();
 
-	switch(event.GetKeyCode())
+	int readbook_key = READBOOK_KEY_CODE(event.AltDown() ? 1 : 0,
+		event.ControlDown() ? 1 : 0,
+		event.ShiftDown() ? 1 : 0,
+		event.GetKeyCode());
+
+	switch(readbook_key)
 	{
 	case WXK_HOME:
 		if (nCurrentLine == ScrollToLine(0))
@@ -708,12 +714,18 @@ void CReadBookView::OnKeyDown(wxKeyEvent& event)
 #ifdef __WXMSW__
 	case WXK_ESCAPE:
 		{
-			wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, IDM_HIDE);
+			wxCommandEvent eventCommand(wxEVT_COMMAND_MENU_SELECTED, IDM_HIDE);
 
-			GetMainFrame()->GetEventHandler()->ProcessEvent(event);
+			GetMainFrame()->GetEventHandler()->ProcessEvent(eventCommand);
 			break;
 		}
 #endif
+	case ReadBOOK_Key_CTRL_G:
+		{
+			GoTo();
+			doScroll = false;
+		}
+		break;
 	default:
 		doScroll = false;
 		event.Skip();
@@ -933,6 +945,11 @@ wxInt32 CReadBookView::ScrollPosToLine(wxInt32 nPos)
 	return nPos;
 }
 
+wxInt32 CReadBookView:: ScrollLineToPos(wxInt32 nLine)
+{
+	return nLine;
+}
+
 void CReadBookView::SetDisplayAs(wxReadBook::DisplayAsEnum displayAs)
 {
 	m_DisplayAs = displayAs;
@@ -947,4 +964,49 @@ void CReadBookView::SetDisplayAs(wxReadBook::DisplayAsEnum displayAs)
 void CReadBookView::PreferenceChanged()
 {
     Recalculate();
+}
+
+bool CReadBookView::GoTo()
+{
+	bool doScroll = true;
+
+	wxInt32 nCurrentLine = GetReadBookDoc()->GetCurrentLine();
+
+	double position = ScrollLineToPos(nCurrentLine);
+
+	position = position * 100/ (double)m_nViewSize;
+
+	wxString strDefaultValue = wxString::Format(wxT("%.2f"), position);
+
+	wxTextEntryDialog dialog(GetMainFrame(),
+							 wxT("Please Input the position (0-100%):"),
+							 wxT("Goto any place inside the document"),
+							 strDefaultValue,
+							 wxOK | wxCANCEL);
+
+	if (dialog.ShowModal() == wxID_OK)
+	{
+		if (dialog.GetValue().ToDouble(&position) && position <= 100 && position >=0)
+		{
+			wxInt32 pos = m_nViewSize * position / 100;
+
+			if (nCurrentLine == ScrollToLine(ScrollPosToLine(pos)))
+			{
+				doScroll = false;
+			}
+		}
+	}
+	else
+	{
+		doScroll = false;
+	}
+
+	if (doScroll)
+	{
+		UpdateScrollPos();
+
+		m_pCanvas->Refresh();
+	}
+
+	return doScroll;
 }
