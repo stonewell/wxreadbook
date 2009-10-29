@@ -970,9 +970,7 @@ bool CReadBookView::GoTo()
 {
 	bool doScroll = true;
 
-	wxInt32 nCurrentLine = GetReadBookDoc()->GetCurrentLine();
-
-	double position = ScrollLineToPos(nCurrentLine);
+	double position = GetCurrentPosition();
 
 	position = m_nViewSize == 0 ? 0 : position * 100/ (double)m_nViewSize;
 
@@ -990,10 +988,7 @@ bool CReadBookView::GoTo()
 		{
 			wxInt32 pos = m_nViewSize * position / 100;
 
-			if (nCurrentLine == ScrollToLine(ScrollPosToLine(pos)))
-			{
-				doScroll = false;
-			}
+			ScrollToPosition(pos);
 		}
 	}
 	else
@@ -1010,3 +1005,10 @@ bool CReadBookView::GoTo()
 
 	return doScroll;
 }
+
+wxInt32 CReadBookView::GetCurrentLine() 
+{
+	return GetReadBookDoc()->GetCurrentLine();
+}
+
+

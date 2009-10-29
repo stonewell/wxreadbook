@@ -32,12 +32,29 @@ protected:
     virtual void CalculateLastCharOffset();
     virtual void CalculateFirstCharOffset();
 
+	virtual wxInt32 ScrollPage(wxInt16 nDelta) { return (wxInt32)ScrollSimplePage(nDelta); }
+	virtual wxInt32 ScrollLine(wxInt16 nDelta) { return (wxInt32)ScrollSimpleLine(nDelta); }
+	virtual wxInt32 ScrollToLine(wxInt32 nLine) 
+	{ 
+		return (wxInt32)ScrollToPosition(ScrollLineToPos(nLine)); 
+	}
+
+	virtual wxInt32 ScrollToPosition(wxInt32 nPos)
+	{
+		return (wxInt32)ScrollToBeginPosition((wxFileOffset)nPos);
+	}
+
+	virtual wxInt32 ScrollPosToLine(wxInt32 nPos) { return nPos; }
+	virtual wxInt32 ScrollLineToPos(wxInt32 nLine) { return nLine; }
+
 	virtual wxFileOffset ScrollSimplePage(wxInt16 nDelta);
 	virtual wxFileOffset ScrollSimpleLine(wxInt16 nDelta);
 	virtual wxFileOffset ScrollToBeginPosition(wxFileOffset nPos, bool bUpdateFileInfo = true);
 	virtual wxFileOffset ScrollToEndPosition(wxFileOffset nPos, bool bUpdateFileInfo = true);
 
-    virtual wxFileOffset GetCurrentPosition();
+    virtual wxFileOffset GetSimpleCurrentPosition();
+    virtual wxInt32 GetCurrentPosition() { return (wxInt32)GetSimpleCurrentPosition(); }
+    virtual wxInt32 GetCurrentLine() { return ScrollPosToLine(GetCurrentPosition()); }
 
     virtual void OnSize(wxSizeEvent& event);
     virtual wxRect GetClientRect();
@@ -55,3 +72,4 @@ private:
 	CReadBookChar ** m_ppChars;
 	wxInt32 m_nPageChars;
 };
+

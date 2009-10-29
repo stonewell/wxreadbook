@@ -107,8 +107,8 @@ bool CReadBookApp::OnInit(void)
 #define VIEW_CLASS CReadBookView
 #endif
 #else
-#define DOC_CLASS CReadBookSimpleDoc
-#define VIEW_CLASS CReadBookSimpleView
+#define DOC_CLASS CReadBookBufferedDoc
+#define VIEW_CLASS CReadBookBufferedView
 #endif
 	(void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Files"),
