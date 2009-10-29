@@ -286,6 +286,7 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookDC.cpp \
 	ObjectCache.cpp \
 	ObjectCache.h \
+	ReadBookKeys.h \
 	version.h
 
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
