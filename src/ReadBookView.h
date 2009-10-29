@@ -87,7 +87,11 @@ protected:
 
 	virtual wxInt32 ScrollPage(wxInt16 nDelta);
 	virtual wxInt32 ScrollLine(wxInt16 nDelta);
-	virtual wxInt32 ScrollToLine(wxInt32 nPos);
+	virtual wxInt32 ScrollToLine(wxInt32 nLine);
+	virtual wxInt32 ScrollToPosition(wxInt32 nPos)
+	{
+		return ScrollToLine(ScrollPosToLine(nPos));
+	}
 
 	const LineNumberMapping & ViewLineCountToDocLine(wxInt32 viewLine);
 
@@ -112,5 +116,12 @@ protected:
 	virtual wxInt32 NormalizeScrollToLine(wxInt32 nLine);
 	virtual wxInt32 ScrollPosToLine(wxInt32 nPos);
 	virtual wxInt32 ScrollLineToPos(wxInt32 nLine);
+	virtual wxInt32 GetCurrentLine();
+
+	virtual wxInt32 GetCurrentPosition()
+	{
+		return ScrollLineToPos(GetCurrentLine());
+	}
 };
 #endif /*READBOOKVIEW_H_*/
+
