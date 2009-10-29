@@ -974,7 +974,7 @@ bool CReadBookView::GoTo()
 
 	double position = ScrollLineToPos(nCurrentLine);
 
-	position = position * 100/ (double)m_nViewSize;
+	position = m_nViewSize == 0 ? 0 : position * 100/ (double)m_nViewSize;
 
 	wxString strDefaultValue = wxString::Format(wxT("%.2f"), position);
 

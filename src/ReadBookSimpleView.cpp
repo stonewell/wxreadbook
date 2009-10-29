@@ -73,6 +73,8 @@ void CReadBookSimpleView::OnDraw(wxDC *pDC)
 
 		wxInt32 nRow = wxGetApp().GetPreference()->GetFileInfo(pDoc->GetFileName(), &pFileInfo);
 
+		m_pViewPage = CreateReadBookPage();
+
 		if (pFileInfo != NULL)
 		{
 			ScrollToBeginPosition(pFileInfo->m_nFilePos);
