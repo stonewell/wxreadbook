@@ -6,6 +6,7 @@ namespace TextProcess
 	{
 		class CMemoryMappedFile
 		{
+#ifdef _WIN32
 		public:
 			CMemoryMappedFile(LPCTSTR pszFile);
 			virtual ~CMemoryMappedFile(void);
@@ -18,6 +19,7 @@ namespace TextProcess
 			wxFileOffset   m_cb;
 			HANDLE  m_hf;
 			HANDLE  m_hfm;
+#endif
 		};
 	}
 }

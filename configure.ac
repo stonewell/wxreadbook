@@ -1,4 +1,4 @@
-AC_INIT([wxReadBook], [1.2.4], [jingnan.si@gmail.com])
+AC_INIT([wxReadBook], [1.3.0], [jingnan.si@gmail.com])
 AC_CONFIG_SRCDIR(src/ReadBookApp.cpp)
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
@@ -58,10 +58,13 @@ AC_TYPE_SIZE_T
 AC_HEADER_STDC
 AC_CHECK_FUNCS([memset])
 AC_CHECK_FUNCS([sqrt])
+AC_CHECK_FUNCS([gettimeofday])
 
 AC_CONFIG_FILES([
 	Makefile
 	doc/Makefile
+	addons/Makefile
+	addons/libtextprocess/Makefile
 	src/Makefile
 	src/7Zip/Makefile
 	src/res/Makefile

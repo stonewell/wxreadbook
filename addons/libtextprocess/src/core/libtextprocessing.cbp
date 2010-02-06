@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="libtextprocessing" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug Win32">
+				<Option output="lib" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="$(SolutionDir)Linux/Debug Win32" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_LIB" />
+					<Add option="-W" />
+					<Add option="-g" />
+					<Add option="-O0" />
+					<Add directory="$(WXWIN)/include" />
+					<Add directory="$(WXWIN)/include/msvc" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="$(WXWIN)/include" />
+					<Add directory="$(WXWIN)/include/msvc" />
+				</ResourceCompiler>
+			</Target>
+			<Target title="Release Win32">
+				<Option output="lib" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="$(SolutionDir)Linux/Release Win32" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_LIB" />
+					<Add option="-W" />
+					<Add option="-O2" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Unit filename="Document/Impl/DocumentLineBuilderImpl.cpp" />
+		<Unit filename="Document/Impl/DocumentLineImpl.cpp" />
+		<Unit filename="Document/Impl/DocumentLineManagerImpl.cpp" />
+		<Unit filename="Document/Impl/DocumentLineMatcherImpl.cpp" />
+		<Unit filename="Document/Impl/DocumentObjectFactory.cpp" />
+		<Unit filename="Impl/LineBuilderImpl.cpp" />
+		<Unit filename="Impl/LineImpl.cpp" />
+		<Unit filename="IO/MemoryMappedFile.cpp" />
+		<Unit filename="Utils/ReadWriteLock.cpp" />
+		<Unit filename="View/Impl/ViewLineBuilderImpl.cpp" />
+		<Unit filename="View/Impl/ViewLineImpl.cpp" />
+		<Unit filename="View/Impl/ViewLineManagerImpl.cpp" />
+		<Unit filename="View/Impl/ViewLineMatcherImpl.cpp" />
+		<Unit filename="View/Impl/ViewObjectFactory.cpp" />
+		<Unit filename="Document/Impl/DocumentLineBuilderImpl.h" />
+		<Unit filename="Document/Impl/DocumentLineImpl.h" />
+		<Unit filename="Document/Impl/DocumentLineManagerImpl.h" />
+		<Unit filename="Document/Impl/DocumentLineMatcherImpl.h" />
+		<Unit filename="Document/DocumentObjectFactory.h" />
+		<Unit filename="Document/IDocumentLine.h" />
+		<Unit filename="Document/IDocumentLineBuilder.h" />
+		<Unit filename="Document/IDocumentLineManager.h" />
+		<Unit filename="Document/IDocumentLineMatcher.h" />
+		<Unit filename="ILine.h" />
+		<Unit filename="ILineBuilder.h" />
+		<Unit filename="ILineMatcher.h" />
+		<Unit filename="View/IViewLine.h" />
+		<Unit filename="View/IViewLineBuilder.h" />
+		<Unit filename="View/IViewLineManager.h" />
+		<Unit filename="View/IViewLineMatcher.h" />
+		<Unit filename="Impl/LineBuilderImpl.h" />
+		<Unit filename="Impl/LineImpl.h" />
+		<Unit filename="Impl/LineManagerImpl.h" />
+		<Unit filename="Utils/LockStatus.h" />
+		<Unit filename="IO/MemoryMappedFile.h" />
+		<Unit filename="Utils/ReadWriteLock.h" />
+		<Unit filename="Utils/ReadWriteLocker.h" />
+		<Unit filename="TextProcess.h" />
+		<Unit filename="Impl/TextProcessImpl.h" />
+		<Unit filename="TextProcessMacros.h" />
+		<Unit filename="View/Impl/ViewLineBuilderImpl.h" />
+		<Unit filename="View/Impl/ViewLineImpl.h" />
+		<Unit filename="View/Impl/ViewLineManagerImpl.h" />
+		<Unit filename="View/Impl/ViewLineMatcherImpl.h" />
+		<Unit filename="View/ViewObjectFactory.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

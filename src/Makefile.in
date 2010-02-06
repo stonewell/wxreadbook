@@ -71,6 +71,7 @@ am_wxReadBook_OBJECTS = ArchiveExplorerDlg.$(OBJEXT) \
 	ObjectCache.$(OBJEXT)
 wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
 wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a \
+	../addons/libtextprocess/libtextprocess.a \
 	$(srcdir)/../libs/lib7zip.a $(srcdir)/../libs/libcppcommon.a \
 	$(srcdir)/../libs/libcppwindows.a
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -322,6 +323,7 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	version.h
 
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
+	../addons/libtextprocess/libtextprocess.a \
 	$(srcdir)/../libs/lib7zip.a \
 	$(srcdir)/../libs/libcppcommon.a \
 	$(srcdir)/../libs/libcppwindows.a
