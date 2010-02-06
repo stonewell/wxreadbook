@@ -10,6 +10,7 @@ namespace TextProcess
 		public:
 			DECLARE_PROPERTY(int, DocumentOffset);
 			DECLARE_PROPERTY(IDocumentLineManager *, DocumentLineManager);
+			DECLARE_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
 		};
 	}
 }

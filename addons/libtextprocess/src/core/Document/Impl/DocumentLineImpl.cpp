@@ -2,7 +2,8 @@
 #include "../../Impl/TextProcessImpl.h"
 
 TextProcess::Document::Impl::CDocumentLineImpl::CDocumentLineImpl(void) :
-TextProcess::Impl::CLineImpl(TextProcess::ILine::DocumentLine)
+TextProcess::Impl::CLineImpl(TextProcess::ILine::DocumentLine),
+INIT_PROPERTY(DocumentFile, NULL)
 {
 }
 

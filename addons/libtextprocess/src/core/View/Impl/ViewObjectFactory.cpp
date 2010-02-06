@@ -1,12 +1,14 @@
 #include "../../TextProcess.h"
 #include "../../Impl/TextProcessImpl.h"
 
-TextProcess::View::IViewLine * TextProcess::View::CViewObjectFactory::CreateViewLine(int viewLineOffset, int viewLineSize)
+TextProcess::View::IViewLine * TextProcess::View::CViewObjectFactory::CreateViewLine(int viewLineOffset, int viewLineSize,
+    TextProcess::Document::IDocumentLine * pDocumentLine)
 {
 	TextProcess::View::IViewLine * pViewLine = new TextProcess::View::Impl::CViewLineImpl();
 
 	pViewLine->SetOffset(viewLineOffset);
 	pViewLine->SetLength(viewLineSize);
+	pViewLine->SetDocumentLine(pDocumentLine);
 
 	return pViewLine;
 }

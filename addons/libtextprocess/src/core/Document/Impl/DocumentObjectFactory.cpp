@@ -1,12 +1,13 @@
 #include "../../TextProcess.h"
 #include "../../Impl/TextProcessImpl.h"
 
-TextProcess::Document::IDocumentLine * TextProcess::Document::CDocumentObjectFactory::CreateDocumentLine(int offset, int length)
+TextProcess::Document::IDocumentLine * TextProcess::Document::CDocumentObjectFactory::CreateDocumentLine(int offset, int length, TextProcess::IO::IMemoryMappedFile * pDocumentFile)
 {
 	TextProcess::Document::IDocumentLine * pDocumentLine = new TextProcess::Document::Impl::CDocumentLineImpl();
 
 	pDocumentLine->SetOffset(offset);
 	pDocumentLine->SetLength(length);
+	pDocumentLine->SetDocumentFile(pDocumentFile);
 
 	return pDocumentLine;
 }

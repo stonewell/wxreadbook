@@ -17,10 +17,16 @@ namespace TextProcess
 			public:
 				IMPL_PROPERTY(int, DocumentOffset);
 				IMPL_PROPERTY(IDocumentLineManager *, DocumentLineManager);
+				IMPL_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
 
 			public:
 				virtual int BuildLines();
 				virtual void Cancel();
+
+			private:
+				IMPL_PROPERTY_FIELD(int, Cancel);
+
+				int IsEmptyLine(int offset, int length);
 			};
 		}
 	}
