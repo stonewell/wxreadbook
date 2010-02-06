@@ -18,7 +18,7 @@ TextProcess::View::Impl::CViewLineBuilderImpl::~CViewLineBuilderImpl(void)
 
 int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 {
-	TextProcess::Document::IDocumentLine * pDocLine = 
+	TextProcess::Document::IDocumentLine * pDocLine =
 		GetDocumentLineManager()->FindLine(TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(GetDocumentLineOffset()));
 
 	float width = GetViewFont()->GetPixelSize().x;
@@ -47,8 +47,8 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 
 			if (m_Cancel) break;
 
-			IViewLine * pLine = CViewObjectFactory::CreateViewLine(viewLineOffset, viewLineSize);
-			pLine->SetDocumentLine(pDocLine);
+			IViewLine * pLine =
+                CViewObjectFactory::CreateViewLine(viewLineOffset, viewLineSize, pDocLine);
 
 			if (pFirstDocViewLine == NULL && GetBuilderDirection() == TextProcess::Prev)
 			{

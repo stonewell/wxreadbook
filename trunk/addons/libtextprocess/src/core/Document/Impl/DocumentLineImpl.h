@@ -15,6 +15,7 @@ namespace TextProcess
 				virtual ~CDocumentLineImpl(void);
 
 			public:
+                IMPL_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
 				virtual void GetData(int nOffset, int nLength, wxChar * pBuf, int * pBuf_Size = NULL) const;
 				virtual const wxString & GetData(int nOffset, int nLength) const;
 			};

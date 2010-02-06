@@ -4,6 +4,8 @@
 
 #include "TextProcessMacros.h"
 
+#include "./IO/IMemoryMappedFile.h"
+
 #include "ILine.h"
 #include "./Document/IDocumentLine.h"
 #include "./View/IViewLine.h"
@@ -21,5 +23,3 @@
 
 #include "./Document/DocumentObjectFactory.h"
 #include "./View/ViewObjectFactory.h"
-
-#include "./IO/IMemoryMappedFile.h"

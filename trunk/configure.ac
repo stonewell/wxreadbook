@@ -56,11 +56,15 @@ AC_TYPE_SIZE_T
 
 # Checks for library functions.
 AC_HEADER_STDC
+AC_HEADER_TIME
 AC_CHECK_FUNCS([memset])
 AC_CHECK_FUNCS([sqrt])
 AC_CHECK_FUNCS([gettimeofday])
 AC_CHECK_FUNCS([mmap])
 AC_CHECK_FUNCS([open])
+AC_CHECK_HEADERS([algorithm], 
+	[AC_DEFINE([HAVE_ALGORITHM], 1, [Define to 1 if you have <stdio.h>.]) ], 
+	[AC_MSG_ERROR([unable to find algorithm, please install libstdc++])])
 
 AC_CONFIG_FILES([
 	Makefile
