@@ -12,6 +12,12 @@
 /* Define to 1 if you have the `memset' function. */
 #undef HAVE_MEMSET
 
+/* Define to 1 if you have the `mmap' function. */
+#undef HAVE_MMAP
+
+/* Define to 1 if you have the `open' function. */
+#undef HAVE_OPEN
+
 /* Define to 1 if you have the `sqrt' function. */
 #undef HAVE_SQRT
 

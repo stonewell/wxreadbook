@@ -22,4 +22,4 @@
 #include "./Document/DocumentObjectFactory.h"
 #include "./View/ViewObjectFactory.h"
 
-#include "./IO/MemoryMappedFile.h"
+#include "./IO/IMemoryMappedFile.h"

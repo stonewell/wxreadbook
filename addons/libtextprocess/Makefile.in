@@ -51,10 +51,11 @@ am_libtextprocess_a_OBJECTS = DocumentLineBuilderImpl.$(OBJEXT) \
 	DocumentLineImpl.$(OBJEXT) DocumentLineManagerImpl.$(OBJEXT) \
 	DocumentLineMatcherImpl.$(OBJEXT) \
 	DocumentObjectFactory.$(OBJEXT) LineBuilderImpl.$(OBJEXT) \
-	LineImpl.$(OBJEXT) MemoryMappedFile.$(OBJEXT) \
-	ReadWriteLock.$(OBJEXT) ViewLineBuilderImpl.$(OBJEXT) \
-	ViewLineImpl.$(OBJEXT) ViewLineManagerImpl.$(OBJEXT) \
-	ViewLineMatcherImpl.$(OBJEXT) ViewObjectFactory.$(OBJEXT)
+	LineImpl.$(OBJEXT) IMemoryMappedFile.$(OBJEXT) \
+	MemoryMappedFile.$(OBJEXT) ReadWriteLock.$(OBJEXT) \
+	ViewLineBuilderImpl.$(OBJEXT) ViewLineImpl.$(OBJEXT) \
+	ViewLineManagerImpl.$(OBJEXT) ViewLineMatcherImpl.$(OBJEXT) \
+	ViewObjectFactory.$(OBJEXT)
 libtextprocess_a_OBJECTS = $(am_libtextprocess_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -191,8 +192,10 @@ libtextprocess_a_SOURCES = ./src/core/Document/DocumentObjectFactory.h \
 	./src/core/Impl/LineImpl.h \
 	./src/core/Impl/LineManagerImpl.h \
 	./src/core/Impl/TextProcessImpl.h \
-	./src/core/IO/MemoryMappedFile.cpp \
-	./src/core/IO/MemoryMappedFile.h \
+	./src/core/IO/IMemoryMappedFile.cpp \
+	./src/core/IO/IMemoryMappedFile.h \
+	./src/core/IO/Impl/MemoryMappedFile.cpp \
+	./src/core/IO/Impl/MemoryMappedFile.h \
 	./src/core/TextProcess.h \
 	./src/core/TextProcessMacros.h \
 	./src/core/Utils/CriticalSection.h \
@@ -273,6 +276,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DocumentLineManagerImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DocumentLineMatcherImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DocumentObjectFactory.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IMemoryMappedFile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LineBuilderImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LineImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MemoryMappedFile.Po@am__quote@
@@ -395,19 +399,33 @@ LineImpl.obj: ./src/core/Impl/LineImpl.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o LineImpl.obj `if test -f './src/core/Impl/LineImpl.cpp'; then $(CYGPATH_W) './src/core/Impl/LineImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/Impl/LineImpl.cpp'; fi`
 
-MemoryMappedFile.o: ./src/core/IO/MemoryMappedFile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT MemoryMappedFile.o -MD -MP -MF $(DEPDIR)/MemoryMappedFile.Tpo -c -o MemoryMappedFile.o `test -f './src/core/IO/MemoryMappedFile.cpp' || echo '$(srcdir)/'`./src/core/IO/MemoryMappedFile.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/MemoryMappedFile.Tpo $(DEPDIR)/MemoryMappedFile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/IO/MemoryMappedFile.cpp' object='MemoryMappedFile.o' libtool=no @AMDEPBACKSLASH@
+IMemoryMappedFile.o: ./src/core/IO/IMemoryMappedFile.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT IMemoryMappedFile.o -MD -MP -MF $(DEPDIR)/IMemoryMappedFile.Tpo -c -o IMemoryMappedFile.o `test -f './src/core/IO/IMemoryMappedFile.cpp' || echo '$(srcdir)/'`./src/core/IO/IMemoryMappedFile.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/IMemoryMappedFile.Tpo $(DEPDIR)/IMemoryMappedFile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/IO/IMemoryMappedFile.cpp' object='IMemoryMappedFile.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o MemoryMappedFile.o `test -f './src/core/IO/MemoryMappedFile.cpp' || echo '$(srcdir)/'`./src/core/IO/MemoryMappedFile.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o IMemoryMappedFile.o `test -f './src/core/IO/IMemoryMappedFile.cpp' || echo '$(srcdir)/'`./src/core/IO/IMemoryMappedFile.cpp
 
-MemoryMappedFile.obj: ./src/core/IO/MemoryMappedFile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT MemoryMappedFile.obj -MD -MP -MF $(DEPDIR)/MemoryMappedFile.Tpo -c -o MemoryMappedFile.obj `if test -f './src/core/IO/MemoryMappedFile.cpp'; then $(CYGPATH_W) './src/core/IO/MemoryMappedFile.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/IO/MemoryMappedFile.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/MemoryMappedFile.Tpo $(DEPDIR)/MemoryMappedFile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/IO/MemoryMappedFile.cpp' object='MemoryMappedFile.obj' libtool=no @AMDEPBACKSLASH@
+IMemoryMappedFile.obj: ./src/core/IO/IMemoryMappedFile.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT IMemoryMappedFile.obj -MD -MP -MF $(DEPDIR)/IMemoryMappedFile.Tpo -c -o IMemoryMappedFile.obj `if test -f './src/core/IO/IMemoryMappedFile.cpp'; then $(CYGPATH_W) './src/core/IO/IMemoryMappedFile.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/IO/IMemoryMappedFile.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/IMemoryMappedFile.Tpo $(DEPDIR)/IMemoryMappedFile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/IO/IMemoryMappedFile.cpp' object='IMemoryMappedFile.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o MemoryMappedFile.obj `if test -f './src/core/IO/MemoryMappedFile.cpp'; then $(CYGPATH_W) './src/core/IO/MemoryMappedFile.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/IO/MemoryMappedFile.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o IMemoryMappedFile.obj `if test -f './src/core/IO/IMemoryMappedFile.cpp'; then $(CYGPATH_W) './src/core/IO/IMemoryMappedFile.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/IO/IMemoryMappedFile.cpp'; fi`
+
+MemoryMappedFile.o: ./src/core/IO/Impl/MemoryMappedFile.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT MemoryMappedFile.o -MD -MP -MF $(DEPDIR)/MemoryMappedFile.Tpo -c -o MemoryMappedFile.o `test -f './src/core/IO/Impl/MemoryMappedFile.cpp' || echo '$(srcdir)/'`./src/core/IO/Impl/MemoryMappedFile.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/MemoryMappedFile.Tpo $(DEPDIR)/MemoryMappedFile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/IO/Impl/MemoryMappedFile.cpp' object='MemoryMappedFile.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o MemoryMappedFile.o `test -f './src/core/IO/Impl/MemoryMappedFile.cpp' || echo '$(srcdir)/'`./src/core/IO/Impl/MemoryMappedFile.cpp
+
+MemoryMappedFile.obj: ./src/core/IO/Impl/MemoryMappedFile.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT MemoryMappedFile.obj -MD -MP -MF $(DEPDIR)/MemoryMappedFile.Tpo -c -o MemoryMappedFile.obj `if test -f './src/core/IO/Impl/MemoryMappedFile.cpp'; then $(CYGPATH_W) './src/core/IO/Impl/MemoryMappedFile.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/IO/Impl/MemoryMappedFile.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/MemoryMappedFile.Tpo $(DEPDIR)/MemoryMappedFile.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/IO/Impl/MemoryMappedFile.cpp' object='MemoryMappedFile.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o MemoryMappedFile.obj `if test -f './src/core/IO/Impl/MemoryMappedFile.cpp'; then $(CYGPATH_W) './src/core/IO/Impl/MemoryMappedFile.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/IO/Impl/MemoryMappedFile.cpp'; fi`
 
 ReadWriteLock.o: ./src/core/Utils/ReadWriteLock.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadWriteLock.o -MD -MP -MF $(DEPDIR)/ReadWriteLock.Tpo -c -o ReadWriteLock.o `test -f './src/core/Utils/ReadWriteLock.cpp' || echo '$(srcdir)/'`./src/core/Utils/ReadWriteLock.cpp

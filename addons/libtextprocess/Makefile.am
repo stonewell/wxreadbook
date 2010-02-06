@@ -23,8 +23,10 @@ libtextprocess_a_SOURCES = ./src/core/Document/DocumentObjectFactory.h \
 	./src/core/Impl/LineImpl.h \
 	./src/core/Impl/LineManagerImpl.h \
 	./src/core/Impl/TextProcessImpl.h \
-	./src/core/IO/MemoryMappedFile.cpp \
-	./src/core/IO/MemoryMappedFile.h \
+	./src/core/IO/IMemoryMappedFile.cpp \
+	./src/core/IO/IMemoryMappedFile.h \
+	./src/core/IO/Impl/MemoryMappedFile.cpp \
+	./src/core/IO/Impl/MemoryMappedFile.h \
 	./src/core/TextProcess.h \
 	./src/core/TextProcessMacros.h \
 	./src/core/Utils/CriticalSection.h \

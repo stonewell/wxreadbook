@@ -9,8 +9,8 @@ namespace TextProcess
         public:
             static IMemoryMappedFile * CreateMemoryMappedFile(const wxString & strFileName);
 
-			const wxByte * GetBuffer() = 0;
-			wxFileOffset GetLength() const = 0;
+			virtual const wxByte * GetBuffer() = 0;
+			virtual wxFileOffset GetLength() const = 0;
         };
     }
 }

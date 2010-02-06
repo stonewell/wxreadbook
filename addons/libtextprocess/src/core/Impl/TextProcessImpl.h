@@ -5,6 +5,9 @@
 #ifndef _WIN32
 #include <errno.h>
 #include <sys/time.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <pthread.h>
 #endif
@@ -31,3 +34,4 @@
 #include "../Document/Impl/DocumentLineBuilderImpl.h"
 #include "../View/Impl/ViewLineBuilderImpl.h"
 
+#include "../IO/Impl/MemoryMappedFile.h"
