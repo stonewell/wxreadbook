@@ -101,6 +101,7 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	version.h
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
+	../addons/libtextprocess/libtextprocess.a \
 	$(srcdir)/../libs/lib7zip.a \
 	$(srcdir)/../libs/libcppcommon.a \
 	$(srcdir)/../libs/libcppwindows.a

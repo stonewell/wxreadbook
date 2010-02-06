@@ -1,4 +1,4 @@
-SUBDIRS = src doc
+SUBDIRS = addons src doc 
 EXTRA_DIST = Makefile.msw \
 	wxReadBook.sln 
 

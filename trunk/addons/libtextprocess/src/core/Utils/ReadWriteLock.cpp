@@ -1,29 +1,23 @@
-#include <wx/wx.h>
-
-#include "ReadWriteLock.h"
+#include "../TextProcess.h"
+#include "../Impl/TextProcessImpl.h"
 
 TextProcess::Utils::CReadWriteLock::CReadWriteLock(void) :
 m_nAccessCount(0)
 {
-	InitializeCriticalSection(&m_AccessLock);
-	m_hNotifyEvent = CreateEvent(NULL,
-		TRUE, FALSE, NULL);
 }
 
 TextProcess::Utils::CReadWriteLock::~CReadWriteLock(void)
 {
-	DeleteCriticalSection(&m_AccessLock);
-	CloseHandle(m_hNotifyEvent);
 }
 
 TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockRead(int timeout)
 {
-	EnterCriticalSection(&m_AccessLock);
+	m_AccessLock.Enter();
 	while (m_nAccessCount < 0)
 	{
-		LeaveCriticalSection(&m_AccessLock);
+		m_AccessLock.Leave();
 
-		switch(WaitForSingleObject(m_hNotifyEvent, timeout))
+		switch(m_hNotifyEvent.Wait(timeout))
 		{
 		case WAIT_OBJECT_0:
 			break;
@@ -32,46 +26,44 @@ TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockRead(
 		case WAIT_ABANDONED:
 			return TextProcess::Utils::Lock_Fail;
 		}
-	
-		EnterCriticalSection(&m_AccessLock);
+
+		m_AccessLock.Enter();
 	}
-	
+
 	if (m_nAccessCount == 0)
-		ResetEvent(m_hNotifyEvent);
+		m_hNotifyEvent.Reset();
 
 	m_nAccessCount++;
 
-	LeaveCriticalSection(&m_AccessLock);
+	m_AccessLock.Leave();
 
 	return TextProcess::Utils::Lock_OK;
 }
 
 TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::UnlockRead()
 {
-	EnterCriticalSection(&m_AccessLock);
+	TextProcess::Utils::CCriticalSectionAccessor a(&m_AccessLock);
 
 	if (m_nAccessCount > 0)
 		m_nAccessCount --;
 
 	if (m_nAccessCount == 0)
 	{
-		SetEvent(m_hNotifyEvent);
+		m_hNotifyEvent.Set();
 	}
-
-	LeaveCriticalSection(&m_AccessLock);
 
 	return TextProcess::Utils::Lock_OK;
 }
 
 TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockWrite(int timeout)
 {
-	EnterCriticalSection(&m_AccessLock);
+	m_AccessLock.Enter();
 
 	while (m_nAccessCount != 0)
 	{
-		LeaveCriticalSection(&m_AccessLock);
+		m_AccessLock.Leave();
 
-		switch(WaitForSingleObject(m_hNotifyEvent, timeout))
+		switch(m_hNotifyEvent.Wait(timeout))
 		{
 		case WAIT_OBJECT_0:
 			break;
@@ -80,28 +72,26 @@ TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockWrite
 		case WAIT_ABANDONED:
 			return TextProcess::Utils::Lock_Fail;
 		}
-	
-		EnterCriticalSection(&m_AccessLock);
-	}
-	
-	m_nAccessCount--;
-	ResetEvent(m_hNotifyEvent);
 
-	LeaveCriticalSection(&m_AccessLock);
+		m_AccessLock.Enter();
+	}
+
+	m_nAccessCount--;
+	m_hNotifyEvent.Reset();
+
+	m_AccessLock.Leave();
 
 	return TextProcess::Utils::Lock_OK;
 }
 
 TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::UnlockWrite()
 {
-	EnterCriticalSection(&m_AccessLock);
+	TextProcess::Utils::CCriticalSectionAccessor a(&m_AccessLock);
 
 	if (m_nAccessCount != 0)
 		m_nAccessCount = 0;
 
-	SetEvent(m_hNotifyEvent);
-
-	LeaveCriticalSection(&m_AccessLock);
+	m_hNotifyEvent.Set();
 
 	return TextProcess::Utils::Lock_OK;
 }

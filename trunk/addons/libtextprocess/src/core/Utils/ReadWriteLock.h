@@ -20,8 +20,8 @@ namespace TextProcess
 
 		private:
 			int m_nAccessCount;
-			CRITICAL_SECTION m_AccessLock;
-			HANDLE m_hNotifyEvent;
+			CCriticalSection m_AccessLock;
+			CEvent m_hNotifyEvent;
 		};
 	}
 }

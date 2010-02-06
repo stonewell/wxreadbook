@@ -1,99 +1,21 @@
 #pragma once
 
-#include "../Utils/ReadWriteLock.h"
-#include "../Utils/ReadWriteLocker.h"
-
 namespace TextProcess
 {
 	namespace Impl
 	{
-		template<class T, class U>	
+		template<class T, class U>
 		class CLineManagerImpl
 		{
-			class CCriticalSectionAccessor
-			{
-			private:
-				LPCRITICAL_SECTION m_pSec;
-			public:
-				CCriticalSectionAccessor(LPCRITICAL_SECTION pSec) :
-				  m_pSec(pSec)
-				  {
-					  EnterCriticalSection(pSec);
-				  }
-
-				  ~CCriticalSectionAccessor()
-				  {
-					  LeaveCriticalSection(m_pSec);
-				  }
-			};
-
-			class CMultiWaitEvent //Auto Reset wait ref count == 0
-			{
-			private:
-				int m_nWait;
-				HANDLE m_nEvent;
-				CRITICAL_SECTION m_AccessLock;
-
-			public:
-				CMultiWaitEvent() :
-				  m_nWait(0)
-				{
-					InitializeCriticalSection(&m_AccessLock);
-					m_nEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-				}
-
-				~CMultiWaitEvent()
-				{
-					CloseHandle(m_nEvent);
-					DeleteCriticalSection(&m_AccessLock);
-				}
-
-				void NotifyAll()
-				{
-					CCriticalSectionAccessor a(&m_AccessLock);
-					SetEvent(m_nEvent);
-				}
-
-				void Wait()
-				{
-					{
-						CCriticalSectionAccessor a(&m_AccessLock);
-
-						m_nWait++;
-					}
-
-					WaitForSingleObject(m_nEvent, INFINITE);
-
-					{
-						CCriticalSectionAccessor a(&m_AccessLock);
-						m_nWait--;
-						
-						if (!m_nWait)
-							ResetEvent(m_nEvent);
-					}
-				}
-			};
-
 			class CLineEntry
 			{
 			public:
 				CLineEntry()
 				{
-					m_hNextWaitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-					m_hPrevWaitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-					m_hDataWaitEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-
-					InitializeCriticalSection(&m_AccessLock);
 				}
 
 				~CLineEntry()
 				{
-					CloseHandle(m_hNextWaitEvent);
-					CloseHandle(m_hPrevWaitEvent);
-					CloseHandle(m_hDataWaitEvent);
-
-					DeleteCriticalSection(&m_AccessLock);
-
 					if (m_pLine != NULL) delete m_pLine;
 				}
 			private:
@@ -101,70 +23,75 @@ namespace TextProcess
 				CLineEntry * m_pPrevEntry;
 				CLineEntry * m_pNextEntry;
 
-				CRITICAL_SECTION m_AccessLock;
+				TextProcess::Utils::CCriticalSection m_AccessLock;
 
-				HANDLE m_hNextWaitEvent;
-				HANDLE m_hPrevWaitEvent;
-				HANDLE m_hDataWaitEvent;
+				TextProcess::Utils::CEvent m_hNextWaitEvent;
+				TextProcess::Utils::CEvent m_hPrevWaitEvent;
+				TextProcess::Utils::CEvent m_hDataWaitEvent;
 
 			public:
 				void NotifyNextChange()
 				{
-					SetEvent(m_hNextWaitEvent);
+					m_hNextWaitEvent.Set();
 				}
 
 				void NotifyPrevChange()
 				{
-					SetEvent(m_hPrevWaitEvent);
+					m_hPrevWaitEvent.Set();
 				}
 
 				void NotifyDataChange()
 				{
-					SetEvent(m_hDataWaitEvent);
+					m_hDataWaitEvent.Set();
 				}
 
-				T * GetLine() 
-				{ 
-					CCriticalSectionAccessor accessor(&m_AccessLock); 
-					return m_pLine; 
+				T * GetLine()
+				{
+					TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock);
+					return m_pLine;
 				}
 
-				void SetLine(T * pLine) 
-				{ 
-					CCriticalSectionAccessor accessor(&m_AccessLock); 
-					m_pLine = pLine; 
+				void SetLine(T * pLine)
+				{
+					TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock);
+					m_pLine = pLine;
 					NotifyDataChange();
 				}
 
 				void WaitData()
 				{
-					WaitForSingleObject(m_hDataWaitEvent, INFINITE);
+					m_hDataWaitEvent.Wait();
 				}
 
-				CLineEntry * GetNext() { CCriticalSectionAccessor accessor(&m_AccessLock); return m_pNextEntry; }
+				CLineEntry * GetNext()
+				{
+				    TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock);
+				    return m_pNextEntry;
+                }
+
 				void SetNext(CLineEntry * pNext)
 				{
-					CCriticalSectionAccessor accessor(&m_AccessLock); 
+					TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock);
 					m_pNextEntry = pNext;
 					NotifyNextChange();
 				}
 
 				void WaitNext()
 				{
-					WaitForSingleObject(m_hNextWaitEvent, INFINITE);
+					m_hNextWaitEvent.Wait();
 				}
 
-				CLineEntry * GetPrev() { CCriticalSectionAccessor accessor(&m_AccessLock); return m_pPrevEntry; }
+				CLineEntry * GetPrev() { TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock); return m_pPrevEntry; }
 				void SetPrev(CLineEntry * pPrev)
 				{
-					CCriticalSectionAccessor accessor(&m_AccessLock); 
+					TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock);
 					m_pPrevEntry = pPrev;
 					NotifyPrevChange();
 				}
 
 				void WaitPrev()
 				{
-					WaitForSingleObject(m_hPrevWaitEvent, INFINITE);
+					m_hPrevWaitEvent.Wait();
 				}
 			};
 
@@ -177,7 +104,7 @@ namespace TextProcess
 			CLineEntry * m_pHeaderEntry;
 			CLineEntry * m_pTailEntry;
 
-			CMultiWaitEvent m_NewDataEvent;
+			TextProcess::Utils::CMultiWaitEvent m_NewDataEvent;
 
 			CLineEntry * FindEntry(T * pLine)
 			{
@@ -266,7 +193,7 @@ namespace TextProcess
 
 				CLineEntry * pEntry = FindEntry(pLine);
 
-				if (pEntry == NULL) 
+				if (pEntry == NULL)
 				{
 					m_ReadWriteLock.UnlockRead();
 					return NULL;
@@ -276,13 +203,13 @@ namespace TextProcess
 				{
 					CLineEntry * pNextEntry = pEntry->GetNext();
 
-					if (pNextEntry != NULL) 
+					if (pNextEntry != NULL)
 					{
 						while(true)
 						{
 							T * pNextLine = pNextEntry->GetLine();
 
-							if (pNextLine != NULL) 
+							if (pNextLine != NULL)
 							{
 								m_ReadWriteLock.UnlockRead();
 
@@ -304,7 +231,7 @@ namespace TextProcess
 					}
 
 					m_ReadWriteLock.UnlockRead();
-					
+
 					if (!IsHasAllLines() && wait)
 						pEntry->WaitNext();
 					else
@@ -323,7 +250,7 @@ namespace TextProcess
 
 				CLineEntry * pEntry = FindEntry(pLine);
 
-				if (pEntry == NULL) 
+				if (pEntry == NULL)
 				{
 					m_ReadWriteLock.UnlockRead();
 					return NULL;
@@ -333,13 +260,13 @@ namespace TextProcess
 				{
 					CLineEntry * pPrevEntry = pEntry->GetPrev();
 
-					if (pPrevEntry != NULL) 
+					if (pPrevEntry != NULL)
 					{
 						while(true)
 						{
 							T * pPrevLine = pPrevEntry->GetLine();
 
-							if (pPrevLine != NULL) 
+							if (pPrevLine != NULL)
 							{
 								m_ReadWriteLock.UnlockRead();
 
@@ -361,7 +288,7 @@ namespace TextProcess
 					}
 
 					m_ReadWriteLock.UnlockRead();
-					
+
 					if (!IsHasAllLines() && wait)
 						pEntry->WaitPrev();
 					else
@@ -415,7 +342,7 @@ namespace TextProcess
 					{
 						m_pTailEntry = tmpEntry;
 					}
-					
+
 					tmpEntry->SetPrev(pEntry);
 					pEntry->SetNext(tmpEntry);
 				}
@@ -458,7 +385,7 @@ namespace TextProcess
 						pPrevEntry->SetNext(tmpEntry);
 					else
 						m_pHeaderEntry = tmpEntry;
-					
+
 					tmpEntry->SetNext(pEntry);
 					pEntry->SetPrev(tmpEntry);
 				}

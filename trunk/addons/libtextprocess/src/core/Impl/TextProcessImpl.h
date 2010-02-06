@@ -2,6 +2,18 @@
 
 #include "../TextProcess.h"
 
+#ifndef _WIN32
+#include <errno.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <pthread.h>
+#endif
+
+#include "../Utils/CriticalSection.h"
+#include "../Utils/Event.h"
+#include "../Utils/ReadWriteLock.h"
+#include "../Utils/ReadWriteLocker.h"
+
 #pragma warning(disable:4250)
 
 #include "LineImpl.h"
