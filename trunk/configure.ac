@@ -59,6 +59,8 @@ AC_HEADER_STDC
 AC_CHECK_FUNCS([memset])
 AC_CHECK_FUNCS([sqrt])
 AC_CHECK_FUNCS([gettimeofday])
+AC_CHECK_FUNCS([mmap])
+AC_CHECK_FUNCS([open])
 
 AC_CONFIG_FILES([
 	Makefile

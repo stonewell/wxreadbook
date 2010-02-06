@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<CodeLite_Workspace Name="wxReadBook" Database=".\wxReadBook.tags">
-  <Project Name="wxReadBook" Path="wxReadBook.project" Active="Yes"/>
-  <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="yes">
-      <Project Name="wxReadBook" ConfigName="Debug"/>
-    </WorkspaceConfiguration>
-  </BuildMatrix>
-</CodeLite_Workspace>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="wxReadBook.cbp" />
+		<Project filename="addons/libtextprocess/src/core/libtextprocessing.cbp" active="1" />
+	</Workspace>
+</CodeBlocks_workspace_file>
