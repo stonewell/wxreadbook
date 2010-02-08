@@ -38,27 +38,39 @@ TextProcess::Utils::CStringPool::~CStringPool()
 wxChar * TextProcess::Utils::CStringPool::AllocBuffer(wxUint32 cch)
 {
 	wxChar * psz = m_pchNext;
+	wxUint32 cbAlloc = 0;
+	wxByte * pbNext = NULL;
+	HEADER* phdrCur = NULL;
+	const int wxStringDataSize = sizeof(wxStringData);
 
-	if (m_pchNext + cch * sizeof(wxChar) <= m_pchLimit) 
+	if (m_pchNext + cch * sizeof(wxChar) + wxStringDataSize <= m_pchLimit)
 	{
-		m_pchNext += (cch * sizeof(wxChar));
+		m_pchNext += (cch * sizeof(wxChar) + wxStringDataSize);
 
-		return psz;
+		wxStringData * pStringData =
+            reinterpret_cast<wxStringData *>(psz);
+
+        pStringData->nDataLength = cch;
+        pStringData->nRefs = 1;
+        pStringData->nAllocLength = cch;
+
+		return pStringData->data();
 	}
 
-	if (cch > MAX_CHARALLOC) goto OOM;
-	
-	wxUint32 cbAlloc = RoundUp(cch * sizeof(wxChar) + sizeof(HEADER),
+	if (cch > MAX_CHARALLOC)
+        goto OOM;
+
+	cbAlloc = RoundUp(wxStringDataSize + cch * sizeof(wxChar) + sizeof(HEADER),
 		m_dwGranularity);
 
 #ifdef _WIN32
-	wxByte* pbNext = reinterpret_cast<wxByte*>(
+	pbNext = reinterpret_cast<wxByte*>(
 		VirtualAlloc(NULL, cbAlloc, MEM_COMMIT, PAGE_READWRITE));
 #else
-	wxByte* pbNext = reinterpret_cast<wxByte*>(malloc(cbAlloc * sizeof(wxByte)));
+	pbNext = reinterpret_cast<wxByte*>(malloc(cbAlloc * sizeof(wxByte)));
 #endif
-	
-	if (!pbNext) 
+
+	if (!pbNext)
 	{
 OOM:
 		static std::bad_alloc OOM;
@@ -66,7 +78,7 @@ OOM:
 	}
 
 	m_pchLimit = reinterpret_cast<wxChar*>(pbNext + cbAlloc);
-	HEADER* phdrCur = reinterpret_cast<HEADER*>(pbNext);
+	phdrCur = reinterpret_cast<HEADER*>(pbNext);
 	phdrCur->m_phdrPrev = m_phdrCur;
 	phdrCur->m_cb = cbAlloc;
 	m_phdrCur = phdrCur;

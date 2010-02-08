@@ -35,6 +35,9 @@ libtextprocess_a_SOURCES = ./src/core/Document/DocumentObjectFactory.h \
 	./src/core/Utils/ReadWriteLock.cpp \
 	./src/core/Utils/ReadWriteLock.h \
 	./src/core/Utils/ReadWriteLocker.h \
+	./src/core/Utils/StringPool.h \
+	./src/core/Utils/StringPool.cpp \
+	./src/core/Utils/wxReadOnlyString.h \
 	./src/core/View/Impl/ViewLineBuilderImpl.cpp \
 	./src/core/View/Impl/ViewLineBuilderImpl.h \
 	./src/core/View/Impl/ViewLineImpl.cpp \

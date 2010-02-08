@@ -372,7 +372,7 @@ wxInt32 CReadBookView::NormalizeScrollToLine(wxInt32 nCurrentLine)
 		{
 			return map.nViewLineCountBegin;
 		}
-		
+
 		if (nCurrentLine - map.nViewLineCountBegin < m_nLastLineViewSize - m_nPageSize)
 		{
 			return nCurrentLine;
@@ -527,9 +527,9 @@ void CReadBookView::CalculateViewSize()
 				size_t totalLength = 0;
 				wxInt32 delta = 0;
 
-				for(size_t i=0; i<line.Length(); i++) 
+				for(size_t i=0; i<line.Length(); i++)
 				{
-					if ((0xFF80 & line[i]) == 0) 
+					if ((0xFF80 & line[i]) == 0)
 					{
 						totalLength += m_FontSize.GetWidth();
 					}
@@ -542,7 +542,7 @@ void CReadBookView::CalculateViewSize()
 					{
 						delta++;
 
-						if ((0xFF80 & line[i]) == 0) 
+						if ((0xFF80 & line[i]) == 0)
 						{
 							totalLength = m_FontSize.GetWidth();
 						}
@@ -1015,7 +1015,7 @@ bool CReadBookView::GoTo()
 	return doScroll;
 }
 
-wxInt32 CReadBookView::GetCurrentLine() 
+wxInt32 CReadBookView::GetCurrentLine()
 {
 	return GetReadBookDoc()->GetCurrentLine();
 }
