@@ -87,6 +87,13 @@ bool CReadBookView::OnCreate(wxDocument * WXUNUSED(doc), long WXUNUSED(flags) )
 
 // Sneakily gets used for default print/preview
 // as well as drawing on the screen.
+
+class B
+{
+public:
+	typedef wxString::size_type (B::*LengthPtr)() const;
+};
+
 void CReadBookView::OnDraw(wxDC *pDC)
 {
 	CReadBookDoc* pDoc = (CReadBookDoc *)GetReadBookDoc();

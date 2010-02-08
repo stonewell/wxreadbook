@@ -170,6 +170,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IO\IMemoryMappedFile.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Impl\LineBuilderImpl.cpp"
 				>
 			</File>
@@ -178,11 +182,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IO\MemoryMappedFile.cpp"
+				RelativePath=".\IO\Impl\MemoryMappedFile.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Utils\ReadWriteLock.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils\StringPool.cpp"
 				>
 			</File>
 			<File
@@ -212,6 +220,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Utils\CriticalSection.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Document\Impl\DocumentLineBuilderImpl.h"
 				>
 			</File>
@@ -229,6 +241,10 @@
 			</File>
 			<File
 				RelativePath=".\Document\DocumentObjectFactory.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils\Event.h"
 				>
 			</File>
 			<File
@@ -257,6 +273,10 @@
 			</File>
 			<File
 				RelativePath=".\ILineMatcher.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IO\IMemoryMappedFile.h"
 				>
 			</File>
 			<File
@@ -292,7 +312,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IO\MemoryMappedFile.h"
+				RelativePath=".\IO\Impl\MemoryMappedFile.h"
 				>
 			</File>
 			<File
@@ -301,6 +321,10 @@
 			</File>
 			<File
 				RelativePath=".\Utils\ReadWriteLocker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils\StringPool.h"
 				>
 			</File>
 			<File
@@ -333,6 +357,10 @@
 			</File>
 			<File
 				RelativePath=".\View\ViewObjectFactory.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils\wxReadOnlyString.h"
 				>
 			</File>
 		</Filter>

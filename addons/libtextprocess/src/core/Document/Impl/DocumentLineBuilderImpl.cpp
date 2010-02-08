@@ -17,11 +17,17 @@ TextProcess::Document::Impl::CDocumentLineBuilderImpl::~CDocumentLineBuilderImpl
 
 int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 {
+	InitBuffers();
+
     const wxByte * pFileBegin = GetDocumentFile()->GetBuffer();
     const wxByte * pFileEnd = pFileBegin + GetDocumentFile()->GetLength();
     const wxByte * pStartPos = pFileBegin + GetDocumentOffset();
     const wxByte * pEndPos = 0;
-    const wxByte pLineEnd[] = {'\n'};
+    const wxByte * pCR = reinterpret_cast<const wxByte *>(m_CRBuffer.data());
+    const wxByte * pLF = reinterpret_cast<const wxByte *>(m_LFBuffer.data());
+	const wxByte * pCREnd = pCR + m_CRLength;
+	const wxByte * pLFEnd = pLF + m_LFLength;
+
     TextProcess::Document::IDocumentLine * pLastLine =
 		GetDocumentLineManager()->FindLine(CDocumentObjectFactory::CreateLineMatcher(GetDocumentOffset()), 0);
 
@@ -44,34 +50,34 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 
         if (GetBuilderDirection() == TextProcess::Next)
         {
-            pchEOL = std::find(pStartPos, pEndPos, '\n');
+            pchEOL = std::search(pStartPos, pEndPos, pCR, pCREnd);
             length = pchEOL - pStartPos;
             offset = pStartPos - pFileBegin;
 
-            if (length > 0)
+            if (length > m_LFLength)
             {
-                if (*(pStartPos + length - 1) == '\r')
+                if (!memcmp(pStartPos + length - m_LFLength, pLF, m_LFLength))
                 {
-                    length --;
+                    length -= m_LFLength;
                 }
             }
 
-            pStartPos = pchEOL + 1;
+            pStartPos = pchEOL + m_CRLength;
         }
         else
         {
             pchEOL = std::find_end(pStartPos, pEndPos,
-                pLineEnd, pLineEnd + 1);
+                pCR, pCREnd);
 
-            offset = (pchEOL + 1) - pFileBegin;
-            length = pEndPos - pchEOL;
+            offset = (pchEOL + m_CRLength) - pFileBegin;
+            length = pEndPos - pchEOL - m_CRLength + 1;
 
             pEndPos = pchEOL - 1;
 
-            if (pEndPos > pStartPos)
+            if (pEndPos - m_LFLength + 1 > pStartPos)
             {
-                if (*pEndPos == '\r')
-                    pEndPos--;
+                if (!memcmp(pEndPos - m_LFLength + 1, pLF, m_LFLength))
+                    pEndPos -= m_LFLength;
             }
         }
 
@@ -103,15 +109,37 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(int offse
     const wxByte * pBegin = GetDocumentFile()->GetBuffer() + offset;
     const wxByte * pEnd = pBegin + length;
 
+	const wxByte * pSpace = reinterpret_cast<const wxByte *>(m_SpaceBuffer.data());
+    const wxByte * pTab = reinterpret_cast<const wxByte *>(m_TabBuffer.data());
+
     while(pBegin < pEnd)
     {
-        if ((*pBegin) != ' '
-            && (*pBegin) != '\t')
-            return 0;
-
-        pBegin++;
+        if (!memcmp(pBegin, pSpace, m_SpaceLength))
+		{
+	        pBegin += m_SpaceLength;
+		}
+		else if (!memcmp(pBegin, pTab, m_TabLength))
+		{
+            pBegin += m_TabLength;
+		}
+		else
+		{
+			return 0;
+		}
     }
 
     return 1;
 }
 
+void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers()
+{
+	wxMBConv * pEncoding = GetDocumentFile()->GetEncoding();
+	m_SpaceBuffer = pEncoding->cWC2MB(wxT(" "));
+	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"));
+	m_SpaceLength = strlen(m_SpaceBuffer.data());
+	m_TabLength = strlen(m_TabBuffer.data());
+	m_CRBuffer = pEncoding->cWC2MB(wxT("\n"));
+	m_LFBuffer = pEncoding->cWC2MB(wxT("\r"));
+	m_CRLength = strlen(m_CRBuffer.data());
+	m_LFLength = strlen(m_LFBuffer.data());
+}

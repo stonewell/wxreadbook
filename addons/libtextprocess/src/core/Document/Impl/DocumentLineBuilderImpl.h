@@ -26,6 +26,16 @@ namespace TextProcess
 			private:
 				IMPL_PROPERTY_FIELD(int, Cancel);
 
+				IMPL_PROPERTY_FIELD(wxCharBuffer, CRBuffer);
+				IMPL_PROPERTY_FIELD(wxCharBuffer, LFBuffer);
+				IMPL_PROPERTY_FIELD(wxCharBuffer, SpaceBuffer);
+				IMPL_PROPERTY_FIELD(wxCharBuffer, TabBuffer);
+				IMPL_PROPERTY_FIELD(int, CRLength);
+				IMPL_PROPERTY_FIELD(int, LFLength);
+				IMPL_PROPERTY_FIELD(int, SpaceLength);
+				IMPL_PROPERTY_FIELD(int, TabLength);
+
+				void InitBuffers();
 				int IsEmptyLine(int offset, int length);
 			};
 		}
