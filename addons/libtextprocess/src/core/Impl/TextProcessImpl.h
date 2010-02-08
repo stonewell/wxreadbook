@@ -17,6 +17,7 @@
 #include "../Utils/ReadWriteLock.h"
 #include "../Utils/ReadWriteLocker.h"
 #include "../Utils/StringPool.h"
+#include "../Utils/wxReadOnlyString.h"
 
 #pragma warning(disable:4250)
 
