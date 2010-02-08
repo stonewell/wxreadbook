@@ -96,11 +96,18 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
 {
 	long width = 0;
 	long height = 0;
+	wxChar * pBuf = NULL;
+	int nBufLen = 0;
 
-	GetGraphics()->GetTextExtent(pDocLine->GetData(offset, size), &width, &height, 0, 0, GetViewFont());
+	pDocLine->GetData(offset, size, &pBuf, &nBufLen);
+
+	GetGraphics()->GetTextExtent(data, &width, &height, 0, 0, GetViewFont());
 
 	if (width < GetClientArea()->GetWidth())
 	{
+		pDocLine->GetData(offset, size + 1, &pBuf, &nBufLen);
+		TextProcess::Utils::wxReadOnlyString data(pBuf, nBufLen);
+
 		GetGraphics()->GetTextExtent(pDocLine->GetData(offset, size + 1), &width, &height, 0, 0, GetViewFont());
 
 		while (!m_Cancel && width < GetClientArea()->GetWidth() && size <= pDocLine->GetLength())

@@ -16,6 +16,7 @@
 #include "../Utils/Event.h"
 #include "../Utils/ReadWriteLock.h"
 #include "../Utils/ReadWriteLocker.h"
+#include "../Utils/StringPool.h"
 
 #pragma warning(disable:4250)
 

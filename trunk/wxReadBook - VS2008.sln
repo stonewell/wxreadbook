@@ -12,13 +12,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxReadBook", "src\wxReadBoo
 		{383D73DB-A55D-4677-826F-16F8BB7CD578} = {383D73DB-A55D-4677-826F-16F8BB7CD578}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lib7Zip", "..\lib7zip\Lib7Zip\Lib7Zip - VS2008.vcproj", "{383D73DB-A55D-4677-826F-16F8BB7CD578}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lib7Zip", "..\lib7Zip\Lib7Zip\Lib7Zip - VS2008.vcproj", "{383D73DB-A55D-4677-826F-16F8BB7CD578}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtextprocessing", "addons\libtextprocess\src\core\libtextprocessing.vcproj", "{29DFA189-122F-4C96-8DB4-7822BFB543AA}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Unicode|Pocket PC 2003 (ARMV4) = Debug - Unicode|Pocket PC 2003 (ARMV4)
 		Debug - Unicode|Win32 = Debug - Unicode|Win32
@@ -74,8 +72,27 @@ Global
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release|Win32.ActiveCfg = Release|Win32
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release|Win32.Build.0 = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug - Unicode|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug - Unicode|Win32.ActiveCfg = Debug|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug - Unicode|Win32.Build.0 = Debug|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug|Win32.Build.0 = Debug|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode - DLL|Win32.ActiveCfg = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode - DLL|Win32.Build.0 = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode|Win32.ActiveCfg = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode|Win32.Build.0 = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release|Win32.ActiveCfg = Release|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
