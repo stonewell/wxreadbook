@@ -7,7 +7,7 @@ namespace TextProcess
 		class wxReadOnlyString : public wxString
 		{
 		public:
-			wxReadOnlyString(const wxChar *psz, size_t nLength)
+			wxReadOnlyString(wxChar *psz, size_t nLength)
 			{ 
 				m_pchData = psz;
 			}
