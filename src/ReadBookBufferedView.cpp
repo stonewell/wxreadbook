@@ -63,7 +63,6 @@ void CReadBookBufferedView::OnDraw(wxDC *pDC)
 	wxInt32 lineCount = row;
 
 	clientRect.Deflate(colMargin,0);
-
 	wxInt32 nStartRow = -1;
 
 	while(pDoc->RowToOffset(row) < pDoc->GetBufferSize())
@@ -169,7 +168,7 @@ void CReadBookBufferedView::CalculateViewSize()
 	m_nCharsPerLine = clientRect.GetWidth() / m_FontSize.GetWidth();
 #endif
 
-	CReadBookBufferedDoc * pBufferedDoc = 
+	CReadBookBufferedDoc * pBufferedDoc =
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
 	pBufferedDoc->SetContentHelper(this);
@@ -194,7 +193,7 @@ void CReadBookBufferedView::OnKeyDown(wxKeyEvent& event)
 	case 'F':
 	case 'f':
 		{
-			CReadBookMainFrm * pMainFrame = 
+			CReadBookMainFrm * pMainFrame =
 				(CReadBookMainFrm *)(GetMainFrame());
 			wxCommandEvent event;
 			pMainFrame->OnFullScreen(event);
@@ -213,12 +212,12 @@ void CReadBookBufferedView::OnKeyDown(wxKeyEvent& event)
 
 wxInt32 CReadBookBufferedView::NormalizeScrollToLine(wxInt32 nCurrentLine)
 {
-	CReadBookBufferedDoc * pBufferedDoc = 
+	CReadBookBufferedDoc * pBufferedDoc =
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
 	m_nViewSize = pBufferedDoc->GetBufferSize();
 
-	if (pBufferedDoc->GetBufferSize() <= 
+	if (pBufferedDoc->GetBufferSize() <=
 		pBufferedDoc->RowToOffset(nCurrentLine) + GetCharsPerLine())
 	{
 		if (m_nLastLine > 0)
@@ -249,7 +248,7 @@ void CReadBookBufferedView::CalculateScrollSize(void)
 	if (m_nViewSize < m_nPageSize)
 		m_nPageSize = m_nViewSize;
 
-	CReadBookBufferedDoc * pBufferedDoc = 
+	CReadBookBufferedDoc * pBufferedDoc =
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
 	int pos = pBufferedDoc->RowToOffset(pBufferedDoc->GetCurrentLine());
@@ -262,16 +261,16 @@ void CReadBookBufferedView::CalculateScrollSize(void)
 
 void CReadBookBufferedView::UpdateScrollPos(void)
 {
-	CReadBookBufferedDoc * pBufferedDoc = 
+	CReadBookBufferedDoc * pBufferedDoc =
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
-	m_pCanvas->SetScrollPos(wxVERTICAL, 
+	m_pCanvas->SetScrollPos(wxVERTICAL,
 		pBufferedDoc->RowToOffset(pBufferedDoc->GetCurrentLine()));
 }
 
 wxInt32 CReadBookBufferedView::ScrollPosToLine(wxInt32 nPos)
 {
-	CReadBookBufferedDoc * pBufferedDoc = 
+	CReadBookBufferedDoc * pBufferedDoc =
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
 	return pBufferedDoc->OffsetToRow(nPos);
@@ -279,7 +278,7 @@ wxInt32 CReadBookBufferedView::ScrollPosToLine(wxInt32 nPos)
 
 wxInt32 CReadBookBufferedView:: ScrollLineToPos(wxInt32 nLine)
 {
-	CReadBookBufferedDoc * pBufferedDoc = 
+	CReadBookBufferedDoc * pBufferedDoc =
 		(CReadBookBufferedDoc *)GetReadBookDoc();
 
 	return pBufferedDoc->RowToOffset(nLine);
@@ -303,7 +302,7 @@ bool CReadBookBufferedView::CouldBeShowInSingleLine(const wxString & strLine) co
 
 	wxSize lineSize = dc.GetTextExtent(strLine);
 
-	pDC->SetFont(pOldFont);	
+	pDC->SetFont(pOldFont);
 
 	return lineSize.GetX() <= clientRect.GetWidth();
 }

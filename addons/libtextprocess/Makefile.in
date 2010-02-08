@@ -53,9 +53,9 @@ am_libtextprocess_a_OBJECTS = DocumentLineBuilderImpl.$(OBJEXT) \
 	DocumentObjectFactory.$(OBJEXT) LineBuilderImpl.$(OBJEXT) \
 	LineImpl.$(OBJEXT) IMemoryMappedFile.$(OBJEXT) \
 	MemoryMappedFile.$(OBJEXT) ReadWriteLock.$(OBJEXT) \
-	ViewLineBuilderImpl.$(OBJEXT) ViewLineImpl.$(OBJEXT) \
-	ViewLineManagerImpl.$(OBJEXT) ViewLineMatcherImpl.$(OBJEXT) \
-	ViewObjectFactory.$(OBJEXT)
+	StringPool.$(OBJEXT) ViewLineBuilderImpl.$(OBJEXT) \
+	ViewLineImpl.$(OBJEXT) ViewLineManagerImpl.$(OBJEXT) \
+	ViewLineMatcherImpl.$(OBJEXT) ViewObjectFactory.$(OBJEXT)
 libtextprocess_a_OBJECTS = $(am_libtextprocess_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -204,6 +204,9 @@ libtextprocess_a_SOURCES = ./src/core/Document/DocumentObjectFactory.h \
 	./src/core/Utils/ReadWriteLock.cpp \
 	./src/core/Utils/ReadWriteLock.h \
 	./src/core/Utils/ReadWriteLocker.h \
+	./src/core/Utils/StringPool.h \
+	./src/core/Utils/StringPool.cpp \
+	./src/core/Utils/wxReadOnlyString.h \
 	./src/core/View/Impl/ViewLineBuilderImpl.cpp \
 	./src/core/View/Impl/ViewLineBuilderImpl.h \
 	./src/core/View/Impl/ViewLineImpl.cpp \
@@ -281,6 +284,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LineImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MemoryMappedFile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadWriteLock.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StringPool.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ViewLineBuilderImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ViewLineImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ViewLineManagerImpl.Po@am__quote@
@@ -440,6 +444,20 @@ ReadWriteLock.obj: ./src/core/Utils/ReadWriteLock.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/Utils/ReadWriteLock.cpp' object='ReadWriteLock.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadWriteLock.obj `if test -f './src/core/Utils/ReadWriteLock.cpp'; then $(CYGPATH_W) './src/core/Utils/ReadWriteLock.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/Utils/ReadWriteLock.cpp'; fi`
+
+StringPool.o: ./src/core/Utils/StringPool.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT StringPool.o -MD -MP -MF $(DEPDIR)/StringPool.Tpo -c -o StringPool.o `test -f './src/core/Utils/StringPool.cpp' || echo '$(srcdir)/'`./src/core/Utils/StringPool.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/StringPool.Tpo $(DEPDIR)/StringPool.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/Utils/StringPool.cpp' object='StringPool.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o StringPool.o `test -f './src/core/Utils/StringPool.cpp' || echo '$(srcdir)/'`./src/core/Utils/StringPool.cpp
+
+StringPool.obj: ./src/core/Utils/StringPool.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT StringPool.obj -MD -MP -MF $(DEPDIR)/StringPool.Tpo -c -o StringPool.obj `if test -f './src/core/Utils/StringPool.cpp'; then $(CYGPATH_W) './src/core/Utils/StringPool.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/Utils/StringPool.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/StringPool.Tpo $(DEPDIR)/StringPool.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='./src/core/Utils/StringPool.cpp' object='StringPool.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o StringPool.obj `if test -f './src/core/Utils/StringPool.cpp'; then $(CYGPATH_W) './src/core/Utils/StringPool.cpp'; else $(CYGPATH_W) '$(srcdir)/./src/core/Utils/StringPool.cpp'; fi`
 
 ViewLineBuilderImpl.o: ./src/core/View/Impl/ViewLineBuilderImpl.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ViewLineBuilderImpl.o -MD -MP -MF $(DEPDIR)/ViewLineBuilderImpl.Tpo -c -o ViewLineBuilderImpl.o `test -f './src/core/View/Impl/ViewLineBuilderImpl.cpp' || echo '$(srcdir)/'`./src/core/View/Impl/ViewLineBuilderImpl.cpp

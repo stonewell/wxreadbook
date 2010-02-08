@@ -6,16 +6,34 @@ namespace TextProcess
 	{
 		class wxReadOnlyString : public wxString
 		{
+        private:
+            size_t m_pchDataLength;
 		public:
-			wxReadOnlyString(wxChar *psz, size_t nLength)
-			{ 
-				m_pchData = psz;
+			wxReadOnlyString(wxChar * pBuf, size_t pBufLen)
+			{
+			    m_pchData = pBuf;
+			    m_pchDataLength = pBufLen;
+
+			    GetStringData()->Lock();
 			}
 
-			virtual ~wxReadOnlyString()
+			wxReadOnlyString(const wxString & string) :
+			wxString(string)
 			{
-				m_pchData = (wxChar *)wxEmptyString;
+			    m_pchDataLength = GetStringData()->nDataLength;
 			}
+
+			int ReadOnlyResize(int newSize)
+			{
+			    if (newSize >= 0 && newSize <= m_pchDataLength)
+			    {
+                    GetStringData()->nDataLength = newSize;
+			    }
+
+                return GetStringData()->nDataLength;
+			}
+
+			size_t GetPchDataLength() const { return m_pchDataLength; }
 		};
 	}
 }
