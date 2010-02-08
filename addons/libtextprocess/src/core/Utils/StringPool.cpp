@@ -39,24 +39,16 @@ wxChar * TextProcess::Utils::CStringPool::AllocBuffer(wxUint32 cch)
 {
 	wxChar * psz = m_pchNext;
 
-	int extra_size = sizeof(wxStringData);
-
-	if (m_pchNext + cch * sizeof(wxChar) + extra_size <= m_pchLimit) 
+	if (m_pchNext + cch * sizeof(wxChar) <= m_pchLimit) 
 	{
-		m_pchNext += (cch * sizeof(wxChar) + extra_size);
+		m_pchNext += (cch * sizeof(wxChar));
 
-		wxStringData * pStringData = (wxStringData *)psz;
-
-		pStringData->nRefs        = 2;
-		pStringData->nDataLength  = cch;
-		pStringData->nAllocLength = cch;
-
-		return pStringData->data();
+		return psz;
 	}
 
 	if (cch > MAX_CHARALLOC) goto OOM;
 	
-	wxUint32 cbAlloc = RoundUp(extra_size + cch * sizeof(wxChar) + sizeof(HEADER),
+	wxUint32 cbAlloc = RoundUp(cch * sizeof(wxChar) + sizeof(HEADER),
 		m_dwGranularity);
 
 #ifdef _WIN32
