@@ -7,11 +7,14 @@
 	<File name="src/ArchiveExplorerDlg.h" open="0" top="0" tabpos="5">
 		<Cursor position="1633" topLine="40" />
 	</File>
-	<File name="src/ReadBookApp.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="1013" topLine="41" />
+	<File name="src/ReadBookApp.cpp" open="1" top="0" tabpos="20">
+		<Cursor position="1013" topLine="89" />
 	</File>
 	<File name="src/ReadBookApp.h" open="0" top="0" tabpos="6">
 		<Cursor position="501" topLine="8" />
+	</File>
+	<File name="src/ReadBookBufferedView.cpp" open="1" top="0" tabpos="21">
+		<Cursor position="1494" topLine="31" />
 	</File>
 	<File name="src/ReadBookCanvas.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="545" topLine="9" />
@@ -46,8 +49,8 @@
 	<File name="src/ReadBookSimpleView.cpp" open="0" top="0" tabpos="6">
 		<Cursor position="17188" topLine="828" />
 	</File>
-	<File name="src/ReadBookView.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="14337" topLine="685" />
+	<File name="src/ReadBookView.cpp" open="1" top="0" tabpos="19">
+		<Cursor position="2266" topLine="87" />
 	</File>
 	<File name="src/ReadBookView.h" open="0" top="0" tabpos="3">
 		<Cursor position="1645" topLine="11" />

@@ -32,7 +32,7 @@
 
 #include "ReadBookApp.h"
 #include "ReadBookMainFrm.h"
-#include "ReadbookDocManager.h"
+#include "ReadBookDocManager.h"
 
 #include "presentation/ReadBookDoc.h"
 #include "presentation/ReadBookView.h"

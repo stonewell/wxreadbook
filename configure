@@ -597,6 +597,7 @@ LTLIBOBJS
 LIBOBJS
 CXXCPP
 WX_CONFIG
+P7ZIP_SOURCE_DIR
 RANLIB
 EGREP
 GREP
@@ -703,6 +704,7 @@ CXX
 CXXFLAGS
 CCC
 CPP
+P7ZIP_SOURCE_DIR
 CXXCPP'
 
 
@@ -1335,6 +1337,8 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   CPP         C preprocessor
+  P7ZIP_SOURCE_DIR
+              p7zip source directory, must be set before compile source
   CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
@@ -4911,6 +4915,29 @@ else
 fi
 
 
+
+
+if test "x$P7ZIP_SOURCE_DIR" = "x"; then
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error "P7ZIP_SOURCE_DIR is not set
+See \`config.log' for more details." "$LINENO" 5; }
+fi
+
+if test ! -d "$P7ZIP_SOURCE_DIR/C"; then
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error "$P7ZIP_SOURCE_DIR/C is invalid
+See \`config.log' for more details." "$LINENO" 5; }
+fi
+
+if test ! -d "$P7ZIP_SOURCE_DIR/CPP"; then
+	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error "P7ZIP_SOURCE_DIR is invalid
+See \`config.log' for more details." "$LINENO" 5; }
+fi
+
 # Extract the first word of "wx-config", so it can be a program name with args.
 set dummy wx-config; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -5116,6 +5143,11 @@ See \`config.log' for more details." "$LINENO" 5; }
 fi
 
 done
+
+
+ac_config_commands="$ac_config_commands p7zip_src_cpp_link"
+
+ac_config_commands="$ac_config_commands p7zip_src_c_link"
 
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -5351,7 +5383,7 @@ fi
 done
 
 
-ac_config_files="$ac_config_files Makefile doc/Makefile addons/Makefile addons/libtextprocess/Makefile src/Makefile src/7Zip/Makefile src/res/Makefile"
+ac_config_files="$ac_config_files Makefile doc/Makefile addons/Makefile addons/libtextprocess/Makefile addons/lib7zip/Makefile addons/lib7zip/includes/Makefile addons/lib7zip/Lib7Zip/Makefile src/Makefile src/7Zip/Makefile src/res/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -6066,10 +6098,15 @@ do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
+    "p7zip_src_cpp_link") CONFIG_COMMANDS="$CONFIG_COMMANDS p7zip_src_cpp_link" ;;
+    "p7zip_src_c_link") CONFIG_COMMANDS="$CONFIG_COMMANDS p7zip_src_c_link" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
     "addons/Makefile") CONFIG_FILES="$CONFIG_FILES addons/Makefile" ;;
     "addons/libtextprocess/Makefile") CONFIG_FILES="$CONFIG_FILES addons/libtextprocess/Makefile" ;;
+    "addons/lib7zip/Makefile") CONFIG_FILES="$CONFIG_FILES addons/lib7zip/Makefile" ;;
+    "addons/lib7zip/includes/Makefile") CONFIG_FILES="$CONFIG_FILES addons/lib7zip/includes/Makefile" ;;
+    "addons/lib7zip/Lib7Zip/Makefile") CONFIG_FILES="$CONFIG_FILES addons/lib7zip/Lib7Zip/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "src/7Zip/Makefile") CONFIG_FILES="$CONFIG_FILES src/7Zip/Makefile" ;;
     "src/res/Makefile") CONFIG_FILES="$CONFIG_FILES src/res/Makefile" ;;
@@ -6752,6 +6789,8 @@ $as_echo X"$file" |
   done
 }
  ;;
+    "p7zip_src_cpp_link":C) ln -sf $P7ZIP_SOURCE_DIR/CPP addons/lib7zip/includes/CPP ;;
+    "p7zip_src_c_link":C) ln -sf $P7ZIP_SOURCE_DIR/C addons/lib7zip/includes/C ;;
 
   esac
 done # for ac_tag

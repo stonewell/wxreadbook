@@ -1,1 +1,1 @@
-SUBDIRS = libtextprocess
+SUBDIRS = libtextprocess lib7zip

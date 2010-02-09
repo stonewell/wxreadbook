@@ -68,12 +68,12 @@ am_wxReadBook_OBJECTS = ArchiveExplorerDlg.$(OBJEXT) \
 	ReadBookSimpleDoc.$(OBJEXT) ReadBookPage.$(OBJEXT) \
 	ReadBookLine.$(OBJEXT) ReadBookChar.$(OBJEXT) \
 	UnicodeHelper.$(OBJEXT) ReadBookDC.$(OBJEXT) \
-	ObjectCache.$(OBJEXT)
+	ObjectCache.$(OBJEXT) ReadBookDocManager.$(OBJEXT) \
+	ReadBookHelperFunc.$(OBJEXT)
 wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
 wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
-	$(srcdir)/../libs/lib7zip.a $(srcdir)/../libs/libcppcommon.a \
-	$(srcdir)/../libs/libcppwindows.a
+	../addons/lib7zip/Lib7Zip/lib7zip.a
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -166,6 +166,7 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
+P7ZIP_SOURCE_DIR = @P7ZIP_SOURCE_DIR@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -226,107 +227,109 @@ top_srcdir = @top_srcdir@
 SUBDIRS = 7Zip res
 AM_CXXFLAGS = -I$(srcdir)/../includes
 wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
-	nsBIG5Statistics.cpp \
+	ns/nsBIG5Statistics.cpp \
 	BookMarksDlg.cpp \
-	nsEUCJPStatistics.cpp \
-	nsEUCKRStatistics.cpp \
-	nsEUCTWStatistics.cpp \
-	nsGB2312Statistics.cpp \
-	nsBIG5Verifier.cpp \
-	nsEUCStatistics.cpp \
-	nsVerifier.cpp \
+	ns/nsEUCJPStatistics.cpp \
+	ns/nsEUCKRStatistics.cpp \
+	ns/nsEUCTWStatistics.cpp \
+	ns/nsGB2312Statistics.cpp \
+	ns/nsBIG5Verifier.cpp \
+	ns/nsEUCStatistics.cpp \
+	ns/nsVerifier.cpp \
 	ReadBookApp.cpp \
 	ReadBookCanvas.cpp \
-	ReadBookDoc.cpp \
+	presentation/ReadBookDoc.cpp \
 	ReadBookMainFrm.cpp \
 	ReadBookPreference.cpp \
 	ReadBookPreferenceDlg.cpp \
-	ReadBookView.cpp \
-	nsCP1252Verifier.cpp \
-	nsDetector.cpp \
-	nsEUCJPVerifier.cpp \
-	nsEUCKRVerifier.cpp \
-	nsEUCSampler.cpp \
-	nsEUCTWVerifier.cpp \
-	nsGB18030Verifier.cpp \
-	nsGB2312Verifier.cpp \
-	nsHZVerifier.cpp \
-	nsICharsetDetectionObserver.cpp \
-	nsISO2022CNVerifier.cpp \
-	nsISO2022JPVerifier.cpp \
-	nsISO2022KRVerifier.cpp \
-	nsPSMDetector.cpp \
-	nsSJISVerifier.cpp \
-	nsUCS2BEVerifier.cpp \
-	nsUCS2LEVerifier.cpp \
-	nsUTF8Verifier.cpp \
+	presentation/ReadBookView.cpp \
+	ns/nsCP1252Verifier.cpp \
+	ns/nsDetector.cpp \
+	ns/nsEUCJPVerifier.cpp \
+	ns/nsEUCKRVerifier.cpp \
+	ns/nsEUCSampler.cpp \
+	ns/nsEUCTWVerifier.cpp \
+	ns/nsGB18030Verifier.cpp \
+	ns/nsGB2312Verifier.cpp \
+	ns/nsHZVerifier.cpp \
+	ns/nsICharsetDetectionObserver.cpp \
+	ns/nsISO2022CNVerifier.cpp \
+	ns/nsISO2022JPVerifier.cpp \
+	ns/nsISO2022KRVerifier.cpp \
+	ns/nsPSMDetector.cpp \
+	ns/nsSJISVerifier.cpp \
+	ns/nsUCS2BEVerifier.cpp \
+	ns/nsUCS2LEVerifier.cpp \
+	ns/nsUTF8Verifier.cpp \
 	ArchiveExplorerDlg.h \
-	nsBIG5Statistics.h \
+	ns/nsBIG5Statistics.h \
 	BookMarksDlg.h \
-	nsEUCJPStatistics.h \
-	nsEUCKRStatistics.h \
-	nsEUCTWStatistics.h \
-	nsGB2312Statistics.h \
-	nsBIG5Verifier.h \
-	nsEUCStatistics.h \
-	nsVerifier.h \
+	ns/nsEUCJPStatistics.h \
+	ns/nsEUCKRStatistics.h \
+	ns/nsEUCTWStatistics.h \
+	ns/nsGB2312Statistics.h \
+	ns/nsBIG5Verifier.h \
+	ns/nsEUCStatistics.h \
+	ns/nsVerifier.h \
 	ReadBookApp.h \
 	ReadBookCanvas.h \
-	ReadBookDoc.h \
+	presentation/ReadBookDoc.h \
 	ReadBookMainFrm.h \
 	ReadBookPreference.h \
 	ReadBookPreferenceDlg.h \
-	ReadBookView.h \
-	nsCP1252Verifier.h \
-	nsDetector.h \
-	nsEUCJPVerifier.h \
-	nsEUCKRVerifier.h \
-	nsEUCSampler.h \
-	nsEUCTWVerifier.h \
-	nsGB18030Verifier.h \
-	nsGB2312Verifier.h \
-	nsHZVerifier.h \
-	nsICharsetDetectionObserver.h \
-	nsICharsetDetector.h \
-	nsISO2022CNVerifier.h \
-	nsISO2022JPVerifier.h \
-	nsISO2022KRVerifier.h \
-	nsPSMDetector.h \
-	nsSJISVerifier.h \
-	nsString.h \
-	nsUCS2BEVerifier.h \
-	nsUCS2LEVerifier.h \
-	nsUTF8Verifier.h \
-	ReadBookBufferedDoc.h \
-	ReadBookBufferedDoc.cpp \
-	ReadBookBufferedView.h \
-	ReadBookBufferedView.cpp \
-	GBBig5Table.cpp \
-	GBBig5Table.h 	\
-	ReadBookSimpleView.h \
-	ReadBookSimpleView.cpp \
-	ReadBookSimpleDoc.h \
-	ReadBookSimpleDoc.cpp \
-	ReadBookPage.h \
-	ReadBookPage.cpp \
-	ReadBookLine.h \
-	ReadBookLine.cpp \
-	ReadBookChar.h \
-	ReadBookChar.cpp \
-	UnicodeHelper.h \
-	UnicodeHelper.cpp \
-	ReadBookDC.h \
-	ReadBookDC.cpp \
-	ObjectCache.cpp \
-	ObjectCache.h \
-	ReadBookKeys.h \
+	presentation/ReadBookView.h \
+	ns/nsCP1252Verifier.h \
+	ns/nsDetector.h \
+	ns/nsEUCJPVerifier.h \
+	ns/nsEUCKRVerifier.h \
+	ns/nsEUCSampler.h \
+	ns/nsEUCTWVerifier.h \
+	ns/nsGB18030Verifier.h \
+	ns/nsGB2312Verifier.h \
+	ns/nsHZVerifier.h \
+	ns/nsICharsetDetectionObserver.h \
+	ns/nsICharsetDetector.h \
+	ns/nsISO2022CNVerifier.h \
+	ns/nsISO2022JPVerifier.h \
+	ns/nsISO2022KRVerifier.h \
+	ns/nsPSMDetector.h \
+	ns/nsSJISVerifier.h \
+	ns/nsString.h \
+	ns/nsUCS2BEVerifier.h \
+	ns/nsUCS2LEVerifier.h \
+	ns/nsUTF8Verifier.h \
+	presentation/buffered/ReadBookBufferedDoc.h \
+	presentation/buffered/ReadBookBufferedDoc.cpp \
+	presentation/buffered/ReadBookBufferedView.h \
+	presentation/buffered/ReadBookBufferedView.cpp \
+	unicode/GBBig5Table.cpp \
+	unicode/GBBig5Table.h 	\
+	presentation/simple/ReadBookSimpleView.h \
+	presentation/simple/ReadBookSimpleView.cpp \
+	presentation/simple/ReadBookSimpleDoc.h \
+	presentation/simple/ReadBookSimpleDoc.cpp \
+	presentation/simple/ReadBookPage.h \
+	presentation/simple/ReadBookPage.cpp \
+	presentation/simple/ReadBookLine.h \
+	presentation/simple/ReadBookLine.cpp \
+	presentation/simple/ReadBookChar.h \
+	presentation/simple/ReadBookChar.cpp \
+	unicode/UnicodeHelper.h \
+	unicode/UnicodeHelper.cpp \
+	presentation/ReadBookDC.h \
+	presentation/ReadBookDC.cpp \
+	presentation/simple/ObjectCache.cpp \
+	presentation/simple/ObjectCache.h \
+	presentation/ReadBookKeys.h \
+	ReadBookDocManager.h \
+	ReadBookDocManager.cpp \
+	ReadBookHelperFunc.h \
+	ReadBookHelperFunc.cpp \
 	version.h
 
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
-	$(srcdir)/../libs/lib7zip.a \
-	$(srcdir)/../libs/libcppcommon.a \
-	$(srcdir)/../libs/libcppwindows.a
+	../addons/lib7zip/Lib7Zip/lib7zip.a
 
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
 all: all-recursive
@@ -421,6 +424,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookChar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookDC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookDoc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookDocManager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookHelperFunc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookLine.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookMainFrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookPage.Po@am__quote@
@@ -470,6 +475,552 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+nsBIG5Statistics.o: ns/nsBIG5Statistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsBIG5Statistics.o -MD -MP -MF $(DEPDIR)/nsBIG5Statistics.Tpo -c -o nsBIG5Statistics.o `test -f 'ns/nsBIG5Statistics.cpp' || echo '$(srcdir)/'`ns/nsBIG5Statistics.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsBIG5Statistics.Tpo $(DEPDIR)/nsBIG5Statistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsBIG5Statistics.cpp' object='nsBIG5Statistics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsBIG5Statistics.o `test -f 'ns/nsBIG5Statistics.cpp' || echo '$(srcdir)/'`ns/nsBIG5Statistics.cpp
+
+nsBIG5Statistics.obj: ns/nsBIG5Statistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsBIG5Statistics.obj -MD -MP -MF $(DEPDIR)/nsBIG5Statistics.Tpo -c -o nsBIG5Statistics.obj `if test -f 'ns/nsBIG5Statistics.cpp'; then $(CYGPATH_W) 'ns/nsBIG5Statistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsBIG5Statistics.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsBIG5Statistics.Tpo $(DEPDIR)/nsBIG5Statistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsBIG5Statistics.cpp' object='nsBIG5Statistics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsBIG5Statistics.obj `if test -f 'ns/nsBIG5Statistics.cpp'; then $(CYGPATH_W) 'ns/nsBIG5Statistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsBIG5Statistics.cpp'; fi`
+
+nsEUCJPStatistics.o: ns/nsEUCJPStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCJPStatistics.o -MD -MP -MF $(DEPDIR)/nsEUCJPStatistics.Tpo -c -o nsEUCJPStatistics.o `test -f 'ns/nsEUCJPStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCJPStatistics.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCJPStatistics.Tpo $(DEPDIR)/nsEUCJPStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCJPStatistics.cpp' object='nsEUCJPStatistics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCJPStatistics.o `test -f 'ns/nsEUCJPStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCJPStatistics.cpp
+
+nsEUCJPStatistics.obj: ns/nsEUCJPStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCJPStatistics.obj -MD -MP -MF $(DEPDIR)/nsEUCJPStatistics.Tpo -c -o nsEUCJPStatistics.obj `if test -f 'ns/nsEUCJPStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCJPStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCJPStatistics.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCJPStatistics.Tpo $(DEPDIR)/nsEUCJPStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCJPStatistics.cpp' object='nsEUCJPStatistics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCJPStatistics.obj `if test -f 'ns/nsEUCJPStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCJPStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCJPStatistics.cpp'; fi`
+
+nsEUCKRStatistics.o: ns/nsEUCKRStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCKRStatistics.o -MD -MP -MF $(DEPDIR)/nsEUCKRStatistics.Tpo -c -o nsEUCKRStatistics.o `test -f 'ns/nsEUCKRStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCKRStatistics.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCKRStatistics.Tpo $(DEPDIR)/nsEUCKRStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCKRStatistics.cpp' object='nsEUCKRStatistics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCKRStatistics.o `test -f 'ns/nsEUCKRStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCKRStatistics.cpp
+
+nsEUCKRStatistics.obj: ns/nsEUCKRStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCKRStatistics.obj -MD -MP -MF $(DEPDIR)/nsEUCKRStatistics.Tpo -c -o nsEUCKRStatistics.obj `if test -f 'ns/nsEUCKRStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCKRStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCKRStatistics.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCKRStatistics.Tpo $(DEPDIR)/nsEUCKRStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCKRStatistics.cpp' object='nsEUCKRStatistics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCKRStatistics.obj `if test -f 'ns/nsEUCKRStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCKRStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCKRStatistics.cpp'; fi`
+
+nsEUCTWStatistics.o: ns/nsEUCTWStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCTWStatistics.o -MD -MP -MF $(DEPDIR)/nsEUCTWStatistics.Tpo -c -o nsEUCTWStatistics.o `test -f 'ns/nsEUCTWStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCTWStatistics.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCTWStatistics.Tpo $(DEPDIR)/nsEUCTWStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCTWStatistics.cpp' object='nsEUCTWStatistics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCTWStatistics.o `test -f 'ns/nsEUCTWStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCTWStatistics.cpp
+
+nsEUCTWStatistics.obj: ns/nsEUCTWStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCTWStatistics.obj -MD -MP -MF $(DEPDIR)/nsEUCTWStatistics.Tpo -c -o nsEUCTWStatistics.obj `if test -f 'ns/nsEUCTWStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCTWStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCTWStatistics.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCTWStatistics.Tpo $(DEPDIR)/nsEUCTWStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCTWStatistics.cpp' object='nsEUCTWStatistics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCTWStatistics.obj `if test -f 'ns/nsEUCTWStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCTWStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCTWStatistics.cpp'; fi`
+
+nsGB2312Statistics.o: ns/nsGB2312Statistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsGB2312Statistics.o -MD -MP -MF $(DEPDIR)/nsGB2312Statistics.Tpo -c -o nsGB2312Statistics.o `test -f 'ns/nsGB2312Statistics.cpp' || echo '$(srcdir)/'`ns/nsGB2312Statistics.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsGB2312Statistics.Tpo $(DEPDIR)/nsGB2312Statistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsGB2312Statistics.cpp' object='nsGB2312Statistics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsGB2312Statistics.o `test -f 'ns/nsGB2312Statistics.cpp' || echo '$(srcdir)/'`ns/nsGB2312Statistics.cpp
+
+nsGB2312Statistics.obj: ns/nsGB2312Statistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsGB2312Statistics.obj -MD -MP -MF $(DEPDIR)/nsGB2312Statistics.Tpo -c -o nsGB2312Statistics.obj `if test -f 'ns/nsGB2312Statistics.cpp'; then $(CYGPATH_W) 'ns/nsGB2312Statistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsGB2312Statistics.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsGB2312Statistics.Tpo $(DEPDIR)/nsGB2312Statistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsGB2312Statistics.cpp' object='nsGB2312Statistics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsGB2312Statistics.obj `if test -f 'ns/nsGB2312Statistics.cpp'; then $(CYGPATH_W) 'ns/nsGB2312Statistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsGB2312Statistics.cpp'; fi`
+
+nsBIG5Verifier.o: ns/nsBIG5Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsBIG5Verifier.o -MD -MP -MF $(DEPDIR)/nsBIG5Verifier.Tpo -c -o nsBIG5Verifier.o `test -f 'ns/nsBIG5Verifier.cpp' || echo '$(srcdir)/'`ns/nsBIG5Verifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsBIG5Verifier.Tpo $(DEPDIR)/nsBIG5Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsBIG5Verifier.cpp' object='nsBIG5Verifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsBIG5Verifier.o `test -f 'ns/nsBIG5Verifier.cpp' || echo '$(srcdir)/'`ns/nsBIG5Verifier.cpp
+
+nsBIG5Verifier.obj: ns/nsBIG5Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsBIG5Verifier.obj -MD -MP -MF $(DEPDIR)/nsBIG5Verifier.Tpo -c -o nsBIG5Verifier.obj `if test -f 'ns/nsBIG5Verifier.cpp'; then $(CYGPATH_W) 'ns/nsBIG5Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsBIG5Verifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsBIG5Verifier.Tpo $(DEPDIR)/nsBIG5Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsBIG5Verifier.cpp' object='nsBIG5Verifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsBIG5Verifier.obj `if test -f 'ns/nsBIG5Verifier.cpp'; then $(CYGPATH_W) 'ns/nsBIG5Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsBIG5Verifier.cpp'; fi`
+
+nsEUCStatistics.o: ns/nsEUCStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCStatistics.o -MD -MP -MF $(DEPDIR)/nsEUCStatistics.Tpo -c -o nsEUCStatistics.o `test -f 'ns/nsEUCStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCStatistics.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCStatistics.Tpo $(DEPDIR)/nsEUCStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCStatistics.cpp' object='nsEUCStatistics.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCStatistics.o `test -f 'ns/nsEUCStatistics.cpp' || echo '$(srcdir)/'`ns/nsEUCStatistics.cpp
+
+nsEUCStatistics.obj: ns/nsEUCStatistics.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCStatistics.obj -MD -MP -MF $(DEPDIR)/nsEUCStatistics.Tpo -c -o nsEUCStatistics.obj `if test -f 'ns/nsEUCStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCStatistics.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCStatistics.Tpo $(DEPDIR)/nsEUCStatistics.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCStatistics.cpp' object='nsEUCStatistics.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCStatistics.obj `if test -f 'ns/nsEUCStatistics.cpp'; then $(CYGPATH_W) 'ns/nsEUCStatistics.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCStatistics.cpp'; fi`
+
+nsVerifier.o: ns/nsVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsVerifier.o -MD -MP -MF $(DEPDIR)/nsVerifier.Tpo -c -o nsVerifier.o `test -f 'ns/nsVerifier.cpp' || echo '$(srcdir)/'`ns/nsVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsVerifier.Tpo $(DEPDIR)/nsVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsVerifier.cpp' object='nsVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsVerifier.o `test -f 'ns/nsVerifier.cpp' || echo '$(srcdir)/'`ns/nsVerifier.cpp
+
+nsVerifier.obj: ns/nsVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsVerifier.obj -MD -MP -MF $(DEPDIR)/nsVerifier.Tpo -c -o nsVerifier.obj `if test -f 'ns/nsVerifier.cpp'; then $(CYGPATH_W) 'ns/nsVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsVerifier.Tpo $(DEPDIR)/nsVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsVerifier.cpp' object='nsVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsVerifier.obj `if test -f 'ns/nsVerifier.cpp'; then $(CYGPATH_W) 'ns/nsVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsVerifier.cpp'; fi`
+
+ReadBookDoc.o: presentation/ReadBookDoc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookDoc.o -MD -MP -MF $(DEPDIR)/ReadBookDoc.Tpo -c -o ReadBookDoc.o `test -f 'presentation/ReadBookDoc.cpp' || echo '$(srcdir)/'`presentation/ReadBookDoc.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookDoc.Tpo $(DEPDIR)/ReadBookDoc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/ReadBookDoc.cpp' object='ReadBookDoc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookDoc.o `test -f 'presentation/ReadBookDoc.cpp' || echo '$(srcdir)/'`presentation/ReadBookDoc.cpp
+
+ReadBookDoc.obj: presentation/ReadBookDoc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookDoc.obj -MD -MP -MF $(DEPDIR)/ReadBookDoc.Tpo -c -o ReadBookDoc.obj `if test -f 'presentation/ReadBookDoc.cpp'; then $(CYGPATH_W) 'presentation/ReadBookDoc.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/ReadBookDoc.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookDoc.Tpo $(DEPDIR)/ReadBookDoc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/ReadBookDoc.cpp' object='ReadBookDoc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookDoc.obj `if test -f 'presentation/ReadBookDoc.cpp'; then $(CYGPATH_W) 'presentation/ReadBookDoc.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/ReadBookDoc.cpp'; fi`
+
+ReadBookView.o: presentation/ReadBookView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookView.o -MD -MP -MF $(DEPDIR)/ReadBookView.Tpo -c -o ReadBookView.o `test -f 'presentation/ReadBookView.cpp' || echo '$(srcdir)/'`presentation/ReadBookView.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookView.Tpo $(DEPDIR)/ReadBookView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/ReadBookView.cpp' object='ReadBookView.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookView.o `test -f 'presentation/ReadBookView.cpp' || echo '$(srcdir)/'`presentation/ReadBookView.cpp
+
+ReadBookView.obj: presentation/ReadBookView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookView.obj -MD -MP -MF $(DEPDIR)/ReadBookView.Tpo -c -o ReadBookView.obj `if test -f 'presentation/ReadBookView.cpp'; then $(CYGPATH_W) 'presentation/ReadBookView.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/ReadBookView.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookView.Tpo $(DEPDIR)/ReadBookView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/ReadBookView.cpp' object='ReadBookView.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookView.obj `if test -f 'presentation/ReadBookView.cpp'; then $(CYGPATH_W) 'presentation/ReadBookView.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/ReadBookView.cpp'; fi`
+
+nsCP1252Verifier.o: ns/nsCP1252Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsCP1252Verifier.o -MD -MP -MF $(DEPDIR)/nsCP1252Verifier.Tpo -c -o nsCP1252Verifier.o `test -f 'ns/nsCP1252Verifier.cpp' || echo '$(srcdir)/'`ns/nsCP1252Verifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsCP1252Verifier.Tpo $(DEPDIR)/nsCP1252Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsCP1252Verifier.cpp' object='nsCP1252Verifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsCP1252Verifier.o `test -f 'ns/nsCP1252Verifier.cpp' || echo '$(srcdir)/'`ns/nsCP1252Verifier.cpp
+
+nsCP1252Verifier.obj: ns/nsCP1252Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsCP1252Verifier.obj -MD -MP -MF $(DEPDIR)/nsCP1252Verifier.Tpo -c -o nsCP1252Verifier.obj `if test -f 'ns/nsCP1252Verifier.cpp'; then $(CYGPATH_W) 'ns/nsCP1252Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsCP1252Verifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsCP1252Verifier.Tpo $(DEPDIR)/nsCP1252Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsCP1252Verifier.cpp' object='nsCP1252Verifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsCP1252Verifier.obj `if test -f 'ns/nsCP1252Verifier.cpp'; then $(CYGPATH_W) 'ns/nsCP1252Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsCP1252Verifier.cpp'; fi`
+
+nsDetector.o: ns/nsDetector.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsDetector.o -MD -MP -MF $(DEPDIR)/nsDetector.Tpo -c -o nsDetector.o `test -f 'ns/nsDetector.cpp' || echo '$(srcdir)/'`ns/nsDetector.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsDetector.Tpo $(DEPDIR)/nsDetector.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsDetector.cpp' object='nsDetector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsDetector.o `test -f 'ns/nsDetector.cpp' || echo '$(srcdir)/'`ns/nsDetector.cpp
+
+nsDetector.obj: ns/nsDetector.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsDetector.obj -MD -MP -MF $(DEPDIR)/nsDetector.Tpo -c -o nsDetector.obj `if test -f 'ns/nsDetector.cpp'; then $(CYGPATH_W) 'ns/nsDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsDetector.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsDetector.Tpo $(DEPDIR)/nsDetector.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsDetector.cpp' object='nsDetector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsDetector.obj `if test -f 'ns/nsDetector.cpp'; then $(CYGPATH_W) 'ns/nsDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsDetector.cpp'; fi`
+
+nsEUCJPVerifier.o: ns/nsEUCJPVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCJPVerifier.o -MD -MP -MF $(DEPDIR)/nsEUCJPVerifier.Tpo -c -o nsEUCJPVerifier.o `test -f 'ns/nsEUCJPVerifier.cpp' || echo '$(srcdir)/'`ns/nsEUCJPVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCJPVerifier.Tpo $(DEPDIR)/nsEUCJPVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCJPVerifier.cpp' object='nsEUCJPVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCJPVerifier.o `test -f 'ns/nsEUCJPVerifier.cpp' || echo '$(srcdir)/'`ns/nsEUCJPVerifier.cpp
+
+nsEUCJPVerifier.obj: ns/nsEUCJPVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCJPVerifier.obj -MD -MP -MF $(DEPDIR)/nsEUCJPVerifier.Tpo -c -o nsEUCJPVerifier.obj `if test -f 'ns/nsEUCJPVerifier.cpp'; then $(CYGPATH_W) 'ns/nsEUCJPVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCJPVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCJPVerifier.Tpo $(DEPDIR)/nsEUCJPVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCJPVerifier.cpp' object='nsEUCJPVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCJPVerifier.obj `if test -f 'ns/nsEUCJPVerifier.cpp'; then $(CYGPATH_W) 'ns/nsEUCJPVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCJPVerifier.cpp'; fi`
+
+nsEUCKRVerifier.o: ns/nsEUCKRVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCKRVerifier.o -MD -MP -MF $(DEPDIR)/nsEUCKRVerifier.Tpo -c -o nsEUCKRVerifier.o `test -f 'ns/nsEUCKRVerifier.cpp' || echo '$(srcdir)/'`ns/nsEUCKRVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCKRVerifier.Tpo $(DEPDIR)/nsEUCKRVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCKRVerifier.cpp' object='nsEUCKRVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCKRVerifier.o `test -f 'ns/nsEUCKRVerifier.cpp' || echo '$(srcdir)/'`ns/nsEUCKRVerifier.cpp
+
+nsEUCKRVerifier.obj: ns/nsEUCKRVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCKRVerifier.obj -MD -MP -MF $(DEPDIR)/nsEUCKRVerifier.Tpo -c -o nsEUCKRVerifier.obj `if test -f 'ns/nsEUCKRVerifier.cpp'; then $(CYGPATH_W) 'ns/nsEUCKRVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCKRVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCKRVerifier.Tpo $(DEPDIR)/nsEUCKRVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCKRVerifier.cpp' object='nsEUCKRVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCKRVerifier.obj `if test -f 'ns/nsEUCKRVerifier.cpp'; then $(CYGPATH_W) 'ns/nsEUCKRVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCKRVerifier.cpp'; fi`
+
+nsEUCSampler.o: ns/nsEUCSampler.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCSampler.o -MD -MP -MF $(DEPDIR)/nsEUCSampler.Tpo -c -o nsEUCSampler.o `test -f 'ns/nsEUCSampler.cpp' || echo '$(srcdir)/'`ns/nsEUCSampler.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCSampler.Tpo $(DEPDIR)/nsEUCSampler.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCSampler.cpp' object='nsEUCSampler.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCSampler.o `test -f 'ns/nsEUCSampler.cpp' || echo '$(srcdir)/'`ns/nsEUCSampler.cpp
+
+nsEUCSampler.obj: ns/nsEUCSampler.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCSampler.obj -MD -MP -MF $(DEPDIR)/nsEUCSampler.Tpo -c -o nsEUCSampler.obj `if test -f 'ns/nsEUCSampler.cpp'; then $(CYGPATH_W) 'ns/nsEUCSampler.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCSampler.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCSampler.Tpo $(DEPDIR)/nsEUCSampler.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCSampler.cpp' object='nsEUCSampler.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCSampler.obj `if test -f 'ns/nsEUCSampler.cpp'; then $(CYGPATH_W) 'ns/nsEUCSampler.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCSampler.cpp'; fi`
+
+nsEUCTWVerifier.o: ns/nsEUCTWVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCTWVerifier.o -MD -MP -MF $(DEPDIR)/nsEUCTWVerifier.Tpo -c -o nsEUCTWVerifier.o `test -f 'ns/nsEUCTWVerifier.cpp' || echo '$(srcdir)/'`ns/nsEUCTWVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCTWVerifier.Tpo $(DEPDIR)/nsEUCTWVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCTWVerifier.cpp' object='nsEUCTWVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCTWVerifier.o `test -f 'ns/nsEUCTWVerifier.cpp' || echo '$(srcdir)/'`ns/nsEUCTWVerifier.cpp
+
+nsEUCTWVerifier.obj: ns/nsEUCTWVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsEUCTWVerifier.obj -MD -MP -MF $(DEPDIR)/nsEUCTWVerifier.Tpo -c -o nsEUCTWVerifier.obj `if test -f 'ns/nsEUCTWVerifier.cpp'; then $(CYGPATH_W) 'ns/nsEUCTWVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCTWVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsEUCTWVerifier.Tpo $(DEPDIR)/nsEUCTWVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsEUCTWVerifier.cpp' object='nsEUCTWVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsEUCTWVerifier.obj `if test -f 'ns/nsEUCTWVerifier.cpp'; then $(CYGPATH_W) 'ns/nsEUCTWVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsEUCTWVerifier.cpp'; fi`
+
+nsGB18030Verifier.o: ns/nsGB18030Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsGB18030Verifier.o -MD -MP -MF $(DEPDIR)/nsGB18030Verifier.Tpo -c -o nsGB18030Verifier.o `test -f 'ns/nsGB18030Verifier.cpp' || echo '$(srcdir)/'`ns/nsGB18030Verifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsGB18030Verifier.Tpo $(DEPDIR)/nsGB18030Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsGB18030Verifier.cpp' object='nsGB18030Verifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsGB18030Verifier.o `test -f 'ns/nsGB18030Verifier.cpp' || echo '$(srcdir)/'`ns/nsGB18030Verifier.cpp
+
+nsGB18030Verifier.obj: ns/nsGB18030Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsGB18030Verifier.obj -MD -MP -MF $(DEPDIR)/nsGB18030Verifier.Tpo -c -o nsGB18030Verifier.obj `if test -f 'ns/nsGB18030Verifier.cpp'; then $(CYGPATH_W) 'ns/nsGB18030Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsGB18030Verifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsGB18030Verifier.Tpo $(DEPDIR)/nsGB18030Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsGB18030Verifier.cpp' object='nsGB18030Verifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsGB18030Verifier.obj `if test -f 'ns/nsGB18030Verifier.cpp'; then $(CYGPATH_W) 'ns/nsGB18030Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsGB18030Verifier.cpp'; fi`
+
+nsGB2312Verifier.o: ns/nsGB2312Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsGB2312Verifier.o -MD -MP -MF $(DEPDIR)/nsGB2312Verifier.Tpo -c -o nsGB2312Verifier.o `test -f 'ns/nsGB2312Verifier.cpp' || echo '$(srcdir)/'`ns/nsGB2312Verifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsGB2312Verifier.Tpo $(DEPDIR)/nsGB2312Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsGB2312Verifier.cpp' object='nsGB2312Verifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsGB2312Verifier.o `test -f 'ns/nsGB2312Verifier.cpp' || echo '$(srcdir)/'`ns/nsGB2312Verifier.cpp
+
+nsGB2312Verifier.obj: ns/nsGB2312Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsGB2312Verifier.obj -MD -MP -MF $(DEPDIR)/nsGB2312Verifier.Tpo -c -o nsGB2312Verifier.obj `if test -f 'ns/nsGB2312Verifier.cpp'; then $(CYGPATH_W) 'ns/nsGB2312Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsGB2312Verifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsGB2312Verifier.Tpo $(DEPDIR)/nsGB2312Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsGB2312Verifier.cpp' object='nsGB2312Verifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsGB2312Verifier.obj `if test -f 'ns/nsGB2312Verifier.cpp'; then $(CYGPATH_W) 'ns/nsGB2312Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsGB2312Verifier.cpp'; fi`
+
+nsHZVerifier.o: ns/nsHZVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsHZVerifier.o -MD -MP -MF $(DEPDIR)/nsHZVerifier.Tpo -c -o nsHZVerifier.o `test -f 'ns/nsHZVerifier.cpp' || echo '$(srcdir)/'`ns/nsHZVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsHZVerifier.Tpo $(DEPDIR)/nsHZVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsHZVerifier.cpp' object='nsHZVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsHZVerifier.o `test -f 'ns/nsHZVerifier.cpp' || echo '$(srcdir)/'`ns/nsHZVerifier.cpp
+
+nsHZVerifier.obj: ns/nsHZVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsHZVerifier.obj -MD -MP -MF $(DEPDIR)/nsHZVerifier.Tpo -c -o nsHZVerifier.obj `if test -f 'ns/nsHZVerifier.cpp'; then $(CYGPATH_W) 'ns/nsHZVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsHZVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsHZVerifier.Tpo $(DEPDIR)/nsHZVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsHZVerifier.cpp' object='nsHZVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsHZVerifier.obj `if test -f 'ns/nsHZVerifier.cpp'; then $(CYGPATH_W) 'ns/nsHZVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsHZVerifier.cpp'; fi`
+
+nsICharsetDetectionObserver.o: ns/nsICharsetDetectionObserver.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsICharsetDetectionObserver.o -MD -MP -MF $(DEPDIR)/nsICharsetDetectionObserver.Tpo -c -o nsICharsetDetectionObserver.o `test -f 'ns/nsICharsetDetectionObserver.cpp' || echo '$(srcdir)/'`ns/nsICharsetDetectionObserver.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsICharsetDetectionObserver.Tpo $(DEPDIR)/nsICharsetDetectionObserver.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsICharsetDetectionObserver.cpp' object='nsICharsetDetectionObserver.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsICharsetDetectionObserver.o `test -f 'ns/nsICharsetDetectionObserver.cpp' || echo '$(srcdir)/'`ns/nsICharsetDetectionObserver.cpp
+
+nsICharsetDetectionObserver.obj: ns/nsICharsetDetectionObserver.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsICharsetDetectionObserver.obj -MD -MP -MF $(DEPDIR)/nsICharsetDetectionObserver.Tpo -c -o nsICharsetDetectionObserver.obj `if test -f 'ns/nsICharsetDetectionObserver.cpp'; then $(CYGPATH_W) 'ns/nsICharsetDetectionObserver.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsICharsetDetectionObserver.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsICharsetDetectionObserver.Tpo $(DEPDIR)/nsICharsetDetectionObserver.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsICharsetDetectionObserver.cpp' object='nsICharsetDetectionObserver.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsICharsetDetectionObserver.obj `if test -f 'ns/nsICharsetDetectionObserver.cpp'; then $(CYGPATH_W) 'ns/nsICharsetDetectionObserver.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsICharsetDetectionObserver.cpp'; fi`
+
+nsISO2022CNVerifier.o: ns/nsISO2022CNVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsISO2022CNVerifier.o -MD -MP -MF $(DEPDIR)/nsISO2022CNVerifier.Tpo -c -o nsISO2022CNVerifier.o `test -f 'ns/nsISO2022CNVerifier.cpp' || echo '$(srcdir)/'`ns/nsISO2022CNVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsISO2022CNVerifier.Tpo $(DEPDIR)/nsISO2022CNVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsISO2022CNVerifier.cpp' object='nsISO2022CNVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsISO2022CNVerifier.o `test -f 'ns/nsISO2022CNVerifier.cpp' || echo '$(srcdir)/'`ns/nsISO2022CNVerifier.cpp
+
+nsISO2022CNVerifier.obj: ns/nsISO2022CNVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsISO2022CNVerifier.obj -MD -MP -MF $(DEPDIR)/nsISO2022CNVerifier.Tpo -c -o nsISO2022CNVerifier.obj `if test -f 'ns/nsISO2022CNVerifier.cpp'; then $(CYGPATH_W) 'ns/nsISO2022CNVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsISO2022CNVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsISO2022CNVerifier.Tpo $(DEPDIR)/nsISO2022CNVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsISO2022CNVerifier.cpp' object='nsISO2022CNVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsISO2022CNVerifier.obj `if test -f 'ns/nsISO2022CNVerifier.cpp'; then $(CYGPATH_W) 'ns/nsISO2022CNVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsISO2022CNVerifier.cpp'; fi`
+
+nsISO2022JPVerifier.o: ns/nsISO2022JPVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsISO2022JPVerifier.o -MD -MP -MF $(DEPDIR)/nsISO2022JPVerifier.Tpo -c -o nsISO2022JPVerifier.o `test -f 'ns/nsISO2022JPVerifier.cpp' || echo '$(srcdir)/'`ns/nsISO2022JPVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsISO2022JPVerifier.Tpo $(DEPDIR)/nsISO2022JPVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsISO2022JPVerifier.cpp' object='nsISO2022JPVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsISO2022JPVerifier.o `test -f 'ns/nsISO2022JPVerifier.cpp' || echo '$(srcdir)/'`ns/nsISO2022JPVerifier.cpp
+
+nsISO2022JPVerifier.obj: ns/nsISO2022JPVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsISO2022JPVerifier.obj -MD -MP -MF $(DEPDIR)/nsISO2022JPVerifier.Tpo -c -o nsISO2022JPVerifier.obj `if test -f 'ns/nsISO2022JPVerifier.cpp'; then $(CYGPATH_W) 'ns/nsISO2022JPVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsISO2022JPVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsISO2022JPVerifier.Tpo $(DEPDIR)/nsISO2022JPVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsISO2022JPVerifier.cpp' object='nsISO2022JPVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsISO2022JPVerifier.obj `if test -f 'ns/nsISO2022JPVerifier.cpp'; then $(CYGPATH_W) 'ns/nsISO2022JPVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsISO2022JPVerifier.cpp'; fi`
+
+nsISO2022KRVerifier.o: ns/nsISO2022KRVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsISO2022KRVerifier.o -MD -MP -MF $(DEPDIR)/nsISO2022KRVerifier.Tpo -c -o nsISO2022KRVerifier.o `test -f 'ns/nsISO2022KRVerifier.cpp' || echo '$(srcdir)/'`ns/nsISO2022KRVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsISO2022KRVerifier.Tpo $(DEPDIR)/nsISO2022KRVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsISO2022KRVerifier.cpp' object='nsISO2022KRVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsISO2022KRVerifier.o `test -f 'ns/nsISO2022KRVerifier.cpp' || echo '$(srcdir)/'`ns/nsISO2022KRVerifier.cpp
+
+nsISO2022KRVerifier.obj: ns/nsISO2022KRVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsISO2022KRVerifier.obj -MD -MP -MF $(DEPDIR)/nsISO2022KRVerifier.Tpo -c -o nsISO2022KRVerifier.obj `if test -f 'ns/nsISO2022KRVerifier.cpp'; then $(CYGPATH_W) 'ns/nsISO2022KRVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsISO2022KRVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsISO2022KRVerifier.Tpo $(DEPDIR)/nsISO2022KRVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsISO2022KRVerifier.cpp' object='nsISO2022KRVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsISO2022KRVerifier.obj `if test -f 'ns/nsISO2022KRVerifier.cpp'; then $(CYGPATH_W) 'ns/nsISO2022KRVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsISO2022KRVerifier.cpp'; fi`
+
+nsPSMDetector.o: ns/nsPSMDetector.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsPSMDetector.o -MD -MP -MF $(DEPDIR)/nsPSMDetector.Tpo -c -o nsPSMDetector.o `test -f 'ns/nsPSMDetector.cpp' || echo '$(srcdir)/'`ns/nsPSMDetector.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsPSMDetector.Tpo $(DEPDIR)/nsPSMDetector.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsPSMDetector.cpp' object='nsPSMDetector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsPSMDetector.o `test -f 'ns/nsPSMDetector.cpp' || echo '$(srcdir)/'`ns/nsPSMDetector.cpp
+
+nsPSMDetector.obj: ns/nsPSMDetector.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsPSMDetector.obj -MD -MP -MF $(DEPDIR)/nsPSMDetector.Tpo -c -o nsPSMDetector.obj `if test -f 'ns/nsPSMDetector.cpp'; then $(CYGPATH_W) 'ns/nsPSMDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsPSMDetector.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsPSMDetector.Tpo $(DEPDIR)/nsPSMDetector.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsPSMDetector.cpp' object='nsPSMDetector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsPSMDetector.obj `if test -f 'ns/nsPSMDetector.cpp'; then $(CYGPATH_W) 'ns/nsPSMDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsPSMDetector.cpp'; fi`
+
+nsSJISVerifier.o: ns/nsSJISVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsSJISVerifier.o -MD -MP -MF $(DEPDIR)/nsSJISVerifier.Tpo -c -o nsSJISVerifier.o `test -f 'ns/nsSJISVerifier.cpp' || echo '$(srcdir)/'`ns/nsSJISVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsSJISVerifier.Tpo $(DEPDIR)/nsSJISVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsSJISVerifier.cpp' object='nsSJISVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsSJISVerifier.o `test -f 'ns/nsSJISVerifier.cpp' || echo '$(srcdir)/'`ns/nsSJISVerifier.cpp
+
+nsSJISVerifier.obj: ns/nsSJISVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsSJISVerifier.obj -MD -MP -MF $(DEPDIR)/nsSJISVerifier.Tpo -c -o nsSJISVerifier.obj `if test -f 'ns/nsSJISVerifier.cpp'; then $(CYGPATH_W) 'ns/nsSJISVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsSJISVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsSJISVerifier.Tpo $(DEPDIR)/nsSJISVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsSJISVerifier.cpp' object='nsSJISVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsSJISVerifier.obj `if test -f 'ns/nsSJISVerifier.cpp'; then $(CYGPATH_W) 'ns/nsSJISVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsSJISVerifier.cpp'; fi`
+
+nsUCS2BEVerifier.o: ns/nsUCS2BEVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsUCS2BEVerifier.o -MD -MP -MF $(DEPDIR)/nsUCS2BEVerifier.Tpo -c -o nsUCS2BEVerifier.o `test -f 'ns/nsUCS2BEVerifier.cpp' || echo '$(srcdir)/'`ns/nsUCS2BEVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsUCS2BEVerifier.Tpo $(DEPDIR)/nsUCS2BEVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsUCS2BEVerifier.cpp' object='nsUCS2BEVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsUCS2BEVerifier.o `test -f 'ns/nsUCS2BEVerifier.cpp' || echo '$(srcdir)/'`ns/nsUCS2BEVerifier.cpp
+
+nsUCS2BEVerifier.obj: ns/nsUCS2BEVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsUCS2BEVerifier.obj -MD -MP -MF $(DEPDIR)/nsUCS2BEVerifier.Tpo -c -o nsUCS2BEVerifier.obj `if test -f 'ns/nsUCS2BEVerifier.cpp'; then $(CYGPATH_W) 'ns/nsUCS2BEVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsUCS2BEVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsUCS2BEVerifier.Tpo $(DEPDIR)/nsUCS2BEVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsUCS2BEVerifier.cpp' object='nsUCS2BEVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsUCS2BEVerifier.obj `if test -f 'ns/nsUCS2BEVerifier.cpp'; then $(CYGPATH_W) 'ns/nsUCS2BEVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsUCS2BEVerifier.cpp'; fi`
+
+nsUCS2LEVerifier.o: ns/nsUCS2LEVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsUCS2LEVerifier.o -MD -MP -MF $(DEPDIR)/nsUCS2LEVerifier.Tpo -c -o nsUCS2LEVerifier.o `test -f 'ns/nsUCS2LEVerifier.cpp' || echo '$(srcdir)/'`ns/nsUCS2LEVerifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsUCS2LEVerifier.Tpo $(DEPDIR)/nsUCS2LEVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsUCS2LEVerifier.cpp' object='nsUCS2LEVerifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsUCS2LEVerifier.o `test -f 'ns/nsUCS2LEVerifier.cpp' || echo '$(srcdir)/'`ns/nsUCS2LEVerifier.cpp
+
+nsUCS2LEVerifier.obj: ns/nsUCS2LEVerifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsUCS2LEVerifier.obj -MD -MP -MF $(DEPDIR)/nsUCS2LEVerifier.Tpo -c -o nsUCS2LEVerifier.obj `if test -f 'ns/nsUCS2LEVerifier.cpp'; then $(CYGPATH_W) 'ns/nsUCS2LEVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsUCS2LEVerifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsUCS2LEVerifier.Tpo $(DEPDIR)/nsUCS2LEVerifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsUCS2LEVerifier.cpp' object='nsUCS2LEVerifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsUCS2LEVerifier.obj `if test -f 'ns/nsUCS2LEVerifier.cpp'; then $(CYGPATH_W) 'ns/nsUCS2LEVerifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsUCS2LEVerifier.cpp'; fi`
+
+nsUTF8Verifier.o: ns/nsUTF8Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsUTF8Verifier.o -MD -MP -MF $(DEPDIR)/nsUTF8Verifier.Tpo -c -o nsUTF8Verifier.o `test -f 'ns/nsUTF8Verifier.cpp' || echo '$(srcdir)/'`ns/nsUTF8Verifier.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsUTF8Verifier.Tpo $(DEPDIR)/nsUTF8Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsUTF8Verifier.cpp' object='nsUTF8Verifier.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsUTF8Verifier.o `test -f 'ns/nsUTF8Verifier.cpp' || echo '$(srcdir)/'`ns/nsUTF8Verifier.cpp
+
+nsUTF8Verifier.obj: ns/nsUTF8Verifier.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nsUTF8Verifier.obj -MD -MP -MF $(DEPDIR)/nsUTF8Verifier.Tpo -c -o nsUTF8Verifier.obj `if test -f 'ns/nsUTF8Verifier.cpp'; then $(CYGPATH_W) 'ns/nsUTF8Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsUTF8Verifier.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/nsUTF8Verifier.Tpo $(DEPDIR)/nsUTF8Verifier.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ns/nsUTF8Verifier.cpp' object='nsUTF8Verifier.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o nsUTF8Verifier.obj `if test -f 'ns/nsUTF8Verifier.cpp'; then $(CYGPATH_W) 'ns/nsUTF8Verifier.cpp'; else $(CYGPATH_W) '$(srcdir)/ns/nsUTF8Verifier.cpp'; fi`
+
+ReadBookBufferedDoc.o: presentation/buffered/ReadBookBufferedDoc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookBufferedDoc.o -MD -MP -MF $(DEPDIR)/ReadBookBufferedDoc.Tpo -c -o ReadBookBufferedDoc.o `test -f 'presentation/buffered/ReadBookBufferedDoc.cpp' || echo '$(srcdir)/'`presentation/buffered/ReadBookBufferedDoc.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookBufferedDoc.Tpo $(DEPDIR)/ReadBookBufferedDoc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/buffered/ReadBookBufferedDoc.cpp' object='ReadBookBufferedDoc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookBufferedDoc.o `test -f 'presentation/buffered/ReadBookBufferedDoc.cpp' || echo '$(srcdir)/'`presentation/buffered/ReadBookBufferedDoc.cpp
+
+ReadBookBufferedDoc.obj: presentation/buffered/ReadBookBufferedDoc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookBufferedDoc.obj -MD -MP -MF $(DEPDIR)/ReadBookBufferedDoc.Tpo -c -o ReadBookBufferedDoc.obj `if test -f 'presentation/buffered/ReadBookBufferedDoc.cpp'; then $(CYGPATH_W) 'presentation/buffered/ReadBookBufferedDoc.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/buffered/ReadBookBufferedDoc.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookBufferedDoc.Tpo $(DEPDIR)/ReadBookBufferedDoc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/buffered/ReadBookBufferedDoc.cpp' object='ReadBookBufferedDoc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookBufferedDoc.obj `if test -f 'presentation/buffered/ReadBookBufferedDoc.cpp'; then $(CYGPATH_W) 'presentation/buffered/ReadBookBufferedDoc.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/buffered/ReadBookBufferedDoc.cpp'; fi`
+
+ReadBookBufferedView.o: presentation/buffered/ReadBookBufferedView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookBufferedView.o -MD -MP -MF $(DEPDIR)/ReadBookBufferedView.Tpo -c -o ReadBookBufferedView.o `test -f 'presentation/buffered/ReadBookBufferedView.cpp' || echo '$(srcdir)/'`presentation/buffered/ReadBookBufferedView.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookBufferedView.Tpo $(DEPDIR)/ReadBookBufferedView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/buffered/ReadBookBufferedView.cpp' object='ReadBookBufferedView.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookBufferedView.o `test -f 'presentation/buffered/ReadBookBufferedView.cpp' || echo '$(srcdir)/'`presentation/buffered/ReadBookBufferedView.cpp
+
+ReadBookBufferedView.obj: presentation/buffered/ReadBookBufferedView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookBufferedView.obj -MD -MP -MF $(DEPDIR)/ReadBookBufferedView.Tpo -c -o ReadBookBufferedView.obj `if test -f 'presentation/buffered/ReadBookBufferedView.cpp'; then $(CYGPATH_W) 'presentation/buffered/ReadBookBufferedView.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/buffered/ReadBookBufferedView.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookBufferedView.Tpo $(DEPDIR)/ReadBookBufferedView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/buffered/ReadBookBufferedView.cpp' object='ReadBookBufferedView.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookBufferedView.obj `if test -f 'presentation/buffered/ReadBookBufferedView.cpp'; then $(CYGPATH_W) 'presentation/buffered/ReadBookBufferedView.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/buffered/ReadBookBufferedView.cpp'; fi`
+
+GBBig5Table.o: unicode/GBBig5Table.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT GBBig5Table.o -MD -MP -MF $(DEPDIR)/GBBig5Table.Tpo -c -o GBBig5Table.o `test -f 'unicode/GBBig5Table.cpp' || echo '$(srcdir)/'`unicode/GBBig5Table.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/GBBig5Table.Tpo $(DEPDIR)/GBBig5Table.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='unicode/GBBig5Table.cpp' object='GBBig5Table.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o GBBig5Table.o `test -f 'unicode/GBBig5Table.cpp' || echo '$(srcdir)/'`unicode/GBBig5Table.cpp
+
+GBBig5Table.obj: unicode/GBBig5Table.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT GBBig5Table.obj -MD -MP -MF $(DEPDIR)/GBBig5Table.Tpo -c -o GBBig5Table.obj `if test -f 'unicode/GBBig5Table.cpp'; then $(CYGPATH_W) 'unicode/GBBig5Table.cpp'; else $(CYGPATH_W) '$(srcdir)/unicode/GBBig5Table.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/GBBig5Table.Tpo $(DEPDIR)/GBBig5Table.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='unicode/GBBig5Table.cpp' object='GBBig5Table.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o GBBig5Table.obj `if test -f 'unicode/GBBig5Table.cpp'; then $(CYGPATH_W) 'unicode/GBBig5Table.cpp'; else $(CYGPATH_W) '$(srcdir)/unicode/GBBig5Table.cpp'; fi`
+
+ReadBookSimpleView.o: presentation/simple/ReadBookSimpleView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookSimpleView.o -MD -MP -MF $(DEPDIR)/ReadBookSimpleView.Tpo -c -o ReadBookSimpleView.o `test -f 'presentation/simple/ReadBookSimpleView.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookSimpleView.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookSimpleView.Tpo $(DEPDIR)/ReadBookSimpleView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookSimpleView.cpp' object='ReadBookSimpleView.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookSimpleView.o `test -f 'presentation/simple/ReadBookSimpleView.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookSimpleView.cpp
+
+ReadBookSimpleView.obj: presentation/simple/ReadBookSimpleView.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookSimpleView.obj -MD -MP -MF $(DEPDIR)/ReadBookSimpleView.Tpo -c -o ReadBookSimpleView.obj `if test -f 'presentation/simple/ReadBookSimpleView.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookSimpleView.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookSimpleView.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookSimpleView.Tpo $(DEPDIR)/ReadBookSimpleView.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookSimpleView.cpp' object='ReadBookSimpleView.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookSimpleView.obj `if test -f 'presentation/simple/ReadBookSimpleView.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookSimpleView.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookSimpleView.cpp'; fi`
+
+ReadBookSimpleDoc.o: presentation/simple/ReadBookSimpleDoc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookSimpleDoc.o -MD -MP -MF $(DEPDIR)/ReadBookSimpleDoc.Tpo -c -o ReadBookSimpleDoc.o `test -f 'presentation/simple/ReadBookSimpleDoc.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookSimpleDoc.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookSimpleDoc.Tpo $(DEPDIR)/ReadBookSimpleDoc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookSimpleDoc.cpp' object='ReadBookSimpleDoc.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookSimpleDoc.o `test -f 'presentation/simple/ReadBookSimpleDoc.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookSimpleDoc.cpp
+
+ReadBookSimpleDoc.obj: presentation/simple/ReadBookSimpleDoc.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookSimpleDoc.obj -MD -MP -MF $(DEPDIR)/ReadBookSimpleDoc.Tpo -c -o ReadBookSimpleDoc.obj `if test -f 'presentation/simple/ReadBookSimpleDoc.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookSimpleDoc.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookSimpleDoc.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookSimpleDoc.Tpo $(DEPDIR)/ReadBookSimpleDoc.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookSimpleDoc.cpp' object='ReadBookSimpleDoc.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookSimpleDoc.obj `if test -f 'presentation/simple/ReadBookSimpleDoc.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookSimpleDoc.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookSimpleDoc.cpp'; fi`
+
+ReadBookPage.o: presentation/simple/ReadBookPage.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookPage.o -MD -MP -MF $(DEPDIR)/ReadBookPage.Tpo -c -o ReadBookPage.o `test -f 'presentation/simple/ReadBookPage.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookPage.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookPage.Tpo $(DEPDIR)/ReadBookPage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookPage.cpp' object='ReadBookPage.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookPage.o `test -f 'presentation/simple/ReadBookPage.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookPage.cpp
+
+ReadBookPage.obj: presentation/simple/ReadBookPage.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookPage.obj -MD -MP -MF $(DEPDIR)/ReadBookPage.Tpo -c -o ReadBookPage.obj `if test -f 'presentation/simple/ReadBookPage.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookPage.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookPage.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookPage.Tpo $(DEPDIR)/ReadBookPage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookPage.cpp' object='ReadBookPage.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookPage.obj `if test -f 'presentation/simple/ReadBookPage.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookPage.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookPage.cpp'; fi`
+
+ReadBookLine.o: presentation/simple/ReadBookLine.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookLine.o -MD -MP -MF $(DEPDIR)/ReadBookLine.Tpo -c -o ReadBookLine.o `test -f 'presentation/simple/ReadBookLine.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookLine.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookLine.Tpo $(DEPDIR)/ReadBookLine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookLine.cpp' object='ReadBookLine.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookLine.o `test -f 'presentation/simple/ReadBookLine.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookLine.cpp
+
+ReadBookLine.obj: presentation/simple/ReadBookLine.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookLine.obj -MD -MP -MF $(DEPDIR)/ReadBookLine.Tpo -c -o ReadBookLine.obj `if test -f 'presentation/simple/ReadBookLine.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookLine.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookLine.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookLine.Tpo $(DEPDIR)/ReadBookLine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookLine.cpp' object='ReadBookLine.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookLine.obj `if test -f 'presentation/simple/ReadBookLine.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookLine.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookLine.cpp'; fi`
+
+ReadBookChar.o: presentation/simple/ReadBookChar.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookChar.o -MD -MP -MF $(DEPDIR)/ReadBookChar.Tpo -c -o ReadBookChar.o `test -f 'presentation/simple/ReadBookChar.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookChar.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookChar.Tpo $(DEPDIR)/ReadBookChar.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookChar.cpp' object='ReadBookChar.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookChar.o `test -f 'presentation/simple/ReadBookChar.cpp' || echo '$(srcdir)/'`presentation/simple/ReadBookChar.cpp
+
+ReadBookChar.obj: presentation/simple/ReadBookChar.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookChar.obj -MD -MP -MF $(DEPDIR)/ReadBookChar.Tpo -c -o ReadBookChar.obj `if test -f 'presentation/simple/ReadBookChar.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookChar.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookChar.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookChar.Tpo $(DEPDIR)/ReadBookChar.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ReadBookChar.cpp' object='ReadBookChar.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookChar.obj `if test -f 'presentation/simple/ReadBookChar.cpp'; then $(CYGPATH_W) 'presentation/simple/ReadBookChar.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ReadBookChar.cpp'; fi`
+
+UnicodeHelper.o: unicode/UnicodeHelper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT UnicodeHelper.o -MD -MP -MF $(DEPDIR)/UnicodeHelper.Tpo -c -o UnicodeHelper.o `test -f 'unicode/UnicodeHelper.cpp' || echo '$(srcdir)/'`unicode/UnicodeHelper.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/UnicodeHelper.Tpo $(DEPDIR)/UnicodeHelper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='unicode/UnicodeHelper.cpp' object='UnicodeHelper.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o UnicodeHelper.o `test -f 'unicode/UnicodeHelper.cpp' || echo '$(srcdir)/'`unicode/UnicodeHelper.cpp
+
+UnicodeHelper.obj: unicode/UnicodeHelper.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT UnicodeHelper.obj -MD -MP -MF $(DEPDIR)/UnicodeHelper.Tpo -c -o UnicodeHelper.obj `if test -f 'unicode/UnicodeHelper.cpp'; then $(CYGPATH_W) 'unicode/UnicodeHelper.cpp'; else $(CYGPATH_W) '$(srcdir)/unicode/UnicodeHelper.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/UnicodeHelper.Tpo $(DEPDIR)/UnicodeHelper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='unicode/UnicodeHelper.cpp' object='UnicodeHelper.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o UnicodeHelper.obj `if test -f 'unicode/UnicodeHelper.cpp'; then $(CYGPATH_W) 'unicode/UnicodeHelper.cpp'; else $(CYGPATH_W) '$(srcdir)/unicode/UnicodeHelper.cpp'; fi`
+
+ReadBookDC.o: presentation/ReadBookDC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookDC.o -MD -MP -MF $(DEPDIR)/ReadBookDC.Tpo -c -o ReadBookDC.o `test -f 'presentation/ReadBookDC.cpp' || echo '$(srcdir)/'`presentation/ReadBookDC.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookDC.Tpo $(DEPDIR)/ReadBookDC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/ReadBookDC.cpp' object='ReadBookDC.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookDC.o `test -f 'presentation/ReadBookDC.cpp' || echo '$(srcdir)/'`presentation/ReadBookDC.cpp
+
+ReadBookDC.obj: presentation/ReadBookDC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookDC.obj -MD -MP -MF $(DEPDIR)/ReadBookDC.Tpo -c -o ReadBookDC.obj `if test -f 'presentation/ReadBookDC.cpp'; then $(CYGPATH_W) 'presentation/ReadBookDC.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/ReadBookDC.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookDC.Tpo $(DEPDIR)/ReadBookDC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/ReadBookDC.cpp' object='ReadBookDC.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookDC.obj `if test -f 'presentation/ReadBookDC.cpp'; then $(CYGPATH_W) 'presentation/ReadBookDC.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/ReadBookDC.cpp'; fi`
+
+ObjectCache.o: presentation/simple/ObjectCache.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ObjectCache.o -MD -MP -MF $(DEPDIR)/ObjectCache.Tpo -c -o ObjectCache.o `test -f 'presentation/simple/ObjectCache.cpp' || echo '$(srcdir)/'`presentation/simple/ObjectCache.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ObjectCache.Tpo $(DEPDIR)/ObjectCache.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ObjectCache.cpp' object='ObjectCache.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ObjectCache.o `test -f 'presentation/simple/ObjectCache.cpp' || echo '$(srcdir)/'`presentation/simple/ObjectCache.cpp
+
+ObjectCache.obj: presentation/simple/ObjectCache.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ObjectCache.obj -MD -MP -MF $(DEPDIR)/ObjectCache.Tpo -c -o ObjectCache.obj `if test -f 'presentation/simple/ObjectCache.cpp'; then $(CYGPATH_W) 'presentation/simple/ObjectCache.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ObjectCache.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ObjectCache.Tpo $(DEPDIR)/ObjectCache.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/simple/ObjectCache.cpp' object='ObjectCache.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ObjectCache.obj `if test -f 'presentation/simple/ObjectCache.cpp'; then $(CYGPATH_W) 'presentation/simple/ObjectCache.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/simple/ObjectCache.cpp'; fi`
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.

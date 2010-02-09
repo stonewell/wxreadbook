@@ -77,6 +77,9 @@
 		<Unit filename="Utils/ReadWriteLock.cpp" />
 		<Unit filename="Utils/ReadWriteLock.h" />
 		<Unit filename="Utils/ReadWriteLocker.h" />
+		<Unit filename="Utils/StringPool.cpp" />
+		<Unit filename="Utils/StringPool.h" />
+		<Unit filename="Utils/wxReadOnlyString.h" />
 		<Unit filename="View/IViewLine.h" />
 		<Unit filename="View/IViewLineBuilder.h" />
 		<Unit filename="View/IViewLineManager.h" />
