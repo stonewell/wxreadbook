@@ -15,16 +15,18 @@
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
 
-#include "ReadBookApp.h"
-#include "ReadBookMainFrm.h"
+#include "../ReadBookApp.h"
+#include "../ReadBookMainFrm.h"
+#include "../ReadBookCanvas.h"
+
+#include "ReadBookDC.h"
 #include "ReadBookDoc.h"
 #include "ReadBookView.h"
-#include "ReadBookCanvas.h"
 #include "ReadBookKeys.h"
 
 #if wxUSE_UNICODE
-#include "ns/nsDetector.h"
-#include "unicode/GBBig5Table.h"
+#include "../ns/nsDetector.h"
+#include "../unicode/GBBig5Table.h"
 #endif
 
 const CReadBookView::LineNumberMapping ZeroMap = {0,0};
@@ -43,11 +45,9 @@ BEGIN_EVENT_TABLE(CReadBookView, wxView)
 END_EVENT_TABLE()
 
 CReadBookView::CReadBookView() :
-m_pFrame(NULL),
-m_pCanvas(NULL),
 m_ViewMode(wxReadBook::Text),
 m_bInScript(false),
-m_ClientSize(0,0),
+m_ClientSize(0,0,0,0),
 m_DisplayAs(wxReadBook::DisplayAsOriginal),
 m_nPageSize(0),
 m_nLastLineViewSize(0),
@@ -67,14 +67,10 @@ CReadBookView::~CReadBookView()
 // windows for displaying the view.
 bool CReadBookView::OnCreate(wxDocument * WXUNUSED(doc), long WXUNUSED(flags) )
 {
-	m_pFrame = GetMainFrame();
-
-	m_pCanvas = ((CReadBookMainFrm *)GetMainFrame())->GetCanvas();
-
-	m_pCanvas->SetView(this);
+	GetCurrentCanvas()->SetView(this);
 
 	// Associate the appropriate frame with this view.
-	SetFrame(m_pFrame);
+	SetFrame(GetMainFrame());
 
 	// Make sure the document manager knows that this is the
 	// current view.
@@ -102,7 +98,7 @@ void CReadBookView::OnDraw(wxDC *pDC)
 
 	int n = sizeof(wxString);
 
-	wxRect clientRect = m_pCanvas->GetClientRect();
+	wxRect clientRect = GetClientRect();
 
 	const wxFont & pOldFont = pDC->GetFont();
 
@@ -129,8 +125,6 @@ void CReadBookView::OnDraw(wxDC *pDC)
 	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
 
 	wxInt32 lineCount = map.nViewLineCountBegin;
-
-	clientRect.Deflate(colMargin,0);
 
 	wxInt32 nStartRow = -1;
 
@@ -229,16 +223,7 @@ void CReadBookView::OnDraw(wxDC *pDC)
 
 void CReadBookView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 {
-	wxFileName fn(GetReadBookDoc()->GetFileName());
-
-	if (fn.GetExt().CmpNoCase(wxT("html")) == 0 || fn.GetExt().CmpNoCase(wxT("htm")) == 0)
-	{
-		m_ViewMode = wxReadBook::Html;
-	}
-	else
-	{
-		m_ViewMode = wxReadBook::Text;
-	}
+	InitViewMode();
 
 	m_bInScript = false;
 
@@ -246,8 +231,7 @@ void CReadBookView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 
 	Recalculate();
 
-	if (m_pCanvas)
-		m_pCanvas->Refresh();
+	RefreshCanvas();
 }
 
 // Clean up windows used for displaying the view.
@@ -256,14 +240,12 @@ bool CReadBookView::OnClose(bool WXUNUSED(deleteWindow))
 	if (!GetReadBookDoc()->Close())
 		return false;
 
-	m_pCanvas->ClearBackground();
-	m_pCanvas->SetView(NULL);
-	m_pCanvas = NULL;
+	GetCurrentCanvas()->ClearBackground();
+	GetCurrentCanvas()->SetView(NULL);
 
-	wxString s(wxTheApp->GetAppName());
+	wxString s(wxGetApp().GetAppName());
 
-	if (m_pFrame)
-		m_pFrame->SetTitle(s);
+	GetMainFrame()->SetTitle(s);
 
 	SetFrame((wxFrame *) NULL);
 
@@ -278,7 +260,7 @@ void CReadBookView::Recalculate(void)
 {
 	bool bFontChange = CalculateFontSize();
 
-	wxSize tmpSize = m_pCanvas->GetClientSize();
+	wxRect tmpSize = GetClientRect();
 
 	if (tmpSize.GetWidth() != m_ClientSize.GetWidth() || bFontChange || m_LineNumberMap.size() == 0)
 	{
@@ -287,7 +269,7 @@ void CReadBookView::Recalculate(void)
 
 	CalculateScrollSize();
 
-	m_ClientSize = m_pCanvas->GetClientSize();
+	m_ClientSize = GetClientRect();
 }
 
 bool CReadBookView::CheckCharConsistence(const wxChar * pBuf, wxInt16 startIndex, wxInt16 count) const
@@ -314,10 +296,7 @@ bool CReadBookView::CheckCharConsistence(const wxChar * pBuf, wxInt16 startIndex
 
 void CReadBookView::CalculateScrollSize(void)
 {
-	wxRect rect = m_pCanvas->GetClientRect();
-
-	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
-	rect.Deflate(colMargin,0);
+	wxRect rect = GetClientRect();
 
 	m_nPageSize = rect.GetHeight() /
 		(m_FontSize.GetHeight() + wxGetApp().GetPreference()->GetLineMargin());
@@ -328,8 +307,7 @@ void CReadBookView::CalculateScrollSize(void)
 	if (m_nViewSize < m_nPageSize)
 		m_nPageSize = m_nViewSize;
 
-	m_pCanvas->SetScrollbar(wxVERTICAL,
-		GetReadBookDoc()->GetCurrentLine(),
+	SetVertScrollbar(GetReadBookDoc()->GetCurrentLine(),
 		m_nPageSize,
 		m_nViewSize);
 }
@@ -382,16 +360,6 @@ wxInt32 CReadBookView::NormalizeScrollToLine(wxInt32 nCurrentLine)
 	}
 
 	return nCurrentLine;
-}
-
-wxInt16 CReadBookView::GetPageSize(void)
-{
-	return m_nPageSize;
-}
-
-wxInt16 CReadBookView::SetPageSize(wxInt16 nPageSize)
-{
-	return m_nPageSize = nPageSize;
 }
 
 wxInt32 CReadBookView::ScrollPage(wxInt16 nDelta)
@@ -458,10 +426,7 @@ wxInt16 CReadBookView::GetViewLineCharSize(wxDC * pDC,
 										   const wxChar * pBuf, size_t length,
 										   size_t startIndex, wxInt16 defaultLineCharSize) const
 {
-	wxRect clientRect = m_pCanvas->GetClientRect();
-
-	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
-	clientRect.Deflate(colMargin,0);
+	wxRect clientRect = GetClientRect();
 
 	wxInt16 lineCharSize = defaultLineCharSize;
 
@@ -501,10 +466,7 @@ void CReadBookView::CalculateViewSize()
 
 	if (GetReadBookDoc()->GetBufferSize() > 0)
 	{
-		wxRect clientRect = m_pCanvas->GetClientRect();
-
-		wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
-		clientRect.Deflate(colMargin,0);
+		wxRect clientRect = GetClientRect();
 
 		m_nLastLineViewSize = 1;
 		wxInt32 row = 0;
@@ -577,7 +539,7 @@ void CReadBookView::CalculateViewSize()
 
 void CReadBookView::UpdateScrollPos(void)
 {
-	m_pCanvas->SetScrollPos(wxVERTICAL, GetReadBookDoc()->GetCurrentLine());
+	SetVertScrollPos(GetReadBookDoc()->GetCurrentLine());
 }
 
 void CReadBookView::OnScrollWin(wxScrollWinEvent& event)
@@ -644,7 +606,7 @@ void CReadBookView::OnScrollWin(wxScrollWinEvent& event)
 	{
 		UpdateScrollPos();
 
-		m_pCanvas->Refresh();
+		RefreshCanvas();
 	}
 }
 
@@ -671,6 +633,14 @@ void CReadBookView::OnKeyDown(wxKeyEvent& event)
 		if (nCurrentLine == ScrollToLine(ScrollPosToLine(m_nViewSize)))
 		{
 			doScroll = false;
+		}
+		break;
+	case 'F':
+	case 'f':
+		{
+			wxCommandEvent eventCommand(wxEVT_COMMAND_MENU_SELECTED, IDM_FULL_SCREEN);
+
+			GetMainFrame()->GetEventHandler()->ProcessEvent(eventCommand);
 		}
 		break;
 	case 'A':
@@ -745,7 +715,7 @@ void CReadBookView::OnKeyDown(wxKeyEvent& event)
 	{
 		UpdateScrollPos();
 
-		m_pCanvas->Refresh();
+		RefreshCanvas();
 	}
 }
 
@@ -765,7 +735,7 @@ void CReadBookView::SetViewMode(wxReadBook::ViewModeEnum ViewMode)
 
 	pDoc->UpdateDisplay(m_DisplayAs, m_ViewMode);
 
-	m_pCanvas->Refresh();
+	RefreshCanvas();
 }
 
 wxArrayString * CReadBookView::StripHtml(const wxString & line)
@@ -908,13 +878,13 @@ void CReadBookView::OnMouseWheel(wxMouseEvent & event)
 	{
 		UpdateScrollPos();
 
-		m_pCanvas->Refresh();
+		RefreshCanvas();
 	}
 }
 
 bool CReadBookView::CalculateFontSize()
 {
-	wxClientDC dc(m_pCanvas);
+	CReadBookDC dc(GetCurrentCanvas());
 
 	wxDC * pDC = &dc;
 
@@ -963,7 +933,7 @@ void CReadBookView::SetDisplayAs(wxReadBook::DisplayAsEnum displayAs)
 {
 	m_DisplayAs = displayAs;
 
-	m_pCanvas->Refresh();
+	RefreshCanvas();
 
 	CReadBookDoc* pDoc = GetReadBookDoc();
 
@@ -1009,7 +979,7 @@ bool CReadBookView::GoTo()
 	{
 		UpdateScrollPos();
 
-		m_pCanvas->Refresh();
+		RefreshCanvas();
 	}
 
 	return doScroll;
@@ -1020,4 +990,67 @@ wxInt32 CReadBookView::GetCurrentLine()
 	return GetReadBookDoc()->GetCurrentLine();
 }
 
+wxRect CReadBookView::GetClientRect() const
+{
+	wxWindow * pCanvas = GetCurrentCanvas();
 
+	if (!pCanvas)
+		return wxRect(0,0,0,0);
+
+	wxRect rect = pCanvas->GetClientRect();
+
+	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
+	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
+
+	rect.Deflate(colMargin,0);
+
+	rect.SetWidth(rect.GetWidth());
+
+	return rect;
+}
+
+void CReadBookView::SetVertScrollbar(int position, int thumbSize,
+                              int range,
+                              bool refresh)
+{
+	wxWindow * pCanvas = GetCurrentCanvas();
+
+	if (!pCanvas) return;
+
+	pCanvas->SetScrollbar(wxVERTICAL,
+		position,
+		thumbSize,
+		range, refresh);
+}
+
+void CReadBookView::SetVertScrollPos(int pos, bool refresh)
+{
+	wxWindow * pCanvas = GetCurrentCanvas();
+	if (!pCanvas) return;
+
+	pCanvas->SetScrollPos(wxVERTICAL,
+		pos,
+		refresh);
+}
+
+void CReadBookView::RefreshCanvas()
+{
+	wxWindow * pCanvas = GetCurrentCanvas();
+	if (!pCanvas) return;
+
+	pCanvas->Refresh();
+}
+
+void CReadBookView::InitViewMode()
+{
+	wxFileName fn(GetReadBookDoc()->GetFileName());
+
+	if (fn.GetExt().CmpNoCase(wxT("html")) == 0 || fn.GetExt().CmpNoCase(wxT("htm")) == 0)
+	{
+		m_ViewMode = wxReadBook::Html;
+	}
+	else
+	{
+		m_ViewMode = wxReadBook::Text;
+	}
+}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ReadBookDoc.h"
+#include "../ReadBookDoc.h"
 
 class CReadBookSimpleDoc :
 	public CReadBookDoc

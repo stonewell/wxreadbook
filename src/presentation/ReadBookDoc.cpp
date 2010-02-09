@@ -19,15 +19,12 @@
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
 #endif
 
-#include "ReadBookApp.h"
-#include "ReadBookMainFrm.h"
+#include "../ReadBookApp.h"
 #include "ReadBookDoc.h"
 #include "ReadBookView.h"
-#include "ReadBookCanvas.h"
-#include "ArchiveExplorerDlg.h"
 
 #if wxUSE_UNICODE
-#include "ns/nsDetector.h"
+#include "../ns/nsDetector.h"
 
 class CObserver : public CnsICharsetDetectionObserver
 {
@@ -83,9 +80,7 @@ bool CReadBookDoc::OnSaveDocument(const wxString& WXUNUSED(filename))
 
 bool CReadBookDoc::OnOpenDocument(const wxString& filename)
 {
-	CReadBookMainFrm * pMainFrame = (CReadBookMainFrm *)(GetMainFrame());
-
-	return OpenDocument(filename, pMainFrame->GetMBConv(), true);
+	return OpenDocument(filename, GetCurrentMBConv(), true);
 }
 
 bool CReadBookDoc::IsModified(void) const
@@ -173,11 +168,11 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 
 	if (isDir)
 	{
-		CArchiveExplorerDlg arDlg(GetMainFrame(),url);
+		wxString archiveFile;
 
-		if (arDlg.ShowModal() == wxID_OK)
+		if (ChooseArchiveFile(url, archiveFile))
 		{
-			url = FileNameToUrl(arDlg.GetSelectedFilePath(), isDir);
+			url = FileNameToUrl(archiveFile, isDir);
 		}
 		else
 		{
@@ -204,13 +199,12 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 	Modify(false);
 	UpdateAllViews();
 
-	CReadBookMainFrm * pMainFrame = (CReadBookMainFrm *)(GetMainFrame());
-	pMainFrame->SetTitle(m_strFileName);
-	pMainFrame->AddRecentFile(m_strFileName);
+	SetMainFrameTitle(m_strFileName);
+	AddToRecentFile(m_strFileName);
 
 	if (pFileInfo != NULL)
 	{
-		CReadBookView * pView = (CReadBookView *)pMainFrame->GetCanvas()->GetView();
+		CReadBookView * pView = GetCurrentView();
 
 		if (pView != NULL)
 		{
@@ -369,9 +363,8 @@ wxMBConv * CReadBookDoc::GetSuitableMBConv(wxInputStream * pInput, wxMBConv * pD
 
 		if (encoding != IDM_ENCODE_UNKNOWN)
 		{
-			CReadBookMainFrm * pMainFrame = (CReadBookMainFrm *)(GetMainFrame());
-			pMainFrame->UpdateEncoding(encoding);
-			pConv = pMainFrame->GetMBConv();
+			UpdateCurrentEncoding(encoding);
+			pConv = GetCurrentMBConv();
 		}
 
 		pInput->SeekI(offset);

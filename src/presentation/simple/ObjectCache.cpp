@@ -13,8 +13,8 @@
 #endif
 
 #include "ObjectCache.h"
-#include "ReadBookApp.h"
-#include "ReadBookView.h"
+#include "../../ReadBookApp.h"
+#include "../ReadBookView.h"
 #include "ReadBookChar.h"
 #include "ReadBookLine.h"
 
