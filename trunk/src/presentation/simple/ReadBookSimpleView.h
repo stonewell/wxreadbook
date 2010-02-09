@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ReadBookView.h"
+#include "../ReadBookView.h"
 
 class CReadBookPage;
 class CReadBookChar;
@@ -57,7 +57,6 @@ protected:
     virtual wxInt32 GetCurrentLine() { return ScrollPosToLine(GetCurrentPosition()); }
 
     virtual void OnSize(wxSizeEvent& event);
-    virtual wxRect GetClientRect();
 
 	virtual CReadBookPage * CreateReadBookPage();
 	virtual void ReleasePPChars();

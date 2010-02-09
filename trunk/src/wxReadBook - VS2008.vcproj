@@ -897,7 +897,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ObjectCache.cpp"
+				RelativePath=".\presentation\simple\ObjectCache.cpp"
 				>
 			</File>
 			<File
@@ -905,11 +905,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookBufferedDoc.cpp"
+				RelativePath=".\presentation\buffered\ReadBookBufferedDoc.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookBufferedView.cpp"
+				RelativePath=".\presentation\buffered\ReadBookBufferedView.cpp"
 				>
 			</File>
 			<File
@@ -917,19 +917,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookChar.cpp"
+				RelativePath=".\presentation\simple\ReadBookChar.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookDC.cpp"
+				RelativePath=".\presentation\ReadBookDC.cpp"
 				>
 			</File>
 			<File
-				RelativePath="ReadBookDoc.cpp"
+				RelativePath=".\presentation\ReadBookDoc.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookLine.cpp"
+				RelativePath=".\ReadBookDocManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookHelperFunc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\presentation\simple\ReadBookLine.cpp"
 				>
 			</File>
 			<File
@@ -937,7 +945,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookPage.cpp"
+				RelativePath=".\presentation\simple\ReadBookPage.cpp"
 				>
 			</File>
 			<File
@@ -949,15 +957,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookSimpleDoc.cpp"
+				RelativePath=".\presentation\simple\ReadBookSimpleDoc.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookSimpleView.cpp"
+				RelativePath=".\presentation\simple\ReadBookSimpleView.cpp"
 				>
 			</File>
 			<File
-				RelativePath="ReadBookView.cpp"
+				RelativePath=".\presentation\ReadBookView.cpp"
 				>
 			</File>
 			<Filter
@@ -1116,7 +1124,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ObjectCache.h"
+				RelativePath=".\presentation\simple\ObjectCache.h"
 				>
 			</File>
 			<File
@@ -1124,11 +1132,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookBufferedDoc.h"
+				RelativePath=".\presentation\buffered\ReadBookBufferedDoc.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookBufferedView.h"
+				RelativePath=".\presentation\buffered\ReadBookBufferedView.h"
 				>
 			</File>
 			<File
@@ -1136,23 +1144,35 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookChar.h"
+				RelativePath=".\presentation\simple\ReadBookChar.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookDC.h"
+				RelativePath=".\presentation\ReadBookDC.h"
 				>
 			</File>
 			<File
-				RelativePath="ReadBookDoc.h"
+				RelativePath=".\presentation\ReadBookDoc.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookKeys.h"
+				RelativePath=".\ReadBookDocManager.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookLine.h"
+				RelativePath=".\ReadBookHelperFunc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ReadBookIds.h"
+				>
+			</File>
+			<File
+				RelativePath=".\presentation\ReadBookKeys.h"
+				>
+			</File>
+			<File
+				RelativePath=".\presentation\simple\ReadBookLine.h"
 				>
 			</File>
 			<File
@@ -1160,7 +1180,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookPage.h"
+				RelativePath=".\presentation\simple\ReadBookPage.h"
 				>
 			</File>
 			<File
@@ -1172,15 +1192,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookSimpleDoc.h"
+				RelativePath=".\presentation\simple\ReadBookSimpleDoc.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ReadBookSimpleView.h"
+				RelativePath=".\presentation\simple\ReadBookSimpleView.h"
 				>
 			</File>
 			<File
-				RelativePath="ReadBookView.h"
+				RelativePath=".\presentation\ReadBookView.h"
 				>
 			</File>
 			<File

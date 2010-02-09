@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ReadBookDoc.h"
+#include "../ReadBookDoc.h"
 #include <vector>
 typedef std::vector<wxFileOffset> wxArrayFileOffset;
 

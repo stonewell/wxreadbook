@@ -14,15 +14,14 @@
 
 #include "wx/filesys.h"
 
-#include "ReadBookApp.h"
-#include "ReadBookMainFrm.h"
+#include "../../ReadBookApp.h"
+#include "../ReadBookDC.h"
+#include "../ReadBookKeys.h"
+
 #include "ReadBookSimpleDoc.h"
 #include "ReadBookSimpleView.h"
-#include "ReadBookCanvas.h"
 #include "ReadBookPage.h"
-#include "ReadBookDC.h"
 #include "ObjectCache.h"
-#include "ReadBookKeys.h"
 
 IMPLEMENT_DYNAMIC_CLASS(CReadBookSimpleView, CReadBookView)
 
@@ -118,16 +117,14 @@ void CReadBookSimpleView::CalculateScrollSize(void)
 
 	wxFileOffset pos = GetSimpleCurrentPosition();
 
-	m_pCanvas->SetScrollbar(wxVERTICAL,
-		pos,
+	SetVertScrollbar(pos,
 		m_nPageSize,
 		m_nViewSize);
 }
 
 void CReadBookSimpleView::UpdateScrollPos(void)
 {
-	m_pCanvas->SetScrollPos(wxVERTICAL, 
-		GetSimpleCurrentPosition());
+	SetVertScrollPos(GetSimpleCurrentPosition());
 }
 
 void CReadBookSimpleView::OnScrollWin(wxScrollWinEvent& event)
@@ -194,7 +191,7 @@ void CReadBookSimpleView::OnScrollWin(wxScrollWinEvent& event)
 	{
 		UpdateScrollPos();
 
-		m_pCanvas->Refresh();
+		RefreshCanvas();
 	}
 }
 
@@ -236,26 +233,15 @@ void CReadBookSimpleView::OnMouseWheel(wxMouseEvent & event)
 	{
 		UpdateScrollPos();
 
-		m_pCanvas->Refresh();
+		RefreshCanvas();
 	}
 }
 
 void CReadBookSimpleView::OnUpdate(wxView *sender, wxObject *hint)
 {
-	wxString url = GetReadBookDoc()->GetFileName();
-
-	if (url.Upper().EndsWith(wxT(".HTML")) || url.Upper().EndsWith(wxT(".HTM")))
-	{
-		m_ViewMode = wxReadBook::Html;
-	}
-	else
-	{
-		m_ViewMode = wxReadBook::Text;
-	}
-
 	CFileInfo * pFileInfo = NULL;
 
-	wxInt32 nRow = wxGetApp().GetPreference()->GetFileInfo(url, &pFileInfo);
+	wxInt32 nRow = wxGetApp().GetPreference()->GetFileInfo(GetReadBookDoc()->GetFileName(), &pFileInfo);
 
 	Recalculate();
 
@@ -271,8 +257,7 @@ void CReadBookSimpleView::OnUpdate(wxView *sender, wxObject *hint)
 		ScrollToBeginPosition(m_nFileBeginPosition);
 	}
 
-	if (m_pCanvas)
-		m_pCanvas->Refresh();
+	RefreshCanvas();
 
 	UpdateScrollPos();
 }
@@ -289,7 +274,6 @@ void CReadBookSimpleView::OnKeyDown(wxKeyEvent& event)
 		event.ControlDown() ? 1 : 0,
 		event.ShiftDown() ? 1 : 0,
 		event.GetKeyCode());
-
 
 	switch(readbook_key)
 	{
@@ -341,15 +325,6 @@ void CReadBookSimpleView::OnKeyDown(wxKeyEvent& event)
 			pDoc->SeekTo(GetSimpleCurrentPosition() - 1);
 		}
 		break;
-	case 'F':
-	case 'f':
-		{
-			CReadBookMainFrm * pMainFrame = 
-				(CReadBookMainFrm *)(GetMainFrame());
-			wxCommandEvent event;
-			pMainFrame->OnFullScreen(event);
-		}
-		break;
 	default:
 		CReadBookView::OnKeyDown(event);
 		return;
@@ -358,7 +333,7 @@ void CReadBookSimpleView::OnKeyDown(wxKeyEvent& event)
 	if (doScroll)
 	{
 		UpdateScrollPos();
-		m_pCanvas->Refresh();
+		RefreshCanvas();
 	}
 }
 
@@ -518,20 +493,6 @@ void CReadBookSimpleView::PreferenceChanged()
 	ScrollToBeginPosition(current_pos);
 }
 
-wxRect CReadBookSimpleView::GetClientRect()
-{
-	wxRect rect = m_pCanvas->GetClientRect();
-
-	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
-	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
-
-	rect.Deflate(colMargin,0);
-
-	rect.SetWidth(rect.GetWidth());
-
-	return rect;
-}
-
 wxFileOffset CReadBookSimpleView::ScrollToBeginPosition(wxFileOffset nPos, bool bUpdateFileInfo)
 {
 	if (nPos == GetSimpleCurrentPosition() && 
@@ -542,7 +503,7 @@ wxFileOffset CReadBookSimpleView::ScrollToBeginPosition(wxFileOffset nPos, bool 
 	if (nPos < 0)
 		nPos = 0;
 
-	CReadBookDC dc(m_pCanvas);
+	CReadBookDC dc(GetCanvas());
 
 	CReadBookPage * pPage = m_pViewPage;
 	pPage->Clear();
@@ -645,7 +606,7 @@ wxFileOffset CReadBookSimpleView::ScrollToEndPosition(wxFileOffset nPos,
 		m_pViewPage->GetLineCount() > 0)
 		return GetSimpleCurrentPosition();
 
-	CReadBookDC dc(m_pCanvas);
+	CReadBookDC dc(GetCanvas());
 
 	CReadBookSimpleDoc * pDoc = GetReadBookDoc();
 

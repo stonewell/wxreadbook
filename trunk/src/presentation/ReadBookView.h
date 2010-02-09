@@ -5,7 +5,6 @@
 #include "wx/datstrm.h"
 #include "wx/arrstr.h"
 
-class CReadBookCanvas;
 class CReadBookDoc;
 
 extern const wxString & STANDARD_LINE;
@@ -57,12 +56,16 @@ public:
 
     DECLARE_EVENT_TABLE()
 
-protected:
-	wxFrame * m_pFrame;
-
-    CReadBookCanvas * m_pCanvas;
-
+private:
 	CLineNumberMap m_LineNumberMap;
+    wxRect m_ClientSize;
+	bool m_bInScript;
+	wxReadBook::ViewModeEnum m_ViewMode;
+	wxReadBook::DisplayAsEnum m_DisplayAs;
+
+	const LineNumberMapping & ViewLineCountToDocLine(wxInt32 viewLine);
+
+protected:
 	wxInt16 m_nPageSize;
 
 	wxInt32 m_nLastLineViewSize;
@@ -70,20 +73,9 @@ protected:
 
 	wxSize m_FontSize;
 
-	wxReadBook::ViewModeEnum m_ViewMode;
-
-	bool m_bInScript;
-
-    wxSize m_ClientSize;
-
 #ifdef _UNICODE
 	wxSize m_mbFontSize;
 #endif
-
-	wxReadBook::DisplayAsEnum m_DisplayAs;
-
-	wxInt16 GetPageSize(void);
-	wxInt16 SetPageSize(wxInt16 nPageSize);
 
 	virtual wxInt32 ScrollPage(wxInt16 nDelta);
 	virtual wxInt32 ScrollLine(wxInt16 nDelta);
@@ -92,8 +84,6 @@ protected:
 	{
 		return ScrollToLine(ScrollPosToLine(nPos));
 	}
-
-	const LineNumberMapping & ViewLineCountToDocLine(wxInt32 viewLine);
 
 	bool CheckCharConsistence(const wxChar * pBuf, wxInt16 startIndex, wxInt16 count) const;
 
@@ -122,6 +112,18 @@ protected:
 	{
 		return ScrollLineToPos(GetCurrentLine());
 	}
+
+	virtual wxRect GetClientRect() const;
+	virtual void SetVertScrollbar(int position, int thumbSize,
+                              int range,
+                              bool refresh = true);
+	virtual void SetVertScrollPos(int pos, bool refresh = true);
+
+	virtual void RefreshCanvas();
+
+	virtual wxWindow * GetCanvas() const { return reinterpret_cast<wxWindow *>(GetCurrentCanvas()); }
+
+	virtual void InitViewMode();
 };
 #endif /*READBOOKVIEW_H_*/
 

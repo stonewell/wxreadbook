@@ -19,10 +19,10 @@
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
 #endif
 
-#include "ReadBookApp.h"
-#include "ReadBookMainFrm.h"
+#include "../../ReadBookApp.h"
+#include "../../ReadBookMainFrm.h"
 #include "ReadBookSimpleDoc.h"
-#include "unicode/UnicodeHelper.h"
+#include "../../unicode/UnicodeHelper.h"
 
 #include <fstream>
 

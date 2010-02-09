@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ReadBookView.h"
+#include "../ReadBookView.h"
 
 class CReadBookBufferedView :
 	public CReadBookView, public IContentHelper

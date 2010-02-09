@@ -32,16 +32,17 @@
 
 #include "ReadBookApp.h"
 #include "ReadBookMainFrm.h"
-#include "ReadBookDoc.h"
-#include "ReadBookView.h"
+#include "ReadbookDocManager.h"
 
-#include "ReadBookBufferedDoc.h"
-#include "ReadBookBufferedView.h"
+#include "presentation/ReadBookDoc.h"
+#include "presentation/ReadBookView.h"
 
-#include "ReadBookSimpleDoc.h"
-#include "ReadBookSimpleView.h"
+#include "presentation/buffered/ReadBookBufferedDoc.h"
+#include "presentation/buffered/ReadBookBufferedView.h"
 
-#include "ObjectCache.h"
+#include "presentation/simple/ReadBookSimpleDoc.h"
+#include "presentation/simple/ReadBookSimpleView.h"
+#include "presentation/simple/ObjectCache.h"
 
 #ifndef __WXMSW__
 #include "res/file.xpm"
@@ -50,23 +51,6 @@
 #include "res/folder32.xpm"
 #include "res/BOOK06.xpm"
 #endif
-
-class CReadBookDocManager : public wxDocManager
-{
-public:
-    CReadBookDocManager(long flags = wxDEFAULT_DOCMAN_FLAGS, bool initialize = true) :
-      wxDocManager(flags, initialize)
-    {
-    }
-
-    virtual ~CReadBookDocManager()
-    {
-    }
-
-public:
-    virtual wxDocTemplate *SelectDocumentPath(wxDocTemplate **templates,
-            int noTemplates, wxString& path, long flags, bool save = false);
-};
 
 CReadBookMainFrm * g_pMainFrm = NULL;
 
@@ -193,11 +177,6 @@ int CReadBookApp::OnExit(void)
     return 0;
 }
 
-wxFrame *GetMainFrame(void)
-{
-    return g_pMainFrm;
-}
-
 void CReadBookApp::LoadPreference()
 {
 	const wxString & strFileName = GetConfigFileName();
@@ -287,226 +266,4 @@ void CReadBookApp::OpenRelatedFile(const wxString & fileName, wxInt16 nDelta)
            m_pDocManager->CreateDocument(files.Item(index), wxDOC_SILENT);
 		}
 	}
-}
-
-bool IsArchiveExt(const wxString & ext)
-{
-	return ext.CmpNoCase(wxT("zip")) == 0 ||
-		ext .CmpNoCase(wxT("gz")) == 0 ||
-		ext.CmpNoCase(wxT("tar")) == 0 ||
-		wxGetApp().GetPreference()->IsArchiveExt(ext);
-}
-
-bool IsFileNameMatch(const wxFileName & filename)
-{
-	return 	filename.GetExt().CmpNoCase(wxT("txt")) == 0 ||
-			filename.GetExt().CmpNoCase(wxT("html")) == 0  ||
-			filename.GetExt().CmpNoCase(wxT("htm")) == 0  ||
-			IsArchiveExt(filename.GetExt());
-}
-
-const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir)
-{
-	wxString tmpfilename = filename;
-	
-	tmpfilename.Replace(wxT("\\"), wxT("/"));
-
-//	wxFileName name(tmpfilename);
-
-	wxString url = tmpfilename;
-
-	size_t pos = tmpfilename.rfind(wxT("."));
-	size_t begin = tmpfilename.Len() - 1;
-
-	while(pos != wxString::npos)
-	{
-		wxString ext = tmpfilename.SubString(pos + 1, begin);
-
-		if (IsArchiveExt(ext))
-		{
-			if (ext.CmpNoCase(wxT("gz")) == 0)
-			{
-				url += wxT("#gzip:");
-			}
-			else
-			{
-				url += wxT("#");
-				url += ext;
-				url += wxT(":");
-			}
-		}
-		else
-		{
-			break;
-		}
-
-		begin = pos - 1;
-
-		pos = tmpfilename.rfind(wxT("."), begin);
-	}
-
-	isUrlDir = url.CmpNoCase(tmpfilename) != 0;
-
-	if (isUrlDir)
-	{
-		url += wxT("/");
-	}
-
-	//if (filename.Lower().EndsWith(wxT(".tar.gz")))
-	//{
-	//	url = tmpfilename + wxT("#gzip:#tar:/");
-	//}
-	//else if (filename.Lower().EndsWith(wxT(".rar.gz")))
-	//{
-	//	url = tmpfilename + wxT("#gzip:#rar:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("zip")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#zip:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("gz")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#gzip:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("tar")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#tar:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("rar")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#rar:/");
-	//}
-	//else
-	//{
-	//	url = tmpfilename;//name.GetFullPath();
-
-	//	isUrlDir = false;
-	//}
-
-	return url;
-}
-
-static wxWindow* wxFindSuitableParent();
-
-wxDocTemplate *CReadBookDocManager::SelectDocumentPath(wxDocTemplate **templates,
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
-                                                int noTemplates,
-#else
-                                                int WXUNUSED(noTemplates),
-#endif
-                                                wxString& path,
-                                                long WXUNUSED(flags),
-                                                bool WXUNUSED(save))
-{
-    // We can only have multiple filters in Windows and GTK
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
-    wxString descrBuf;
-
-    int i;
-    for (i = 0; i < noTemplates; i++)
-    {
-        if (templates[i]->IsVisible())
-        {
-            // add a '|' to separate this filter from the previous one
-            if ( !descrBuf.empty() )
-                descrBuf << wxT('|');
-
-            descrBuf << templates[i]->GetDescription()
-                << wxT(" |")
-                //<< wxT(" (") << templates[i]->GetFileFilter() << wxT(") |")
-                << templates[i]->GetFileFilter();
-        }
-    }
-#else
-    wxString descrBuf = wxT("*.*");
-#endif
-
-    int FilterIndex = -1;
-
-    wxWindow* parent = wxFindSuitableParent();
-
-#ifdef _WIN32_WCE
-    wxGenericFileDialog fileDialog(parent,
-                            _("Select a file"),
-                            m_lastDirectory,
-                            wxEmptyString,
-                            descrBuf);
-
-    wxString pathTmp;
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-        FilterIndex = fileDialog.GetFilterIndex();
-
-        pathTmp = fileDialog.GetPath();
-    }
-#else
-    wxString pathTmp = wxFileSelectorEx(_("Select a file"),
-                                        m_lastDirectory,
-                                        wxEmptyString,
-                                        &FilterIndex,
-                                        descrBuf,
-                                        0,
-                                        parent);
-#endif
-    wxDocTemplate *theTemplate = (wxDocTemplate *)NULL;
-    if (!pathTmp.empty())
-    {
-        if (!wxFileExists(pathTmp))
-        {
-            wxString msgTitle;
-            if (!wxTheApp->GetAppName().empty())
-                msgTitle = wxTheApp->GetAppName();
-            else
-                msgTitle = wxString(_("File error"));
-
-            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
-                parent);
-
-            path = wxEmptyString;
-            return (wxDocTemplate *) NULL;
-        }
-        m_lastDirectory = wxPathOnly(pathTmp);
-
-        path = pathTmp;
-
-        // first choose the template using the extension, if this fails (i.e.
-        // wxFileSelectorEx() didn't fill it), then use the path
-        if ( FilterIndex != -1 )
-            theTemplate = templates[FilterIndex];
-        if ( !theTemplate )
-            theTemplate = FindTemplateForPath(path);
-        if ( !theTemplate )
-        {
-            // Since we do not add files with non-default extensions to the FileHistory this
-            // can only happen if the application changes the allowed templates in runtime.
-            (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
-                                _("Open File"),
-                                wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
-        }
-    }
-    else
-    {
-        path = wxEmptyString;
-    }
-
-    return theTemplate;
-}
-
-static wxWindow* wxFindSuitableParent()
-{
-    wxWindow* parent = wxTheApp->GetTopWindow();
-
-    wxWindow* focusWindow = wxWindow::FindFocus();
-    if (focusWindow)
-    {
-        while (focusWindow &&
-                !focusWindow->IsKindOf(CLASSINFO(wxDialog)) &&
-                !focusWindow->IsKindOf(CLASSINFO(wxFrame)))
-
-            focusWindow = focusWindow->GetParent();
-
-        if (focusWindow)
-            parent = focusWindow;
-    }
-    return parent;
 }

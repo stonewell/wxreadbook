@@ -14,7 +14,7 @@
 
 #include <wx/dcclient.h>
 
-#include "ReadBookApp.h"
+#include "../ReadBookApp.h"
 #include "ReadBookDC.h"
 
 CReadBookDC::CReadBookDC(wxWindow * pWindow) : wxClientDC(pWindow)

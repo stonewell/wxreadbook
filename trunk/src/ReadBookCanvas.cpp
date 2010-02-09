@@ -16,8 +16,8 @@
 
 #include "ReadBookApp.h"
 #include "ReadBookCanvas.h"
-#include "ReadBookDoc.h"
-#include "ReadBookView.h"
+#include "presentation/ReadBookDoc.h"
+#include "presentation/ReadBookView.h"
 
 BEGIN_EVENT_TABLE(CReadBookCanvas, wxWindow)
 	EVT_PAINT(CReadBookCanvas::OnPaint)

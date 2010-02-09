@@ -36,9 +36,7 @@ private:
 
 DECLARE_APP(CReadBookApp)
 
-extern wxFrame *GetMainFrame(void);
+#include "ReadBookHelperFunc.h"
+#include "ReadBookIds.h"
 
-extern bool IsFileNameMatch(const wxFileName & filename);
-
-extern const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir);
 #endif /*READBOOKAPP_H_*/

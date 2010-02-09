@@ -24,8 +24,8 @@
 #include "ReadBookApp.h"
 #include "ReadBookMainFrm.h"
 #include "ReadBookCanvas.h"
-#include "ReadBookDoc.h"
-#include "ReadBookView.h"
+#include "presentation/ReadBookDoc.h"
+#include "presentation/ReadBookView.h"
 #include "ReadBookPreferenceDlg.h"
 #include "version.h"
 
