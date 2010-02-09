@@ -147,7 +147,7 @@ void CArchiveExplorerDlg::InitializeContent(CArchiveItemData * pParentItem)
 		{
 			wxFileName fn(name);
 
-			if (IsFileNameMatch(fn) || flag == wxDIR)
+			if (CanHandleFile(fn) || flag == wxDIR)
 			{
 				if (flag == wxDIR)
 				{
