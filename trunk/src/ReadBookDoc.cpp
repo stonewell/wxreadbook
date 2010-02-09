@@ -27,7 +27,7 @@
 #include "ArchiveExplorerDlg.h"
 
 #if wxUSE_UNICODE
-#include "nsDetector.h"
+#include "ns/nsDetector.h"
 
 class CObserver : public CnsICharsetDetectionObserver
 {

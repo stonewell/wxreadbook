@@ -346,7 +346,7 @@
 		<Configuration
 			Name="Debug - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -517,7 +517,7 @@
 		<Configuration
 			Name="Release - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -897,10 +897,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GBBig5Table.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\ObjectCache.cpp"
 				>
 			</File>
@@ -964,116 +960,112 @@
 				RelativePath="ReadBookView.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\UnicodeHelper.cpp"
-				>
-			</File>
 			<Filter
 				Name="ns"
 				Filter="ns*.cpp"
 				>
 				<File
-					RelativePath=".\nsBIG5Statistics.cpp"
+					RelativePath=".\ns\nsBIG5Statistics.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsBIG5Verifier.cpp"
+					RelativePath=".\ns\nsBIG5Verifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsCP1252Verifier.cpp"
+					RelativePath=".\ns\nsCP1252Verifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsDetector.cpp"
+					RelativePath=".\ns\nsDetector.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCJPStatistics.cpp"
+					RelativePath=".\ns\nsEUCJPStatistics.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCJPVerifier.cpp"
+					RelativePath=".\ns\nsEUCJPVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCKRStatistics.cpp"
+					RelativePath=".\ns\nsEUCKRStatistics.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCKRVerifier.cpp"
+					RelativePath=".\ns\nsEUCKRVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCSampler.cpp"
+					RelativePath=".\ns\nsEUCSampler.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCStatistics.cpp"
+					RelativePath=".\ns\nsEUCStatistics.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCTWStatistics.cpp"
+					RelativePath=".\ns\nsEUCTWStatistics.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCTWVerifier.cpp"
+					RelativePath=".\ns\nsEUCTWVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsGB18030Verifier.cpp"
+					RelativePath=".\ns\nsGB18030Verifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsGB2312Statistics.cpp"
+					RelativePath=".\ns\nsGB2312Statistics.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsGB2312Verifier.cpp"
+					RelativePath=".\ns\nsGB2312Verifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsHZVerifier.cpp"
+					RelativePath=".\ns\nsHZVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsICharsetDetectionObserver.cpp"
+					RelativePath=".\ns\nsICharsetDetectionObserver.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsISO2022CNVerifier.cpp"
+					RelativePath=".\ns\nsISO2022CNVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsISO2022JPVerifier.cpp"
+					RelativePath=".\ns\nsISO2022JPVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsISO2022KRVerifier.cpp"
+					RelativePath=".\ns\nsISO2022KRVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsPSMDetector.cpp"
+					RelativePath=".\ns\nsPSMDetector.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsSJISVerifier.cpp"
+					RelativePath=".\ns\nsSJISVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsUCS2BEVerifier.cpp"
+					RelativePath=".\ns\nsUCS2BEVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsUCS2LEVerifier.cpp"
+					RelativePath=".\ns\nsUCS2LEVerifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsUTF8Verifier.cpp"
+					RelativePath=".\ns\nsUTF8Verifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\nsVerifier.cpp"
+					RelativePath=".\ns\nsVerifier.cpp"
 					>
 				</File>
 			</Filter>
@@ -1097,6 +1089,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="unicode"
+				>
+				<File
+					RelativePath=".\unicode\GBBig5Table.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\unicode\UnicodeHelper.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1109,10 +1113,6 @@
 			</File>
 			<File
 				RelativePath="BookMarksDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\GBBig5Table.h"
 				>
 			</File>
 			<File
@@ -1184,10 +1184,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UnicodeHelper.h"
-				>
-			</File>
-			<File
 				RelativePath=".\version.h"
 				>
 			</File>
@@ -1196,115 +1192,115 @@
 				Filter="ns*.h"
 				>
 				<File
-					RelativePath=".\nsBIG5Statistics.h"
+					RelativePath=".\ns\nsBIG5Statistics.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsBIG5Verifier.h"
+					RelativePath=".\ns\nsBIG5Verifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsCP1252Verifier.h"
+					RelativePath=".\ns\nsCP1252Verifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsDetector.h"
+					RelativePath=".\ns\nsDetector.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCJPStatistics.h"
+					RelativePath=".\ns\nsEUCJPStatistics.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCJPVerifier.h"
+					RelativePath=".\ns\nsEUCJPVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCKRStatistics.h"
+					RelativePath=".\ns\nsEUCKRStatistics.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCKRVerifier.h"
+					RelativePath=".\ns\nsEUCKRVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCSampler.h"
+					RelativePath=".\ns\nsEUCSampler.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCStatistics.h"
+					RelativePath=".\ns\nsEUCStatistics.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCTWStatistics.h"
+					RelativePath=".\ns\nsEUCTWStatistics.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsEUCTWVerifier.h"
+					RelativePath=".\ns\nsEUCTWVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsGB18030Verifier.h"
+					RelativePath=".\ns\nsGB18030Verifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsGB2312Statistics.h"
+					RelativePath=".\ns\nsGB2312Statistics.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsGB2312Verifier.h"
+					RelativePath=".\ns\nsGB2312Verifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsHZVerifier.h"
+					RelativePath=".\ns\nsHZVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsICharsetDetectionObserver.h"
+					RelativePath=".\ns\nsICharsetDetectionObserver.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsICharsetDetector.h"
+					RelativePath=".\ns\nsICharsetDetector.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsISO2022CNVerifier.h"
+					RelativePath=".\ns\nsISO2022CNVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsISO2022JPVerifier.h"
+					RelativePath=".\ns\nsISO2022JPVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsISO2022KRVerifier.h"
+					RelativePath=".\ns\nsISO2022KRVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsPSMDetector.h"
+					RelativePath=".\ns\nsPSMDetector.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsSJISVerifier.h"
+					RelativePath=".\ns\nsSJISVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsString.h"
+					RelativePath=".\ns\nsString.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsUCS2BEVerifier.h"
+					RelativePath=".\ns\nsUCS2BEVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsUCS2LEVerifier.h"
+					RelativePath=".\ns\nsUCS2LEVerifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsUTF8Verifier.h"
+					RelativePath=".\ns\nsUTF8Verifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\nsVerifier.h"
+					RelativePath=".\ns\nsVerifier.h"
 					>
 				</File>
 			</Filter>
@@ -1325,6 +1321,18 @@
 				</File>
 				<File
 					RelativePath=".\7Zip\7ZipOutputStream.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="unicode"
+				>
+				<File
+					RelativePath=".\unicode\GBBig5Table.h"
+					>
+				</File>
+				<File
+					RelativePath=".\unicode\UnicodeHelper.h"
 					>
 				</File>
 			</Filter>

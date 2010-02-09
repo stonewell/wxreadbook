@@ -4,15 +4,15 @@ bin_PROGRAMS = wxReadBook
 AM_CXXFLAGS = -I$(srcdir)/../includes
 
 wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
-	nsBIG5Statistics.cpp \
+	ns/nsBIG5Statistics.cpp \
 	BookMarksDlg.cpp \
-	nsEUCJPStatistics.cpp \
-	nsEUCKRStatistics.cpp \
-	nsEUCTWStatistics.cpp \
-	nsGB2312Statistics.cpp \
-	nsBIG5Verifier.cpp \
-	nsEUCStatistics.cpp \
-	nsVerifier.cpp \
+	ns/nsEUCJPStatistics.cpp \
+	ns/nsEUCKRStatistics.cpp \
+	ns/nsEUCTWStatistics.cpp \
+	ns/nsGB2312Statistics.cpp \
+	ns/nsBIG5Verifier.cpp \
+	ns/nsEUCStatistics.cpp \
+	ns/nsVerifier.cpp \
 	ReadBookApp.cpp \
 	ReadBookCanvas.cpp \
 	ReadBookDoc.cpp \
@@ -20,34 +20,34 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookPreference.cpp \
 	ReadBookPreferenceDlg.cpp \
 	ReadBookView.cpp \
-	nsCP1252Verifier.cpp \
-	nsDetector.cpp \
-	nsEUCJPVerifier.cpp \
-	nsEUCKRVerifier.cpp \
-	nsEUCSampler.cpp \
-	nsEUCTWVerifier.cpp \
-	nsGB18030Verifier.cpp \
-	nsGB2312Verifier.cpp \
-	nsHZVerifier.cpp \
-	nsICharsetDetectionObserver.cpp \
-	nsISO2022CNVerifier.cpp \
-	nsISO2022JPVerifier.cpp \
-	nsISO2022KRVerifier.cpp \
-	nsPSMDetector.cpp \
-	nsSJISVerifier.cpp \
-	nsUCS2BEVerifier.cpp \
-	nsUCS2LEVerifier.cpp \
-	nsUTF8Verifier.cpp \
+	ns/nsCP1252Verifier.cpp \
+	ns/nsDetector.cpp \
+	ns/nsEUCJPVerifier.cpp \
+	ns/nsEUCKRVerifier.cpp \
+	ns/nsEUCSampler.cpp \
+	ns/nsEUCTWVerifier.cpp \
+	ns/nsGB18030Verifier.cpp \
+	ns/nsGB2312Verifier.cpp \
+	ns/nsHZVerifier.cpp \
+	ns/nsICharsetDetectionObserver.cpp \
+	ns/nsISO2022CNVerifier.cpp \
+	ns/nsISO2022JPVerifier.cpp \
+	ns/nsISO2022KRVerifier.cpp \
+	ns/nsPSMDetector.cpp \
+	ns/nsSJISVerifier.cpp \
+	ns/nsUCS2BEVerifier.cpp \
+	ns/nsUCS2LEVerifier.cpp \
+	ns/nsUTF8Verifier.cpp \
 	ArchiveExplorerDlg.h \
-	nsBIG5Statistics.h \
+	ns/nsBIG5Statistics.h \
 	BookMarksDlg.h \
-	nsEUCJPStatistics.h \
-	nsEUCKRStatistics.h \
-	nsEUCTWStatistics.h \
-	nsGB2312Statistics.h \
-	nsBIG5Verifier.h \
-	nsEUCStatistics.h \
-	nsVerifier.h \
+	ns/nsEUCJPStatistics.h \
+	ns/nsEUCKRStatistics.h \
+	ns/nsEUCTWStatistics.h \
+	ns/nsGB2312Statistics.h \
+	ns/nsBIG5Verifier.h \
+	ns/nsEUCStatistics.h \
+	ns/nsVerifier.h \
 	ReadBookApp.h \
 	ReadBookCanvas.h \
 	ReadBookDoc.h \
@@ -55,32 +55,32 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookPreference.h \
 	ReadBookPreferenceDlg.h \
 	ReadBookView.h \
-	nsCP1252Verifier.h \
-	nsDetector.h \
-	nsEUCJPVerifier.h \
-	nsEUCKRVerifier.h \
-	nsEUCSampler.h \
-	nsEUCTWVerifier.h \
-	nsGB18030Verifier.h \
-	nsGB2312Verifier.h \
-	nsHZVerifier.h \
-	nsICharsetDetectionObserver.h \
-	nsICharsetDetector.h \
-	nsISO2022CNVerifier.h \
-	nsISO2022JPVerifier.h \
-	nsISO2022KRVerifier.h \
-	nsPSMDetector.h \
-	nsSJISVerifier.h \
-	nsString.h \
-	nsUCS2BEVerifier.h \
-	nsUCS2LEVerifier.h \
-	nsUTF8Verifier.h \
+	ns/nsCP1252Verifier.h \
+	ns/nsDetector.h \
+	ns/nsEUCJPVerifier.h \
+	ns/nsEUCKRVerifier.h \
+	ns/nsEUCSampler.h \
+	ns/nsEUCTWVerifier.h \
+	ns/nsGB18030Verifier.h \
+	ns/nsGB2312Verifier.h \
+	ns/nsHZVerifier.h \
+	ns/nsICharsetDetectionObserver.h \
+	ns/nsICharsetDetector.h \
+	ns/nsISO2022CNVerifier.h \
+	ns/nsISO2022JPVerifier.h \
+	ns/nsISO2022KRVerifier.h \
+	ns/nsPSMDetector.h \
+	ns/nsSJISVerifier.h \
+	ns/nsString.h \
+	ns/nsUCS2BEVerifier.h \
+	ns/nsUCS2LEVerifier.h \
+	ns/nsUTF8Verifier.h \
 	ReadBookBufferedDoc.h \
 	ReadBookBufferedDoc.cpp \
 	ReadBookBufferedView.h \
 	ReadBookBufferedView.cpp \
-	GBBig5Table.cpp \
-	GBBig5Table.h 	\
+	unicode/GBBig5Table.cpp \
+	unicode/GBBig5Table.h 	\
 	ReadBookSimpleView.h \
 	ReadBookSimpleView.cpp \
 	ReadBookSimpleDoc.h \
@@ -91,8 +91,8 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookLine.cpp \
 	ReadBookChar.h \
 	ReadBookChar.cpp \
-	UnicodeHelper.h \
-	UnicodeHelper.cpp \
+	unicode/UnicodeHelper.h \
+	unicode/UnicodeHelper.cpp \
 	ReadBookDC.h \
 	ReadBookDC.cpp \
 	ObjectCache.cpp \

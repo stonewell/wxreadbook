@@ -129,7 +129,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
 
             while (!m_Cancel &&
                 (width - curAllViewLineWidth) < GetClientArea()->GetWidth() &&
-                (offset + size) <= pDocLineData->GetPchDataLength())
+                (size_t)(offset + size) <= pDocLineData->GetPchDataLength())
             {
                 size++;
                 newSize = pDocLineData->ReadOnlyResize(offset + size + 1);

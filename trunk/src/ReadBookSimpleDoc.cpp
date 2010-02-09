@@ -22,7 +22,7 @@
 #include "ReadBookApp.h"
 #include "ReadBookMainFrm.h"
 #include "ReadBookSimpleDoc.h"
-#include "UnicodeHelper.h"
+#include "unicode/UnicodeHelper.h"
 
 #include <fstream>
 

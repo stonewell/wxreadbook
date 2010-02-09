@@ -15,7 +15,7 @@
 #include "ReadBookApp.h"
 #include "ReadBookChar.h"
 #include "ReadBookView.h"
-#include "GBBig5Table.h"
+#include "unicode/GBBig5Table.h"
 
 CReadBookChar::CReadBookChar(CReadBookView * pView) :
 m_pView(pView)
