@@ -23,8 +23,8 @@
 #include "ReadBookKeys.h"
 
 #if wxUSE_UNICODE
-#include "nsDetector.h"
-#include "GBBig5Table.h"
+#include "ns/nsDetector.h"
+#include "unicode/GBBig5Table.h"
 #endif
 
 const CReadBookView::LineNumberMapping ZeroMap = {0,0};

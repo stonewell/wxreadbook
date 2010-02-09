@@ -23,7 +23,7 @@ namespace TextProcess
 			    m_pchDataLength = GetStringData()->nDataLength;
 			}
 
-			int ReadOnlyResize(int newSize)
+			size_t ReadOnlyResize(size_t newSize)
 			{
 			    if (newSize >= 0 && newSize <= m_pchDataLength)
 			    {
