@@ -240,7 +240,7 @@ void CReadBookApp::OpenRelatedFile(const wxString & fileName, wxInt16 nDelta)
 	{
 		wxFileName fn1(name);
 
-		if (IsFileNameMatch(fn1))
+		if (CanHandleFile(fn1))
 		{
 			files.Add(name);
 

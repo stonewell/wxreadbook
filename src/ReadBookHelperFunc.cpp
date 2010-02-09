@@ -55,7 +55,7 @@ bool IsArchiveExt(const wxString & ext)
 		wxGetApp().GetPreference()->IsArchiveExt(ext);
 }
 
-bool IsFileNameMatch(const wxFileName & filename)
+bool CanHandleFile(const wxFileName & filename)
 {
 	return 	filename.GetExt().CmpNoCase(wxT("txt")) == 0 ||
 			filename.GetExt().CmpNoCase(wxT("html")) == 0  ||
@@ -63,13 +63,16 @@ bool IsFileNameMatch(const wxFileName & filename)
 			IsArchiveExt(filename.GetExt());
 }
 
+bool IsArchiveFileUrl(const wxString & url)
+{
+	return url.find(wxT('#')) != wxString::npos;
+}
+
 const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir)
 {
 	wxString tmpfilename = filename;
 	
 	tmpfilename.Replace(wxT("\\"), wxT("/"));
-
-//	wxFileName name(tmpfilename);
 
 	wxString url = tmpfilename;
 
@@ -109,37 +112,6 @@ const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir)
 	{
 		url += wxT("/");
 	}
-
-	//if (filename.Lower().EndsWith(wxT(".tar.gz")))
-	//{
-	//	url = tmpfilename + wxT("#gzip:#tar:/");
-	//}
-	//else if (filename.Lower().EndsWith(wxT(".rar.gz")))
-	//{
-	//	url = tmpfilename + wxT("#gzip:#rar:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("zip")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#zip:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("gz")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#gzip:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("tar")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#tar:/");
-	//}
-	//else if (name.GetExt().CmpNoCase(wxT("rar")) == 0)
-	//{
-	//	url = tmpfilename + wxT("#rar:/");
-	//}
-	//else
-	//{
-	//	url = tmpfilename;//name.GetFullPath();
-
-	//	isUrlDir = false;
-	//}
 
 	return url;
 }

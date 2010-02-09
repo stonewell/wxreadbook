@@ -6,7 +6,8 @@ class CReadBookCanvas;
 
 CReadBookMainFrm *GetMainFrame(void);
 
-bool IsFileNameMatch(const wxFileName & filename);
+bool CanHandleFile(const wxFileName & filename);
+bool IsArchiveFileUrl(const wxString & url);
 
 const wxString FileNameToUrl(const wxString & filename, bool & isUrlDir);
 
