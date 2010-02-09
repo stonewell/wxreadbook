@@ -15,11 +15,11 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ns/nsVerifier.cpp \
 	ReadBookApp.cpp \
 	ReadBookCanvas.cpp \
-	ReadBookDoc.cpp \
+	presentation/ReadBookDoc.cpp \
 	ReadBookMainFrm.cpp \
 	ReadBookPreference.cpp \
 	ReadBookPreferenceDlg.cpp \
-	ReadBookView.cpp \
+	presentation/ReadBookView.cpp \
 	ns/nsCP1252Verifier.cpp \
 	ns/nsDetector.cpp \
 	ns/nsEUCJPVerifier.cpp \
@@ -50,11 +50,11 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ns/nsVerifier.h \
 	ReadBookApp.h \
 	ReadBookCanvas.h \
-	ReadBookDoc.h \
+	presentation/ReadBookDoc.h \
 	ReadBookMainFrm.h \
 	ReadBookPreference.h \
 	ReadBookPreferenceDlg.h \
-	ReadBookView.h \
+	presentation/ReadBookView.h \
 	ns/nsCP1252Verifier.h \
 	ns/nsDetector.h \
 	ns/nsEUCJPVerifier.h \
@@ -75,36 +75,38 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ns/nsUCS2BEVerifier.h \
 	ns/nsUCS2LEVerifier.h \
 	ns/nsUTF8Verifier.h \
-	ReadBookBufferedDoc.h \
-	ReadBookBufferedDoc.cpp \
-	ReadBookBufferedView.h \
-	ReadBookBufferedView.cpp \
+	presentation/buffered/ReadBookBufferedDoc.h \
+	presentation/buffered/ReadBookBufferedDoc.cpp \
+	presentation/buffered/ReadBookBufferedView.h \
+	presentation/buffered/ReadBookBufferedView.cpp \
 	unicode/GBBig5Table.cpp \
 	unicode/GBBig5Table.h 	\
-	ReadBookSimpleView.h \
-	ReadBookSimpleView.cpp \
-	ReadBookSimpleDoc.h \
-	ReadBookSimpleDoc.cpp \
-	ReadBookPage.h \
-	ReadBookPage.cpp \
-	ReadBookLine.h \
-	ReadBookLine.cpp \
-	ReadBookChar.h \
-	ReadBookChar.cpp \
+	presentation/simple/ReadBookSimpleView.h \
+	presentation/simple/ReadBookSimpleView.cpp \
+	presentation/simple/ReadBookSimpleDoc.h \
+	presentation/simple/ReadBookSimpleDoc.cpp \
+	presentation/simple/ReadBookPage.h \
+	presentation/simple/ReadBookPage.cpp \
+	presentation/simple/ReadBookLine.h \
+	presentation/simple/ReadBookLine.cpp \
+	presentation/simple/ReadBookChar.h \
+	presentation/simple/ReadBookChar.cpp \
 	unicode/UnicodeHelper.h \
 	unicode/UnicodeHelper.cpp \
-	ReadBookDC.h \
-	ReadBookDC.cpp \
-	ObjectCache.cpp \
-	ObjectCache.h \
-	ReadBookKeys.h \
+	presentation/ReadBookDC.h \
+	presentation/ReadBookDC.cpp \
+	presentation/simple/ObjectCache.cpp \
+	presentation/simple/ObjectCache.h \
+	presentation/ReadBookKeys.h \
+	ReadBookDocManager.h \
+	ReadBookDocManager.cpp \
+	ReadBookHelperFunc.h \
+	ReadBookHelperFunc.cpp \
 	version.h
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
-	$(srcdir)/../libs/lib7zip.a \
-	$(srcdir)/../libs/libcppcommon.a \
-	$(srcdir)/../libs/libcppwindows.a
+	../addons/lib7zip/Lib7Zip/lib7zip.a
 
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
 

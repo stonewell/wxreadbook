@@ -36,6 +36,21 @@ AC_ARG_ENABLE([static],
        *) AC_MSG_ERROR([bad value ${enableval} for --enable-static]) ;;
      esac],[static=no])
 
+dnl check for p7zip source
+AC_ARG_VAR([P7ZIP_SOURCE_DIR], [p7zip source directory, must be set before compile source])
+
+if test "x$P7ZIP_SOURCE_DIR" = "x"; then
+	AC_MSG_FAILURE(P7ZIP_SOURCE_DIR is not set)
+fi
+
+if test ! -d "$P7ZIP_SOURCE_DIR/C"; then
+	AC_MSG_FAILURE($P7ZIP_SOURCE_DIR/C is invalid)
+fi
+
+if test ! -d "$P7ZIP_SOURCE_DIR/CPP"; then
+	AC_MSG_FAILURE(P7ZIP_SOURCE_DIR is invalid)
+fi
+
 AC_CHECK_PROG(WX_CONFIG,[wx-config],yes,no)
 if test "$WX_CONFIG" = no; then
 	AC_MSG_FAILURE(wx-config not exists)
@@ -50,6 +65,10 @@ AC_CHECK_HEADERS(["wx/wx.h"],
 	[AC_MSG_RESULT(checking for wx/wx.h... OK)], 
 	[AC_MSG_FAILURE(wx/wx.h is not found)]
 	)
+
+dnl create link for p7zip source
+AC_CONFIG_COMMANDS([p7zip_src_cpp_link], [ln -sf $P7ZIP_SOURCE_DIR/CPP addons/lib7zip/includes/CPP])
+AC_CONFIG_COMMANDS([p7zip_src_c_link], [ln -sf $P7ZIP_SOURCE_DIR/C addons/lib7zip/includes/C])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
@@ -71,6 +90,9 @@ AC_CONFIG_FILES([
 	doc/Makefile
 	addons/Makefile
 	addons/libtextprocess/Makefile
+	addons/lib7zip/Makefile
+	addons/lib7zip/includes/Makefile
+        addons/lib7zip/Lib7Zip/Makefile
 	src/Makefile
 	src/7Zip/Makefile
 	src/res/Makefile
