@@ -8,6 +8,7 @@ INIT_PROPERTY(Encoding, pEncoding)
 , m_hfm(NULL), m_hf(NULL)
 #else
 , m_hf(-1)
+, m_do_unlink(0)
 #endif
 {
 #ifdef _WIN32
@@ -59,6 +60,62 @@ INIT_PROPERTY(Encoding, pEncoding)
 #endif
 }
 
+TextProcess::IO::Impl::CMemoryMappedFile::CMemoryMappedFile(wxInputStream * pInput, wxMBConv * pEncoding)
+: m_p(NULL), m_cb(0),
+INIT_PROPERTY(Encoding, pEncoding)
+#ifdef _WIN32
+, m_hfm(NULL), m_hf(INVALID_HANDLE_VALUE)
+#else
+, m_hf(-1)
+, m_do_unlink(1)
+#endif
+{
+#ifdef _WIN32
+	wxFileOffset cb = pInput->GetLength();
+	DWORD dwHigh = (cb >> 32) & 0xFFFFFFFF;
+	DWORD dwLow = (DWORD)(cb & 0xFFFFFFFF);
+
+	m_hfm = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, 
+		PAGE_READWRITE, dwHigh, dwLow, NULL);
+
+	if (m_hfm != NULL)
+	{
+		m_p = reinterpret_cast<wxByte *>
+			(MapViewOfFile(m_hfm, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0));
+
+		if (m_p)
+		{
+			pInput->SeekI(0);
+			pInput->Read(m_p, cb);
+
+			m_cb = cb;
+		}
+	}
+#else
+	off_t pa_offset;
+
+	m_hf = shm_open(SHARE_MEMORY_NAME, O_RDWR | O_CREATE, 0x1ED);
+
+	if (m_hf == -1) return;
+
+	pa_offset = 0 & ~(sysconf(_SC_PAGE_SIZE) - 1);
+
+	m_cb = pInput->GetLength();
+
+	m_p = reinterpret_cast<wxByte *>(mmap(NULL, m_cb + 0 - pa_offset, PROT_READ | PROT_WRITE,
+		MAP_PRIVATE, m_hf, 0));
+
+	if (m_p == MAP_FAILED)
+	{
+		m_p = NULL;
+		return;
+	}
+
+	pInput->SeekI(0);
+	pInput->Read(m_p, cb);
+#endif
+}
+
 TextProcess::IO::Impl::CMemoryMappedFile::~CMemoryMappedFile(void)
 {
 #ifdef _WIN32
@@ -67,25 +124,31 @@ TextProcess::IO::Impl::CMemoryMappedFile::~CMemoryMappedFile(void)
 	if (m_hf != INVALID_HANDLE_VALUE) CloseHandle(m_hf);
 #else
 	if (m_p) munmap(m_p, m_cb);
-	if (m_hf != -1) close(m_hf);
+	if (m_hf != -1) 
+	{
+		if (m_do_unlink)
+			shm_unlink(SHARE_MEMORY_NAME);
+		else
+			close(m_hf);
+	}
 #endif
 }
 
-wxChar * TextProcess::IO::Impl::CMemoryMappedFile::DecodeData(int nOffset, int nLength)
+wxChar * TextProcess::IO::Impl::CMemoryMappedFile::DecodeData(int nOffset, int nLength, wxInt32 & nDecodedSize)
 {
 	const char * pBegin = reinterpret_cast<const char *>(GetBuffer() + nOffset);
 
-	size_t dst_size = GetEncoding()->ToWChar(NULL, 0, pBegin, nLength);
+	nDecodedSize = GetEncoding()->ToWChar(NULL, 0, pBegin, nLength);
 
-	if (dst_size == wxCONV_FAILED)
+	if (nDecodedSize == wxCONV_FAILED)
 	{
 		static std::bad_alloc OOM;
 		throw(OOM);
 	}
 
-	wxChar * pBuf = m_StringPool.AllocBuffer(sizeof(wxChar) * (dst_size + 1));
+	wxChar * pBuf = m_StringPool.AllocBuffer(sizeof(wxChar) * (nDecodedSize + 1));
 
-	GetEncoding()->ToWChar(pBuf, dst_size, pBegin, nLength);
+	GetEncoding()->ToWChar(pBuf, nDecodedSize, pBegin, nLength);
 
 	return pBuf;
 }

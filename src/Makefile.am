@@ -1,7 +1,9 @@
 SUBDIRS = 7Zip res
 bin_PROGRAMS = wxReadBook
 
-AM_CXXFLAGS = -I$(srcdir)/../includes
+AM_CXXFLAGS = -I$(srcdir)/../addons/lib7zip/Lib7Zip \
+	-I$(srcdir)/../addons/libtextprocess/src/core/ \
+	-I$(srcdir)/../addons/libportablethread/includes
 
 wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ns/nsBIG5Statistics.cpp \

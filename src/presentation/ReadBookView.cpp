@@ -96,8 +96,6 @@ void CReadBookView::OnDraw(wxDC *pDC)
 	if (!pDoc)
 		return;
 
-	int n = sizeof(wxString);
-
 	wxRect clientRect = GetClientRect();
 
 	const wxFont & pOldFont = pDC->GetFont();

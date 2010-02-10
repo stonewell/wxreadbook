@@ -15,7 +15,7 @@ TextProcess::Document::Impl::CDocumentLineImpl::~CDocumentLineImpl(void)
 void TextProcess::Document::Impl::CDocumentLineImpl::GetData(int nOffset, int nLength,
 															 wxChar ** ppBuf, int * ppBufLen)
 {
-	if (nOffset >= GetLength())
+	if (nOffset >= m_nDecodedLength)
 	{
 		*ppBuf = NULL;
 
@@ -24,8 +24,8 @@ void TextProcess::Document::Impl::CDocumentLineImpl::GetData(int nOffset, int nL
 		return;
 	}
 
-	if (nOffset + nLength > GetLength())
-		nLength = GetLength() - nOffset;
+	if (nOffset + nLength > m_nDecodedLength)
+		nLength = m_nDecodedLength - nOffset;
 
 	wxChar * pDataBuf = GetDecodedBuffer();
 
@@ -53,7 +53,7 @@ wxChar * TextProcess::Document::Impl::CDocumentLineImpl::GetDecodedBuffer()
 
 	if (m_DecodedBuffer) return m_DecodedBuffer;
 
-	m_DecodedBuffer = GetDocumentFile()->DecodeData(GetOffset(), GetLength());
+	m_DecodedBuffer = GetDocumentFile()->DecodeData(GetOffset(), GetLength(), m_nDecodedLength);
 
 	return m_DecodedBuffer;
 }

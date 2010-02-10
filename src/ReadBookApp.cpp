@@ -44,6 +44,9 @@
 #include "presentation/simple/ReadBookSimpleView.h"
 #include "presentation/simple/ObjectCache.h"
 
+#include "presentation/textprocesslib/ReadBookTPLDoc.h"
+#include "presentation/textprocesslib/ReadBookTPLView.h"
+
 #ifndef __WXMSW__
 #include "res/file.xpm"
 #include "res/file32.xpm"
@@ -87,8 +90,8 @@ bool CReadBookApp::OnInit(void)
 #define DOC_CLASS CReadBookSimpleDoc
 #define VIEW_CLASS CReadBookSimpleView
 #else
-#define DOC_CLASS CReadBookDoc
-#define VIEW_CLASS CReadBookView
+#define DOC_CLASS CReadBookTPLDoc
+#define VIEW_CLASS CReadBookTPLView
 #endif
 #else
 #define DOC_CLASS CReadBookBufferedDoc

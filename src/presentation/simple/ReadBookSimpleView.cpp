@@ -112,9 +112,6 @@ void CReadBookSimpleView::CalculateScrollSize(void)
 	if (m_nViewSize < m_nPageSize)
 		m_nPageSize = m_nViewSize;
 
-	CReadBookSimpleDoc * pBufferedDoc = 
-		(CReadBookSimpleDoc *)GetReadBookDoc();
-
 	wxFileOffset pos = GetSimpleCurrentPosition();
 
 	SetVertScrollbar(pos,
