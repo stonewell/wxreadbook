@@ -11,12 +11,13 @@ namespace TextProcess
             {
             public:
                 CMemoryMappedFile(const wxString & strFileName, wxMBConv * pEncoding);
+                CMemoryMappedFile(wxInputStream * pInput, wxMBConv * pEncoding);
                 virtual ~CMemoryMappedFile(void);
 
                 virtual const wxByte * GetBuffer() { return m_p; }
                 virtual wxFileOffset GetLength() const { return m_cb; }
 
-				virtual wxChar * DecodeData(int nOffset, int nLength);
+				virtual wxChar * DecodeData(int nOffset, int nLength, wxInt32 & nDecodedSize);
 
 				IMPL_PROPERTY(wxMBConv *, Encoding);
 
@@ -30,6 +31,10 @@ namespace TextProcess
                 HANDLE  m_hfm;
     #else
                 int m_hf;
+				int m_do_unlink;
+
+#define SHARE_MEMORY_NAME "/wxReadBook_MemoryFile"
+
     #endif
             };
 	    }

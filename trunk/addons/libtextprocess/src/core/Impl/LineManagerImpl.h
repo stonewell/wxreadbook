@@ -81,7 +81,12 @@ namespace TextProcess
 					m_hNextWaitEvent.Wait();
 				}
 
-				CLineEntry * GetPrev() { TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock); return m_pPrevEntry; }
+				CLineEntry * GetPrev() 
+				{
+					TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock); 
+					return m_pPrevEntry; 
+				}
+
 				void SetPrev(CLineEntry * pPrev)
 				{
 					TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock);

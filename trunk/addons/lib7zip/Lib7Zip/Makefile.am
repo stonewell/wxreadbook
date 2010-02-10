@@ -10,6 +10,8 @@ lib7zip_a_SOURCES = \
 
 EXTRA_DIST = ReadMe.txt Lib7Zip.vcproj 
 
+CLEAN_FILES = ../includes/CPP ../includes/C
+
 dist-hook:
 	cp -rf $(srcdir)/Lib7Zip\ -\ VS2008.vcproj $(distdir)
 

@@ -149,21 +149,18 @@ namespace TextProcess
 
             void Wait()
             {
-                {
-                    CCriticalSectionAccessor a(&m_AccessLock);
-
-                    m_nWait++;
-                }
+				m_AccessLock.Enter();
+                m_nWait++;
+				m_AccessLock.Leave();
 
                 m_Event.Wait();
 
-                {
-                    CCriticalSectionAccessor a(&m_AccessLock);
-                    m_nWait--;
+				m_AccessLock.Enter();
+                m_nWait--;
 
-                    if (!m_nWait)
-                        m_Event.Reset();
-                }
+                if (!m_nWait)
+                    m_Event.Reset();
+				m_AccessLock.Leave();
             }
         };
     }

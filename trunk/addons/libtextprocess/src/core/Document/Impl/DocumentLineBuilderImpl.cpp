@@ -27,24 +27,43 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
     const wxByte * pLF = reinterpret_cast<const wxByte *>(m_LFBuffer.data());
 	const wxByte * pCREnd = pCR + m_CRLength;
 	const wxByte * pLFEnd = pLF + m_LFLength;
+    const wxByte * pchEOL = NULL;
 
     TextProcess::Document::IDocumentLine * pLastLine =
 		GetDocumentLineManager()->FindLine(CDocumentObjectFactory::CreateLineMatcher(GetDocumentOffset()), 0);
 
+	if (pLastLine != NULL)
+	{
+		pStartPos = pFileBegin + pLastLine->GetOffset();
+	}
+	else
+	{
+        pchEOL = std::find_end(pFileBegin, pStartPos,
+            pCR, pCREnd);
+
+		if (pStartPos != pchEOL)
+		{
+			pStartPos = pchEOL + m_CRLength;
+		}
+		else
+		{
+			pStartPos = pFileBegin;
+		}
+	}
+	
     if (GetBuilderDirection() == TextProcess::Next)
     {
         pEndPos = pFileEnd;
     }
     else
     {
-        pEndPos = pFileBegin - 1;
+        pEndPos = pFileBegin;
 
         std::swap(pEndPos, pStartPos);
     }
 
     while(!m_Cancel && pStartPos < pEndPos)
     {
-        const wxByte * pchEOL = NULL;
         int length = 0;
         int offset = 0;
 
@@ -69,8 +88,16 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
             pchEOL = std::find_end(pStartPos, pEndPos,
                 pCR, pCREnd);
 
-            offset = (pchEOL + m_CRLength) - pFileBegin;
-            length = pEndPos - pchEOL - m_CRLength + 1;
+			if (pchEOL == pEndPos)
+			{
+				offset = 0;
+				length = pEndPos - pFileBegin + 1;
+			}
+			else
+			{
+				offset = (pchEOL + m_CRLength) - pFileBegin;
+				length = pEndPos - pchEOL - m_CRLength + 1;
+			}
 
             pEndPos = pchEOL - 1;
 

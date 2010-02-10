@@ -6,3 +6,7 @@ TextProcess::IO::IMemoryMappedFile * TextProcess::IO::IMemoryMappedFile::CreateM
     return new TextProcess::IO::Impl::CMemoryMappedFile(strFileName, pEncoding);
 }
 
+TextProcess::IO::IMemoryMappedFile * TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(wxInputStream * pInput, wxMBConv * pEncoding)
+{
+    return new TextProcess::IO::Impl::CMemoryMappedFile(pInput, pEncoding);
+}

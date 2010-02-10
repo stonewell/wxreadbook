@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libwxreadbook7zip.a
 
-AM_CXXFLAGS = -I$(srcdir)/../../includes
+AM_CXXFLAGS = -I$(srcdir)/../../addons/lib7zip/Lib7Zip
 
 libwxreadbook7zip_a_SOURCES = \
 	7ZipClassFactory.cpp  \

@@ -29,33 +29,12 @@ namespace TextProcess
              */
             ~CCriticalSection(void)
             {
-                this->WaitForFinish(); // acquire ownership
             #ifdef _WIN32
                 DeleteCriticalSection(&this->m_cSection);
             #else
                 pthread_mutex_destroy(&this->m_cSection);
             #endif
             }; // ~CriticalSection()
-
-            /**
-             * @fn void WaitForFinish(void)
-             * @brief Waits for the critical section to unlock.
-             * This function puts the waiting thread in a waiting
-             * state.
-             * @see TryEnter()
-             * @return void
-             */
-            void WaitForFinish(void)
-            {
-                while(!this->TryEnter())
-                {
-                #ifdef _WIN32
-                    Sleep(1); // put waiting thread to sleep for 1ms
-                #else
-                    usleep(1000); // put waiting thread to sleep for 1ms (1000us)
-                #endif
-                };
-            }; // WaitForFinish()
 
             /**
              * @fn void Enter(void)
@@ -65,7 +44,6 @@ namespace TextProcess
              */
             void Enter(void)
             {
-                this->WaitForFinish(); // acquire ownership
             #ifdef _WIN32
                 EnterCriticalSection(&this->m_cSection);
             #else
