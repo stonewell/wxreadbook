@@ -189,11 +189,33 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 
 	std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
 
-	TextProcess::View::IViewLine * pViewLine = 
-		m_pViewLineManager->FindLine(pMatcher.get());
+	TextProcess::View::IViewLine * pViewLine = NULL;
+
+	for(int i=0; i < 3; i++)
+	{
+		pViewLine = m_pViewLineManager->FindLine(pMatcher.get(), 0);
+
+		if (pViewLine != NULL)
+			break;
+		else
+#ifdef _WIN32
+			Sleep(1000);
+#else
+			sleep(1);
+#endif
+	}
 
 	if (pViewLine == NULL)
-		return m_pViewLine->GetDocumentLine()->GetOffset();
+	{
+		StopViewLineBuilder();
+		GetReadBookDoc()->ScrollDocumentTo(nLine);
+		StartViewLineBuilder();
+	}
+
+	pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
+
+	if (pViewLine == NULL)
+		return GetReadBookDoc()->GetCurrentLine();
 
 	wxInt32 nViewLineOffset = 
 		pViewLine->GetDocumentLine()->GetDecodedLength() *
@@ -224,7 +246,8 @@ void CReadBookTPLView::StartViewLineBuilder()
 
 	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
-	m_pClientDC.reset(new CReadBookDC(GetCanvas()));
+	m_pClientDCPrev.reset(new CReadBookDC(GetCanvas()));
+	m_pClientDCNext.reset(new CReadBookDC(GetCanvas()));
 
 	m_pClientRect.reset(new wxRect(GetClientRect()));
 
@@ -232,7 +255,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	m_pViewLineBuilderPrev->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderPrev->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
 	m_pViewLineBuilderPrev->SetDocumentLineOffset(docPos);
-	m_pViewLineBuilderPrev->SetGraphics(m_pClientDC.get());
+	m_pViewLineBuilderPrev->SetGraphics(m_pClientDCPrev.get());
 	m_pViewLineBuilderPrev->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderPrev->SetViewLineManager(m_pViewLineManager.get());
 	m_pViewLineBuilderPrev->SetViewLineOffset(0);
@@ -246,7 +269,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderNext->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
 	m_pViewLineBuilderNext->SetDocumentLineOffset(docPos);
-	m_pViewLineBuilderNext->SetGraphics(m_pClientDC.get());
+	m_pViewLineBuilderNext->SetGraphics(m_pClientDCNext.get());
 	m_pViewLineBuilderNext->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderNext->SetViewLineManager(m_pViewLineManager.get());
 	m_pViewLineBuilderNext->SetViewLineOffset(0);

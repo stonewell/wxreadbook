@@ -93,11 +93,13 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 		else
 			pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
 
-		std::auto_ptr<IViewLineMatcher> pMatcher(CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
-		if (pDocLine != NULL &&
-			GetViewLineManager()->FindLine(pMatcher.get(), false) != NULL)
+		if (pDocLine != NULL)
 		{
-			break;
+			std::auto_ptr<IViewLineMatcher> pMatcher(CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
+			if (GetViewLineManager()->FindLine(pMatcher.get(), false) != NULL)
+			{
+				break;
+			}
 		}
 	}
 

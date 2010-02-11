@@ -37,7 +37,8 @@ private:
 	PortableThread::CPortableThread m_BuildPrevThread;
 	PortableThread::CPortableThread m_BuildNextThread;
 	TextProcess::View::IViewLine * m_pViewLine;
-	std::auto_ptr<CReadBookDC> m_pClientDC;
+	std::auto_ptr<CReadBookDC> m_pClientDCPrev;
+	std::auto_ptr<CReadBookDC> m_pClientDCNext;
 	std::auto_ptr<wxRect> m_pClientRect;
 	bool m_bViewLineBuilding;
 };
