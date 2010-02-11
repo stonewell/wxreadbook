@@ -92,6 +92,10 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 			pMatcher->SetDocumentLineOffset(0);
 			pMatcher->SetViewLineOffset(0);
 		}
+		else
+		{
+			pMatcher->SetViewLineOffset(currentLine - m_pViewLine->GetDocumentLine()->GetOffset());
+		}
 
 		m_pViewLine = 
 			m_pViewLineManager->FindLine(pMatcher.get());
@@ -108,7 +112,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 
 		pDC->DrawText(line, clientRect.GetLeft(), y);
 
-		y += pNewFont->GetPixelSize().GetY();
+		y += m_FontSize.GetY();
 
 		//Line Margin
 		y+=lineMargin;
@@ -172,7 +176,10 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 		}
 	}
 
-	return m_pViewLine->GetDocumentLine()->GetOffset();
+	wxFileOffset offset = m_pViewLine->GetDocumentLine()->GetOffset();
+	GetReadBookDoc()->SetCurrentLine(offset + m_pViewLine->GetOffset());
+
+	return GetReadBookDoc()->GetCurrentLine();
 }
 
 wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
@@ -200,7 +207,10 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 	if (pViewLine != NULL)
 		m_pViewLine = pViewLine;
 
-	return m_pViewLine->GetDocumentLine()->GetOffset();
+	wxFileOffset offset = m_pViewLine->GetDocumentLine()->GetOffset();
+	GetReadBookDoc()->SetCurrentLine(offset + m_pViewLine->GetOffset());
+
+	return GetReadBookDoc()->GetCurrentLine();
 }
 
 void CReadBookTPLView::StartViewLineBuilder()

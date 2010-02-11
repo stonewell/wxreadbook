@@ -82,15 +82,15 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
             length = pchEOL - pStartPos;
             offset = pStartPos - pFileBegin;
 
-            if (length > m_LFLength)
+            pStartPos = pchEOL + m_CRLength;
+
+            if (length >= m_LFLength)
             {
-                if (!memcmp(pStartPos + length - m_LFLength, pLF, m_LFLength))
+                if (!memcmp(pFileBegin + offset + length - m_LFLength, pLF, m_LFLength))
                 {
                     length -= m_LFLength;
                 }
             }
-
-            pStartPos = pchEOL + m_CRLength;
         }
         else
         {
@@ -105,16 +105,16 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 			else
 			{
 				offset = (pchEOL + m_CRLength) - pFileBegin;
-				length = pEndPos - pchEOL - m_CRLength + 1;
+				length = (pEndPos - (pchEOL + m_CRLength)) + 1;
+
+				if (length >= m_LFLength)
+				{
+					if (!memcmp(pFileBegin + offset, pLF, m_LFLength))
+						offset += m_LFLength;
+				}
 			}
 
             pEndPos = pchEOL - 1;
-
-            if (pEndPos - m_LFLength + 1 > pStartPos)
-            {
-                if (!memcmp(pEndPos - m_LFLength + 1, pLF, m_LFLength))
-                    pEndPos -= m_LFLength;
-            }
         }
 
         if (!m_Cancel && !IsEmptyLine(offset, length))
@@ -151,6 +151,9 @@ void TextProcess::Document::Impl::CDocumentLineBuilderImpl::Cancel()
 
 int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(wxFileOffset offset, wxFileOffset length)
 {
+	if (length == 0)
+		return 1;
+
     const wxByte * pBegin = GetDocumentFile()->GetBuffer() + offset;
     const wxByte * pEnd = pBegin + length;
 

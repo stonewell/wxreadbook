@@ -1000,7 +1000,7 @@ wxRect CReadBookView::GetClientRect() const
 	wxInt16 colMargin = wxGetApp().GetPreference()->GetColumnMargin();
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
 
-	rect.Deflate(colMargin,0);
+	rect.Deflate(colMargin + 15,0);
 
 	rect.SetWidth(rect.GetWidth());
 

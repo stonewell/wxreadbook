@@ -47,17 +47,17 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 		wxFileOffset pBufLen = 0;
 		long cur_all_line_width = 0;
 
-		pDocLine->GetData(0, pDocLine->GetLength(), &pBuf, &pBufLen);
+		pDocLine->GetData(0, pDocLine->GetDecodedLength(), &pBuf, &pBufLen);
 
 		TextProcess::Utils::wxReadOnlyString docLineData(pBuf, pBufLen);
 
-		while (!m_Cancel && viewLineOffset < pDocLine->GetLength())
+		while (!m_Cancel && viewLineOffset < pDocLine->GetDecodedLength())
 		{
 			wxFileOffset viewLineSize = defaultLineCharSize;
 
-			if (viewLineSize + viewLineOffset > pDocLine->GetLength())
+			if (viewLineSize + viewLineOffset > pDocLine->GetDecodedLength())
 			{
-				viewLineSize = pDocLine->GetLength() - viewLineOffset;
+				viewLineSize = pDocLine->GetDecodedLength() - viewLineOffset;
 			}
 
 			FixViewLineSize(&docLineData,
@@ -93,8 +93,9 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 		else
 			pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
 
+		std::auto_ptr<IViewLineMatcher> pMatcher(CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
 		if (pDocLine != NULL &&
-			GetViewLineManager()->FindLine(CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0), false) != NULL)
+			GetViewLineManager()->FindLine(pMatcher.get(), false) != NULL)
 		{
 			break;
 		}
@@ -132,6 +133,9 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
 
     do
     {
+		if (width < curAllViewLineWidth)
+			break;
+
         if (width - curAllViewLineWidth < GetClientArea()->GetWidth())
         {
             newSize = pDocLineData->ReadOnlyResize(offset + size + 1);
@@ -158,7 +162,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
                 GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, 0, 0, GetViewFont());
             }
         }
-        else if (width > GetClientArea()->GetWidth())
+        else if (width - curAllViewLineWidth > GetClientArea()->GetWidth())
         {
             size--;
             newSize = pDocLineData->ReadOnlyResize(offset + size);

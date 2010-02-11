@@ -146,9 +146,13 @@ wxChar * TextProcess::IO::Impl::CMemoryMappedFile::DecodeData(wxFileOffset nOffs
 		throw(OOM);
 	}
 
-	wxChar * pBuf = m_StringPool.AllocBuffer(sizeof(wxChar) * (nDecodedSize + 1));
+	wxChar * pBuf = m_StringPool.AllocBuffer(sizeof(wxChar) * (nDecodedSize));
 
 	GetEncoding()->ToWChar(pBuf, nDecodedSize, pBegin, nLength);
+
+	nDecodedSize--;
+
+	wxChar ch = pBuf[nDecodedSize - 1];
 
 	return pBuf;
 }
