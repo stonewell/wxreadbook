@@ -14,8 +14,8 @@ int TextProcess::Document::Impl::CDocumentLineMatcherImpl::IsMatch(const ILine *
 {
 	if (pLine->GetType() == TextProcess::ILine::DocumentLine)
 	{
-		const TextProcess::Document::IDocumentLine * pDocLine = 
-			reinterpret_cast<const TextProcess::Document::IDocumentLine *>(pLine);
+		const IDocumentLine * pDocLine = 
+			dynamic_cast<const IDocumentLine *>(pLine);
 
 		return pDocLine->GetOffset() <= GetDocumentOffset() &&
 			pDocLine->GetOffset() + pDocLine->GetLength() > GetDocumentOffset();

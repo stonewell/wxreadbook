@@ -17,8 +17,8 @@ namespace TextProcess
 			public:
 				IMPL_PROPERTY(wxRect *, ClientArea);
 				IMPL_PROPERTY(wxFont *, ViewFont);
-				IMPL_PROPERTY(int, DocumentLineOffset);
-				IMPL_PROPERTY(int, ViewLineOffset);
+				IMPL_PROPERTY(wxFileOffset, DocumentLineOffset);
+				IMPL_PROPERTY(wxFileOffset, ViewLineOffset);
 				IMPL_PROPERTY(TextProcess::Document::IDocumentLineManager *, DocumentLineManager);
 				IMPL_PROPERTY(IViewLineManager *, ViewLineManager);
 				IMPL_PROPERTY(wxDC *, Graphics);
@@ -30,7 +30,7 @@ namespace TextProcess
 			private:
 				IMPL_PROPERTY_FIELD(int, Cancel);
 				void FixViewLineSize(TextProcess::Utils::wxReadOnlyString * pDocLineData,
-                    int viewLineOffset, int & viewLineSize, long & curAllViewLineWidth);
+                    wxFileOffset viewLineOffset, wxFileOffset & viewLineSize, long & curAllViewLineWidth);
 			};
 		}
 	}

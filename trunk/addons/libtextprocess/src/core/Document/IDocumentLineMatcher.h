@@ -8,7 +8,8 @@ namespace TextProcess
 			public virtual ILineMatcher
 		{
 		public:
-			DECLARE_PROPERTY(int, DocumentOffset);
+			DECLARE_TPL_INTERFACE(IDocumentLineMatcher);
+			DECLARE_PROPERTY(wxFileOffset, DocumentOffset);
 		};
 	}
 }

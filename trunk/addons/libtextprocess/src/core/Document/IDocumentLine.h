@@ -7,9 +7,11 @@ namespace TextProcess
 		class IDocumentLine : public virtual ILine
 		{
 		public:
-            DECLARE_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
-			virtual void GetData(int nOffset, int nLength, wxChar ** ppBuf, int * ppBufLen) = 0;
-			virtual wxString GetData(int nOffset, int nLength) = 0;
+			DECLARE_TPL_INTERFACE(IDocumentLine);
+
+			DECLARE_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
+			virtual void GetData(wxFileOffset nOffset, wxFileOffset nLength, wxChar ** ppBuf, wxFileOffset * ppBufLen) = 0;
+			virtual wxString GetData(wxFileOffset nOffset, wxFileOffset nLength) = 0;
 			virtual wxInt32 GetDecodedLength() = 0;
 		};
 	}

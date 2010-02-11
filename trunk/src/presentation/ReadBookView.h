@@ -49,7 +49,7 @@ public:
 	CReadBookDoc * GetReadBookDoc() 
 	{ return (CReadBookDoc *)(GetDocument()); }
 
-	void Recalculate(void);
+	virtual void Recalculate(void);
 
     virtual void PreferenceChanged();
 	virtual bool GoTo();

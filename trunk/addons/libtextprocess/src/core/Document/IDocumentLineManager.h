@@ -7,6 +7,8 @@ namespace TextProcess
 		class IDocumentLineManager
 		{
 		public:
+			DECLARE_TPL_INTERFACE(IDocumentLineManager);
+
 			virtual IDocumentLine * FindLine(IDocumentLineMatcher * pMatcher, int wait = 1) = 0;
 
 			virtual IDocumentLine * GetNextLine(IDocumentLine * pLine, int wait = 1) = 0;
@@ -18,7 +20,8 @@ namespace TextProcess
 
 			virtual void Clear() = 0;
 
-			virtual void HasAllLines(int getAllLines = 1) = 0;
+			virtual void HasAllPreviousLines() = 0;
+			virtual void HasAllNextLines() = 0;
 
 			virtual int IsHasAllLines() = 0;
 		};

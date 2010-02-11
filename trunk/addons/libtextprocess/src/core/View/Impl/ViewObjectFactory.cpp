@@ -1,7 +1,7 @@
 #include "../../TextProcess.h"
 #include "../../Impl/TextProcessImpl.h"
 
-TextProcess::View::IViewLine * TextProcess::View::CViewObjectFactory::CreateViewLine(int viewLineOffset, int viewLineSize,
+TextProcess::View::IViewLine * TextProcess::View::CViewObjectFactory::CreateViewLine(wxFileOffset viewLineOffset, wxFileOffset viewLineSize,
     TextProcess::Document::IDocumentLine * pDocumentLine)
 {
 	TextProcess::View::IViewLine * pViewLine = new TextProcess::View::Impl::CViewLineImpl();
@@ -13,7 +13,7 @@ TextProcess::View::IViewLine * TextProcess::View::CViewObjectFactory::CreateView
 	return pViewLine;
 }
 
-TextProcess::View::IViewLineMatcher * TextProcess::View::CViewObjectFactory::CreateLineMatcher(int docOffset, int viewOffset)
+TextProcess::View::IViewLineMatcher * TextProcess::View::CViewObjectFactory::CreateLineMatcher(wxFileOffset docOffset, wxFileOffset viewOffset)
 {
 	TextProcess::View::IViewLineMatcher * pMatcher =
 		new TextProcess::View::Impl::CViewLineMatcherImpl();

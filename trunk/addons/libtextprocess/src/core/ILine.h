@@ -12,10 +12,11 @@ namespace TextProcess
 		};
 
 	public:
+		DECLARE_TPL_INTERFACE(ILine);
 		DECLARE_PROPERTY_GETTER(LineTypeEnum, Type);
 
-		DECLARE_PROPERTY(int, Offset);
-		DECLARE_PROPERTY(int, Length);
-		DECLARE_PROPERTY(int, Index);
+		DECLARE_PROPERTY(wxFileOffset, Offset);
+		DECLARE_PROPERTY(wxFileOffset, Length);
+		DECLARE_PROPERTY(wxUint32, Index);
 	};
 }

@@ -10,8 +10,8 @@ namespace TextProcess
 			CDocumentObjectFactory() {}
 
 		public:
-			static IDocumentLine * CreateDocumentLine(int offset, int length, TextProcess::IO::IMemoryMappedFile * pDocumentFile);
-			static IDocumentLineMatcher * CreateLineMatcher(int offset);
+			static IDocumentLine * CreateDocumentLine(wxFileOffset offset, wxFileOffset length, TextProcess::IO::IMemoryMappedFile * pDocumentFile);
+			static IDocumentLineMatcher * CreateLineMatcher(wxFileOffset offset);
 			static IDocumentLineManager * CreateLineManager();
 			static IDocumentLineBuilder * CreateLineBuilder();
 		};

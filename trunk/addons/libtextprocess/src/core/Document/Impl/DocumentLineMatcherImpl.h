@@ -15,7 +15,7 @@ namespace TextProcess
 				virtual ~CDocumentLineMatcherImpl(void);
 
 			public:
-				IMPL_PROPERTY(int, DocumentOffset);
+				IMPL_PROPERTY(wxFileOffset, DocumentOffset);
 
 				virtual int IsMatch(const ILine * pLine) const;
 			};

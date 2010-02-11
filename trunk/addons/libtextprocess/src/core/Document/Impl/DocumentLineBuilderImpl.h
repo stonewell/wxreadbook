@@ -15,7 +15,7 @@ namespace TextProcess
 				virtual ~CDocumentLineBuilderImpl(void);
 
 			public:
-				IMPL_PROPERTY(int, DocumentOffset);
+				IMPL_PROPERTY(wxFileOffset, DocumentOffset);
 				IMPL_PROPERTY(IDocumentLineManager *, DocumentLineManager);
 				IMPL_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
 
@@ -36,7 +36,7 @@ namespace TextProcess
 				IMPL_PROPERTY_FIELD(int, TabLength);
 
 				void InitBuffers();
-				int IsEmptyLine(int offset, int length);
+				int IsEmptyLine(wxFileOffset offset, wxFileOffset length);
 			};
 		}
 	}
