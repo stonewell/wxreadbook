@@ -82,8 +82,12 @@ AC_CHECK_FUNCS([gettimeofday])
 AC_CHECK_FUNCS([mmap])
 AC_CHECK_FUNCS([open])
 AC_CHECK_HEADERS([algorithm], 
-	[AC_DEFINE([HAVE_ALGORITHM], 1, [Define to 1 if you have <stdio.h>.]) ], 
+	[AC_DEFINE([HAVE_ALGORITHM], 1, [Define to 1 if you have <algorithm>.]) ], 
 	[AC_MSG_ERROR([unable to find algorithm, please install libstdc++])])
+AC_CHECK_HEADERS([memory], 
+	[AC_DEFINE([HAVE_MEMORY], 1, [Define to 1 if you have <memory>.]) ], 
+	[AC_MSG_ERROR([unable to find memory, please install libstdc++])])
+
 
 AC_CONFIG_FILES([
 	Makefile
@@ -92,7 +96,8 @@ AC_CONFIG_FILES([
 	addons/libtextprocess/Makefile
 	addons/lib7zip/Makefile
 	addons/lib7zip/includes/Makefile
-        addons/lib7zip/Lib7Zip/Makefile
+    addons/lib7zip/Lib7Zip/Makefile
+    addons/libportablethread/Makefile
 	src/Makefile
 	src/7Zip/Makefile
 	src/res/Makefile

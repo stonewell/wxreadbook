@@ -2,6 +2,7 @@
 #include "../../Impl/TextProcessImpl.h"
 
 #include <algorithm>
+#include <memory>
 
 TextProcess::Document::Impl::CDocumentLineBuilderImpl::CDocumentLineBuilderImpl(void) :
 INIT_PROPERTY(DocumentOffset, 0),

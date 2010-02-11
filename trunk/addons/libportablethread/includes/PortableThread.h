@@ -8,6 +8,7 @@ namespace PortableThread
 		virtual unsigned long Run(void * pArgument) = 0;
 	};
 
+	class CPortableThreadHandle;
 	class CPortableThread
 	{
 	private:
