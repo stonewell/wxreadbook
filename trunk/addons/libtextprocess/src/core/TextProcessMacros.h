@@ -35,6 +35,9 @@
 #define INIT_PROPERTY(p, v) \
 	m_##p(v)
 
+#define DECLARE_TPL_INTERFACE_VIRTUAL_DESTRUCTOR(a) \
+	virtual ##a
+
 #define DECLARE_TPL_INTERFACE(t) \
-	t() {}\
-	virtual ~##t() {}
+	t() {} \
+	virtual ~t() {}
