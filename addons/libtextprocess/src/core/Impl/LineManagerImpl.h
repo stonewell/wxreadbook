@@ -10,13 +10,18 @@ namespace TextProcess
 			class CLineEntry
 			{
 			public:
-				CLineEntry()
+				CLineEntry() :
+					m_pLine(NULL)
+					, m_pPrevEntry(NULL)
+					, m_pNextEntry(NULL)
 				{
 				}
 
 				~CLineEntry()
 				{
+					TextProcess::Utils::CCriticalSectionAccessor accessor(&m_AccessLock);
 					if (m_pLine != NULL) delete m_pLine;
+					m_pLine = NULL;
 				}
 			private:
 				T * m_pLine;
@@ -103,7 +108,8 @@ namespace TextProcess
 		private:
 			TextProcess::Utils::CReadWriteLock m_ReadWriteLock;
 
-			int m_bHasAllLines;
+			int m_bHasAllNextLines;
+			int m_bHasAllPreviousLines;
 			int m_bClearing;
 
 			CLineEntry * m_pHeaderEntry;
@@ -135,9 +141,11 @@ namespace TextProcess
 			{
 				m_NewDataEvent.NotifyAll();
 			}
+
 		public:
 			CLineManagerImpl(void) :
-				m_bHasAllLines(0),
+				m_bHasAllPreviousLines(0),
+				m_bHasAllNextLines(0),
 				m_bClearing(0),
 				m_pHeaderEntry(NULL),
 				m_pTailEntry(NULL)
@@ -223,7 +231,7 @@ namespace TextProcess
 
 							m_ReadWriteLock.UnlockRead();
 
-							if (!IsHasAllLines() && wait)
+							if (!IsHasAllNextLines() && wait)
 								pNextEntry->WaitData();
 							else
 								return NULL;
@@ -237,7 +245,7 @@ namespace TextProcess
 
 					m_ReadWriteLock.UnlockRead();
 
-					if (!IsHasAllLines() && wait)
+					if (!IsHasAllNextLines() && wait)
 						pEntry->WaitNext();
 					else
 						return NULL;
@@ -280,7 +288,7 @@ namespace TextProcess
 
 							m_ReadWriteLock.UnlockRead();
 
-							if (!IsHasAllLines() && wait)
+							if (!IsHasAllPreviousLines() && wait)
 								pPrevEntry->WaitData();
 							else
 								return NULL;
@@ -294,7 +302,7 @@ namespace TextProcess
 
 					m_ReadWriteLock.UnlockRead();
 
-					if (!IsHasAllLines() && wait)
+					if (!IsHasAllPreviousLines() && wait)
 						pEntry->WaitPrev();
 					else
 						return NULL;
@@ -351,6 +359,8 @@ namespace TextProcess
 					tmpEntry->SetPrev(pEntry);
 					pEntry->SetNext(tmpEntry);
 				}
+
+				NotifyNewEntryCome();
 			}
 
 			virtual void AddPrevLine(T * pPrevLine, T * pLine)
@@ -394,6 +404,8 @@ namespace TextProcess
 					tmpEntry->SetNext(pEntry);
 					pEntry->SetPrev(tmpEntry);
 				}
+
+				NotifyNewEntryCome();
 			}
 
 			virtual void Clear()
@@ -404,7 +416,8 @@ namespace TextProcess
 
 				CLineEntry * pEntry = m_pHeaderEntry;
 
-				m_bHasAllLines = 0;
+				m_bHasAllPreviousLines = 0;
+				m_bHasAllNextLines = 0;
 
 				while(pEntry != NULL)
 				{
@@ -425,11 +438,36 @@ namespace TextProcess
 				m_bClearing = 0;
 			}
 
-			virtual void HasAllLines(int getAllLines = 1)
+			virtual void HasAllPreviousLines()
 			{
 				TextProcess::Utils::CReadWriteLocker locker(&m_ReadWriteLock, 0);
 
-				m_bHasAllLines = getAllLines;
+				if (m_bHasAllPreviousLines)
+					return;
+
+				m_bHasAllPreviousLines = 1;
+
+				CLineEntry * pEntry = m_pHeaderEntry;
+
+				while(pEntry != NULL)
+				{
+					pEntry->NotifyDataChange();
+					pEntry->NotifyPrevChange();
+
+					pEntry = pEntry->GetNext();
+				}
+
+				NotifyNewEntryCome();
+			}
+
+			virtual void HasAllNextLines()
+			{
+				TextProcess::Utils::CReadWriteLocker locker(&m_ReadWriteLock, 0);
+
+				if (m_bHasAllNextLines)
+					return;
+
+				m_bHasAllNextLines = 1;
 
 				CLineEntry * pEntry = m_pHeaderEntry;
 
@@ -437,7 +475,6 @@ namespace TextProcess
 				{
 					pEntry->NotifyDataChange();
 					pEntry->NotifyNextChange();
-					pEntry->NotifyPrevChange();
 
 					pEntry = pEntry->GetNext();
 				}
@@ -448,7 +485,19 @@ namespace TextProcess
 			virtual int IsHasAllLines()
 			{
 				TextProcess::Utils::CReadWriteLocker locker(&m_ReadWriteLock);
-				return m_bHasAllLines;
+				return m_bHasAllPreviousLines && m_bHasAllNextLines;
+			}
+
+			virtual int IsHasAllPreviousLines()
+			{
+				TextProcess::Utils::CReadWriteLocker locker(&m_ReadWriteLock);
+				return m_bHasAllPreviousLines;
+			}
+
+			virtual int IsHasAllNextLines()
+			{
+				TextProcess::Utils::CReadWriteLocker locker(&m_ReadWriteLock);
+				return m_bHasAllNextLines;
 			}
 		};
 	}

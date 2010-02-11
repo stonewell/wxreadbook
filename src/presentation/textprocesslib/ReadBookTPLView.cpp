@@ -82,8 +82,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 
 	if (m_pViewLine == NULL)
 	{
-		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher =
-			std::auto_ptr<TextProcess::View::IViewLineMatcher>(TextProcess::View::CViewObjectFactory::CreateLineMatcher(currentLine, 0));
+		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(currentLine, 0));
 
 		m_pViewLine = 
 			m_pViewLineManager->FindLine(pMatcher.get());
@@ -181,8 +180,7 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding)
 		return GetReadBookDoc()->GetCurrentLine();
 
-	std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher =
-		std::auto_ptr<TextProcess::View::IViewLineMatcher>(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
+	std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
 
 	TextProcess::View::IViewLine * pViewLine = 
 		m_pViewLineManager->FindLine(pMatcher.get());
@@ -212,15 +210,13 @@ void CReadBookTPLView::StartViewLineBuilder()
 
 	wxFileOffset docPos = GetReadBookDoc()->GetCurrentLine();
 
-	m_pViewLineManager = 
-		std::auto_ptr<TextProcess::View::IViewLineManager>(TextProcess::View::CViewObjectFactory::CreateLineManager());
+	m_pViewLineManager.reset(TextProcess::View::CViewObjectFactory::CreateLineManager());
 
-	m_pViewLineBuilderPrev = 
-		std::auto_ptr<TextProcess::View::IViewLineBuilder>(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
+	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
-	m_pClientDC = std::auto_ptr<CReadBookDC>(new CReadBookDC(GetCanvas()));
+	m_pClientDC.reset(new CReadBookDC(GetCanvas()));
 
-	m_pClientRect = std::auto_ptr<wxRect>(new wxRect(GetClientRect()));
+	m_pClientRect.reset(new wxRect(GetClientRect()));
 
 	m_pViewLineBuilderPrev->SetBuilderDirection(TextProcess::Prev);
 	m_pViewLineBuilderPrev->SetClientArea(m_pClientRect.get());
@@ -234,8 +230,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	m_BuildPrevThread.SetRunningArgument(m_pViewLineBuilderPrev.get());
 	m_BuildPrevThread.Start();
 
-	m_pViewLineBuilderNext = 
-		std::auto_ptr<TextProcess::View::IViewLineBuilder>(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
+	m_pViewLineBuilderNext.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
 	m_pViewLineBuilderNext->SetBuilderDirection(TextProcess::Next);
 	m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());

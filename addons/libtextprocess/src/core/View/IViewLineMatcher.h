@@ -7,8 +7,9 @@ namespace TextProcess
 		class IViewLineMatcher : public virtual ILineMatcher
 		{
 		public:
-			DECLARE_PROPERTY(int, DocumentLineOffset);
-			DECLARE_PROPERTY(int, ViewLineOffset);
+			DECLARE_TPL_INTERFACE(IViewLineMatcher);
+			DECLARE_PROPERTY(wxFileOffset, DocumentLineOffset);
+			DECLARE_PROPERTY(wxFileOffset, ViewLineOffset);
 		};
 	}
 

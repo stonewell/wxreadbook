@@ -35,9 +35,9 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(CReadBookTPLDoc, CReadBookDoc)
 
 CReadBookTPLDoc::CReadBookTPLDoc(void) :
-m_BuildPrevThread(new CDocumentBuilderRunnable())
-,m_BuildNextThread(new CDocumentBuilderRunnable())
-,m_bDocumentLoading(false)
+ m_BuildPrevThread(new CDocumentBuilderRunnable())
+, m_BuildNextThread(new CDocumentBuilderRunnable())
+, m_bDocumentLoading(false)
 {
 }
 
@@ -68,19 +68,14 @@ bool CReadBookTPLDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGu
 
 	if (IsArchiveFileUrl(url))
 	{
-		std::auto_ptr<TextProcess::IO::IMemoryMappedFile> file(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(pInput, pConv));
-
-		m_pMemoryMappedFile = file;
+		m_pMemoryMappedFile.reset(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(pInput, pConv));
 	}
 	else
 	{
-		std::auto_ptr<TextProcess::IO::IMemoryMappedFile> file(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(url, pConv));
-
-		m_pMemoryMappedFile = file;
+		m_pMemoryMappedFile.reset(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(url, pConv));
 	}
 
-	m_pDocumentLineManager = 
-		std::auto_ptr<TextProcess::Document::IDocumentLineManager>(TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+	m_pDocumentLineManager.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
 
 	StartDocumentLineBuilder();
 
@@ -105,8 +100,10 @@ void CReadBookTPLDoc::StartDocumentLineBuilder()
 	if (pFileInfo != NULL)
 		docPos = pFileInfo->m_nFilePos;
 
-	m_pDocumentLineBuilderPrev = 
-		std::auto_ptr<TextProcess::Document::IDocumentLineBuilder>(TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+	if (docPos < 0)
+		docPos = 0;
+
+	m_pDocumentLineBuilderPrev.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 
 	m_pDocumentLineBuilderPrev->SetBuilderDirection(TextProcess::Prev);
 	m_pDocumentLineBuilderPrev->SetDocumentFile(m_pMemoryMappedFile.get());
@@ -116,8 +113,7 @@ void CReadBookTPLDoc::StartDocumentLineBuilder()
 	m_BuildPrevThread.SetRunningArgument(m_pDocumentLineBuilderPrev.get());
 	m_BuildPrevThread.Start();
 
-	m_pDocumentLineBuilderNext = 
-		std::auto_ptr<TextProcess::Document::IDocumentLineBuilder>(TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+	m_pDocumentLineBuilderNext.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 
 	m_pDocumentLineBuilderNext->SetBuilderDirection(TextProcess::Next);
 	m_pDocumentLineBuilderNext->SetDocumentFile(m_pMemoryMappedFile.get());

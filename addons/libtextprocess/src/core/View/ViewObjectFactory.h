@@ -10,8 +10,8 @@ namespace TextProcess
 			CViewObjectFactory() {}
 
 		public:
-			static IViewLine * CreateViewLine(int viewLineOffset, int viewLineSize, TextProcess::Document::IDocumentLine * pDocumentLine);
-			static IViewLineMatcher * CreateLineMatcher(int docOffset, int viewOffset);
+			static IViewLine * CreateViewLine(wxFileOffset viewLineOffset, wxFileOffset viewLineSize, TextProcess::Document::IDocumentLine * pDocumentLine);
+			static IViewLineMatcher * CreateLineMatcher(wxFileOffset docOffset, wxFileOffset viewOffset);
 			static IViewLineManager * CreateLineManager();
 			static IViewLineBuilder * CreateLineBuilder();
 		};

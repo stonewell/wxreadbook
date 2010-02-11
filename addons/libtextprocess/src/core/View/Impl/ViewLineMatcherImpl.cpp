@@ -15,7 +15,7 @@ int TextProcess::View::Impl::CViewLineMatcherImpl::IsMatch(const ILine * pLine) 
 {
 	if (pLine->GetType() == ILine::ViewLine)
     {
-        const IViewLine * pViewLine = reinterpret_cast<const IViewLine *>(pLine);
+        const IViewLine * pViewLine = dynamic_cast<const IViewLine *>(pLine);
 
         return (pViewLine->GetDocumentLine()->GetOffset() <= GetDocumentLineOffset() &&
             pViewLine->GetDocumentLine()->GetOffset() + pViewLine->GetDocumentLine()->GetLength() > GetDocumentLineOffset() &&

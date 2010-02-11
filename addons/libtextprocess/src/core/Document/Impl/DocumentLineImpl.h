@@ -16,8 +16,8 @@ namespace TextProcess
 
 			public:
                 IMPL_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
-				virtual void GetData(int nOffset, int nLength, wxChar ** ppBuf, int * ppBufLen);
-				virtual wxString GetData(int nOffset, int nLength);
+				virtual void GetData(wxFileOffset nOffset, wxFileOffset nLength, wxChar ** ppBuf, wxFileOffset * ppBufLen);
+				virtual wxString GetData(wxFileOffset nOffset, wxFileOffset nLength);
 
 				virtual wxInt32 GetDecodedLength()
 				{

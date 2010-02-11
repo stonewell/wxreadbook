@@ -5,6 +5,7 @@ TextProcess::Document::Impl::CDocumentLineImpl::CDocumentLineImpl(void) :
 TextProcess::Impl::CLineImpl(TextProcess::ILine::DocumentLine),
 INIT_PROPERTY(DocumentFile, NULL)
 ,m_DecodedBuffer(NULL)
+,m_nDecodedLength(0)
 {
 }
 
@@ -12,10 +13,10 @@ TextProcess::Document::Impl::CDocumentLineImpl::~CDocumentLineImpl(void)
 {
 }
 
-void TextProcess::Document::Impl::CDocumentLineImpl::GetData(int nOffset, int nLength,
-															 wxChar ** ppBuf, int * ppBufLen)
+void TextProcess::Document::Impl::CDocumentLineImpl::GetData(wxFileOffset nOffset, wxFileOffset nLength,
+															 wxChar ** ppBuf, wxFileOffset * ppBufLen)
 {
-	if (nOffset >= m_nDecodedLength)
+	if (nOffset >= GetDecodedLength())
 	{
 		*ppBuf = NULL;
 
@@ -24,8 +25,8 @@ void TextProcess::Document::Impl::CDocumentLineImpl::GetData(int nOffset, int nL
 		return;
 	}
 
-	if (nOffset + nLength > m_nDecodedLength)
-		nLength = m_nDecodedLength - nOffset;
+	if (nOffset + nLength > GetDecodedLength())
+		nLength = GetDecodedLength() - nOffset;
 
 	wxChar * pDataBuf = GetDecodedBuffer();
 
@@ -33,10 +34,10 @@ void TextProcess::Document::Impl::CDocumentLineImpl::GetData(int nOffset, int nL
 	*ppBufLen = nLength;
 }
 
-wxString TextProcess::Document::Impl::CDocumentLineImpl::GetData(int nOffset, int nLength)
+wxString TextProcess::Document::Impl::CDocumentLineImpl::GetData(wxFileOffset nOffset, wxFileOffset nLength)
 {
     wxChar * pBuf = NULL;
-    int pBufLen = 0;
+    wxFileOffset pBufLen = 0;
 
     GetData(nOffset, nLength, &pBuf, &pBufLen);
 

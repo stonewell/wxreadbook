@@ -8,7 +8,8 @@ namespace TextProcess
 			public virtual ILineBuilder
 		{
 		public:
-			DECLARE_PROPERTY(int, DocumentOffset);
+			DECLARE_TPL_INTERFACE(IDocumentLineBuilder);
+			DECLARE_PROPERTY(wxFileOffset, DocumentOffset);
 			DECLARE_PROPERTY(IDocumentLineManager *, DocumentLineManager);
 			DECLARE_PROPERTY(TextProcess::IO::IMemoryMappedFile *, DocumentFile);
 		};

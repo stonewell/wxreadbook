@@ -11,6 +11,7 @@ namespace TextProcess
 	class ILineBuilder
 	{
 	public:
+		DECLARE_TPL_INTERFACE(ILineBuilder);
 		DECLARE_PROPERTY(LineBuilderDirectionEnum, BuilderDirection);
 
 	public:

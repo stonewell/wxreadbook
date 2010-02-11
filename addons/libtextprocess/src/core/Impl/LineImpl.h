@@ -13,9 +13,9 @@ namespace TextProcess
 		public:
 			IMPL_PROPERTY(LineTypeEnum, Type);
 
-			IMPL_PROPERTY(int, Offset);
-			IMPL_PROPERTY(int, Length);
-			IMPL_PROPERTY(int, Index);
+			IMPL_PROPERTY(wxFileOffset, Offset);
+			IMPL_PROPERTY(wxFileOffset, Length);
+			IMPL_PROPERTY(wxUint32, Index);
 		};
 	}
 }

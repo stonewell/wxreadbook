@@ -45,9 +45,14 @@ namespace TextProcess
 					TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::Clear();
 				}
 
-				virtual void HasAllLines(int getAllLines = 1)
+				virtual void HasAllPreviousLines()
 				{
-					TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::HasAllLines(getAllLines);
+					TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::HasAllPreviousLines();
+				}
+
+				virtual void HasAllNextLines()
+				{
+					TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::HasAllNextLines();
 				}
 
 				virtual int IsHasAllLines()

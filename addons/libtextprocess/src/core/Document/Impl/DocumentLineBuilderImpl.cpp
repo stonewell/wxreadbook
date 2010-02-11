@@ -13,6 +13,7 @@ INIT_PROPERTY(Cancel, 0)
 
 TextProcess::Document::Impl::CDocumentLineBuilderImpl::~CDocumentLineBuilderImpl(void)
 {
+	int i = 0;
 }
 
 int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
@@ -29,8 +30,16 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 	const wxByte * pLFEnd = pLF + m_LFLength;
     const wxByte * pchEOL = NULL;
 
-    TextProcess::Document::IDocumentLine * pLastLine =
-		GetDocumentLineManager()->FindLine(CDocumentObjectFactory::CreateLineMatcher(GetDocumentOffset()), 0);
+	if (pStartPos > pFileEnd)
+		pStartPos = pFileEnd;
+
+	if (pStartPos < pFileBegin)
+		pStartPos = pFileBegin;
+
+	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(CDocumentObjectFactory::CreateLineMatcher(GetDocumentOffset()));
+
+	TextProcess::Document::IDocumentLine * pLastLine =
+		GetDocumentLineManager()->FindLine(pMatcher.get(), 0);
 
 	if (pLastLine != NULL)
 	{
@@ -64,8 +73,8 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 
     while(!m_Cancel && pStartPos < pEndPos)
     {
-        int length = 0;
-        int offset = 0;
+        wxFileOffset length = 0;
+        wxFileOffset offset = 0;
 
         if (GetBuilderDirection() == TextProcess::Next)
         {
@@ -122,16 +131,25 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
         }
     }
 
+	if (GetBuilderDirection() == TextProcess::Next)
+		GetDocumentLineManager()->HasAllNextLines();
+	else
+		GetDocumentLineManager()->HasAllPreviousLines();
+
 	return 1;
 }
 
 void TextProcess::Document::Impl::CDocumentLineBuilderImpl::Cancel()
 {
 	m_Cancel = 1;
-	GetDocumentLineManager()->HasAllLines();
+
+	if (GetBuilderDirection() == TextProcess::Next)
+		GetDocumentLineManager()->HasAllNextLines();
+	else
+		GetDocumentLineManager()->HasAllPreviousLines();
 }
 
-int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(int offset, int length)
+int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(wxFileOffset offset, wxFileOffset length)
 {
     const wxByte * pBegin = GetDocumentFile()->GetBuffer() + offset;
     const wxByte * pEnd = pBegin + length;

@@ -1,7 +1,7 @@
 #include "../../TextProcess.h"
 #include "../../Impl/TextProcessImpl.h"
 
-TextProcess::Document::IDocumentLine * TextProcess::Document::CDocumentObjectFactory::CreateDocumentLine(int offset, int length, TextProcess::IO::IMemoryMappedFile * pDocumentFile)
+TextProcess::Document::IDocumentLine * TextProcess::Document::CDocumentObjectFactory::CreateDocumentLine(wxFileOffset offset, wxFileOffset length, TextProcess::IO::IMemoryMappedFile * pDocumentFile)
 {
 	TextProcess::Document::IDocumentLine * pDocumentLine = new TextProcess::Document::Impl::CDocumentLineImpl();
 
@@ -12,7 +12,7 @@ TextProcess::Document::IDocumentLine * TextProcess::Document::CDocumentObjectFac
 	return pDocumentLine;
 }
 
-TextProcess::Document::IDocumentLineMatcher * TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(int docOffset)
+TextProcess::Document::IDocumentLineMatcher * TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(wxFileOffset docOffset)
 {
 	TextProcess::Document::IDocumentLineMatcher * pMatcher =
 		new TextProcess::Document::Impl::CDocumentLineMatcherImpl();

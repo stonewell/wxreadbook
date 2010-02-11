@@ -134,7 +134,7 @@ TextProcess::IO::Impl::CMemoryMappedFile::~CMemoryMappedFile(void)
 #endif
 }
 
-wxChar * TextProcess::IO::Impl::CMemoryMappedFile::DecodeData(int nOffset, int nLength, wxInt32 & nDecodedSize)
+wxChar * TextProcess::IO::Impl::CMemoryMappedFile::DecodeData(wxFileOffset nOffset, wxFileOffset nLength, wxInt32 & nDecodedSize)
 {
 	const char * pBegin = reinterpret_cast<const char *>(GetBuffer() + nOffset);
 
