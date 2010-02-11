@@ -104,10 +104,15 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	ReadBookDocManager.cpp \
 	ReadBookHelperFunc.h \
 	ReadBookHelperFunc.cpp \
+	presentation/textprocesslib/ReadBookTPLDoc.h \
+	presentation/textprocesslib/ReadBookTPLDoc.cpp \
+	presentation/textprocesslib/ReadBookTPLView.cpp \
+	presentation/textprocesslib/ReadBookTPLView.h \
 	version.h
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
+	../addons/libportablethread/libportablethread.a \
 	../addons/lib7zip/Lib7Zip/lib7zip.a
 
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
@@ -115,5 +120,5 @@ EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc
 dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
-all-local:
+all-local: wxReadBook
 	cp wxReadBook ..

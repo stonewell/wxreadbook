@@ -94,7 +94,7 @@ INIT_PROPERTY(Encoding, pEncoding)
 #else
 	off_t pa_offset;
 
-	m_hf = shm_open(SHARE_MEMORY_NAME, O_RDWR | O_CREATE, 0x1ED);
+	m_hf = shm_open(SHARE_MEMORY_NAME, O_RDWR, 0x1ED);
 
 	if (m_hf == -1) return;
 
@@ -112,7 +112,7 @@ INIT_PROPERTY(Encoding, pEncoding)
 	}
 
 	pInput->SeekI(0);
-	pInput->Read(m_p, cb);
+	pInput->Read(m_p, m_cb);
 #endif
 }
 

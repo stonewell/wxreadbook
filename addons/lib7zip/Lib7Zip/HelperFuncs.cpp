@@ -229,7 +229,14 @@ HRESULT IsArchiveItemProp(IInArchive *archive, UInt32 index, PROPID propID, bool
 
 HRESULT IsArchiveItemFolder(IInArchive *archive, UInt32 index, bool &result)
 {
+#if defined(kpidIsDir)
 	return IsArchiveItemProp(archive, index, kpidIsDir, result);
+#elif defined(kpidIsFolder)
+	return IsArchiveItemProp(archive, index, kpidIsFolder, result);
+#else
+	return E_FAIL;
+#endif
+
 }
 
 HRESULT IsArchiveItemAnti(IInArchive *archive, UInt32 index, bool &result)
