@@ -18,6 +18,7 @@ namespace TextProcess
                 virtual wxFileOffset GetLength() const { return m_cb; }
 
 				virtual wxChar * DecodeData(wxFileOffset nOffset, wxFileOffset nLength, wxInt32 & nDecodedSize);
+				virtual void Reset();
 
 				IMPL_PROPERTY(wxMBConv *, Encoding);
 

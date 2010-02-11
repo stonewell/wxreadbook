@@ -98,7 +98,7 @@ void CReadBookTPLDoc::StartDocumentLineBuilder()
 	wxFileOffset docPos = 0;
 
 	if (pFileInfo != NULL)
-		docPos = pFileInfo->m_nFilePos;
+		docPos = pFileInfo->m_nCurrentLine;
 
 	if (docPos < 0)
 		docPos = 0;
@@ -145,4 +145,15 @@ void CReadBookTPLDoc::StopDocumentLineBuilder()
 		if (!m_BuildNextThread.Join(3000))
 			m_BuildNextThread.Abort();
 	}
+}
+
+void CReadBookTPLDoc::ScrollDocumentTo(wxFileOffset nOffset)
+{
+	SetCurrentLine(nOffset);
+
+	StopDocumentLineBuilder();
+
+	m_pDocumentLineManager.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+	m_pMemoryMappedFile->Reset();
+	StartDocumentLineBuilder();
 }

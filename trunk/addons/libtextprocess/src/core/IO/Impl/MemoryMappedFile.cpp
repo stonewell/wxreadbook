@@ -156,3 +156,8 @@ wxChar * TextProcess::IO::Impl::CMemoryMappedFile::DecodeData(wxFileOffset nOffs
 
 	return pBuf;
 }
+
+void TextProcess::IO::Impl::CMemoryMappedFile::Reset()
+{
+	m_StringPool.Clear();
+}

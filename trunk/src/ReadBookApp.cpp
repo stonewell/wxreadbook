@@ -87,15 +87,15 @@ bool CReadBookApp::OnInit(void)
 
 #ifdef _WIN32
 #ifdef _WIN32_WCE
-#define DOC_CLASS CReadBookSimpleDoc
-#define VIEW_CLASS CReadBookSimpleView
+#define DOC_CLASS CReadBookTPLDoc
+#define VIEW_CLASS CReadBookTPLView
 #else
 #define DOC_CLASS CReadBookTPLDoc
 #define VIEW_CLASS CReadBookTPLView
 #endif
 #else
-#define DOC_CLASS CReadBookBufferedDoc
-#define VIEW_CLASS CReadBookBufferedView
+#define DOC_CLASS CReadBookTPLDoc
+#define VIEW_CLASS CReadBookTPLView
 #endif
 	(void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Files"),

@@ -12,6 +12,7 @@ namespace TextProcess
 
 				virtual wxChar * AllocString(const wxChar* pszBegin, const wxChar* pszEnd);
 				virtual wxChar * AllocBuffer(wxUint32 cch);
+				virtual void Clear();
 
 			private:
 				union HEADER {
@@ -33,6 +34,8 @@ namespace TextProcess
 				wxChar*  m_pchLimit;  // one past last available byte
 				HEADER*  m_phdrCur;   // current block
 				wxUint32   m_dwGranularity;
+
+				CCriticalSection m_Section;
 			};
 	}
 }

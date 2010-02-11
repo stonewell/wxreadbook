@@ -22,21 +22,13 @@ TextProcess::Utils::CStringPool::CStringPool()
 
 TextProcess::Utils::CStringPool::~CStringPool()
 {
-	HEADER* phdr = m_phdrCur;
-	while (phdr) {
-		HEADER hdr = *phdr;
-		phdr = hdr.m_phdrPrev;
-
-#ifdef _WIN32
-		VirtualFree(hdr.m_phdrPrev, hdr.m_cb, MEM_RELEASE);
-#else
-		free(hdr.m_phdrPrev);
-#endif
-	}
+	Clear();
 }
 
 wxChar * TextProcess::Utils::CStringPool::AllocBuffer(wxUint32 cch)
 {
+	TextProcess::Utils::CCriticalSectionAccessor a(&m_Section);
+
 	wxChar * psz = m_pchNext;
 	wxUint32 cbAlloc = 0;
 	wxByte * pbNext = NULL;
@@ -89,10 +81,33 @@ OOM:
 
 wxChar * TextProcess::Utils::CStringPool::AllocString(const wxChar* pszBegin, const wxChar* pszEnd)
 {
+	TextProcess::Utils::CCriticalSectionAccessor a(&m_Section);
+
 	size_t cch = pszEnd - pszBegin + 1;
 
 	wxChar * psz = AllocBuffer(cch);
 	wxStrncpy(psz, pszBegin, cch);
 
 	return psz;
+}
+
+void TextProcess::Utils::CStringPool::Clear()
+{
+	TextProcess::Utils::CCriticalSectionAccessor a(&m_Section);
+
+	HEADER* phdr = m_phdrCur;
+	while (phdr) {
+		HEADER hdr = *phdr;
+		phdr = hdr.m_phdrPrev;
+
+#ifdef _WIN32
+		VirtualFree(hdr.m_phdrPrev, hdr.m_cb, MEM_RELEASE);
+#else
+		free(hdr.m_phdrPrev);
+#endif
+	}
+	
+	m_pchNext = NULL;
+	m_pchLimit = NULL;
+	m_phdrCur = NULL;
 }
