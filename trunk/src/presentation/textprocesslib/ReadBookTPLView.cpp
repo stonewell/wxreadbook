@@ -83,7 +83,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
 
 	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
-	return;
+
 	if (m_pViewLine == NULL)
 	{
 		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(currentLine, 0));
@@ -213,12 +213,13 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 
 	if (pViewLine == NULL)
 	{
-		StopViewLineBuilder();
-		GetReadBookDoc()->ScrollDocumentTo(nLine);
-		StartViewLineBuilder();
+		//m_pLineManagerLock->UnlockRead();
+		//StopViewLineBuilder();
+		//GetReadBookDoc()->ScrollDocumentTo(nLine);
+		//StartViewLineBuilder();
+		//m_pLineManagerLock->LockRead();
+		pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
 	}
-
-	pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
 
 	if (pViewLine == NULL)
 		return GetReadBookDoc()->GetCurrentLine();
@@ -251,6 +252,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	{
 	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	m_pViewLineManager.reset(TextProcess::View::CViewObjectFactory::CreateLineManager());
+	m_pViewLine = NULL;
 	}
 
 	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());

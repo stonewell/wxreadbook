@@ -44,7 +44,7 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
             reinterpret_cast<wxStringData *>(psz);
 
         pStringData->nDataLength = cch;
-        pStringData->nRefs = 1;
+        pStringData->nRefs = 10000;
         pStringData->nAllocLength = cch;
 
 		return pStringData->data();
@@ -100,13 +100,13 @@ void TextProcess::Utils::Impl::CStringPool::Clear()
 	HEADER* phdr = m_phdrCur;
 	while (phdr) {
 		HEADER hdr = *phdr;
-		phdr = hdr.m_phdrPrev;
 
 #ifdef _WIN32
-		VirtualFree(hdr.m_phdrPrev, hdr.m_cb, MEM_RELEASE);
+		VirtualFree(phdr, hdr.m_cb, MEM_RELEASE);
 #else
-		free(hdr.m_phdrPrev);
+		free(phdr);
 #endif
+		phdr = hdr.m_phdrPrev;
 	}
 	
 	m_pchNext = NULL;
