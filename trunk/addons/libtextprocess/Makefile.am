@@ -29,15 +29,16 @@ libtextprocess_a_SOURCES = ./src/core/Document/DocumentObjectFactory.h \
 	./src/core/IO/Impl/MemoryMappedFile.h \
 	./src/core/TextProcess.h \
 	./src/core/TextProcessMacros.h \
-	./src/core/Utils/CriticalSection.h \
-	./src/core/Utils/Event.h \
-	./src/core/Utils/LockStatus.h \
-	./src/core/Utils/ReadWriteLock.cpp \
-	./src/core/Utils/ReadWriteLock.h \
-	./src/core/Utils/ReadWriteLocker.h \
-	./src/core/Utils/StringPool.h \
-	./src/core/Utils/StringPool.cpp \
-	./src/core/Utils/wxReadOnlyString.h \
+	./src/core/Utils/ICriticalSection.h \
+	./src/core/Utils/IEvent.h \
+	./src/core/Utils/IReadWriteLock.h \
+	./src/core/Utils/Impl/CriticalSection.h \
+	./src/core/Utils/Impl/Event.h \
+	./src/core/Utils/Impl/ReadWriteLock.cpp \
+	./src/core/Utils/Impl/ReadWriteLock.h \
+	./src/core/Utils/Impl/StringPool.h \
+	./src/core/Utils/Impl/StringPool.cpp \
+	./src/core/Utils/Impl/wxReadOnlyString.h \
 	./src/core/View/Impl/ViewLineBuilderImpl.cpp \
 	./src/core/View/Impl/ViewLineBuilderImpl.h \
 	./src/core/View/Impl/ViewLineImpl.cpp \

@@ -12,12 +12,11 @@
 #include <pthread.h>
 #endif
 
-#include "../Utils/CriticalSection.h"
-#include "../Utils/Event.h"
-#include "../Utils/ReadWriteLock.h"
-#include "../Utils/ReadWriteLocker.h"
-#include "../Utils/StringPool.h"
-#include "../Utils/wxReadOnlyString.h"
+#include "../Utils/Impl/CriticalSection.h"
+#include "../Utils/Impl/Event.h"
+#include "../Utils/Impl/ReadWriteLock.h"
+#include "../Utils/Impl/StringPool.h"
+#include "../Utils/Impl/wxReadOnlyString.h"
 
 #pragma warning(disable:4250)
 
@@ -37,3 +36,4 @@
 #include "../View/Impl/ViewLineBuilderImpl.h"
 
 #include "../IO/Impl/MemoryMappedFile.h"
+

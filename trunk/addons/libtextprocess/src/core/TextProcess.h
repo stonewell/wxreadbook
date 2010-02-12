@@ -23,3 +23,8 @@
 
 #include "./Document/DocumentObjectFactory.h"
 #include "./View/ViewObjectFactory.h"
+
+#include "./Utils/ICriticalSection.h"
+#include "./Utils/IEvent.h"
+#include "./Utils/IReadWriteLock.h"
+

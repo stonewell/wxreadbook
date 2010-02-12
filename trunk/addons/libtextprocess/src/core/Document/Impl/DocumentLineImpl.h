@@ -29,7 +29,7 @@ namespace TextProcess
 
 				wxChar * m_DecodedBuffer;
 				wxInt32 m_nDecodedLength;
-				TextProcess::Utils::CCriticalSection m_CriticalSection;
+				TextProcess::Utils::Impl::CCriticalSection m_CriticalSection;
 			};
 		}
 	}

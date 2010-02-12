@@ -49,7 +49,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 
 		pDocLine->GetData(0, pDocLine->GetDecodedLength(), &pBuf, &pBufLen);
 
-		TextProcess::Utils::wxReadOnlyString docLineData(pBuf, pBufLen);
+		TextProcess::Utils::Impl::wxReadOnlyString docLineData(pBuf, pBufLen);
 
 		while (!m_Cancel && viewLineOffset < pDocLine->GetDecodedLength())
 		{
@@ -121,7 +121,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::Cancel()
 		GetViewLineManager()->HasAllPreviousLines();
 }
 
-void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess::Utils::wxReadOnlyString * pDocLineData,
+void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
     wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth)
 {
 	long width = 0;

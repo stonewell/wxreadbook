@@ -1,12 +1,12 @@
-#include "../TextProcess.h"
-#include "../Impl/TextProcessImpl.h"
+#include "../../TextProcess.h"
+#include "../../Impl/TextProcessImpl.h"
 
 inline wxUint32 RoundUp(wxUint32 cb, wxUint32 units)
 {
 	return ((cb + units - 1) / units) * units;
 }
 
-TextProcess::Utils::CStringPool::CStringPool()
+TextProcess::Utils::Impl::CStringPool::CStringPool()
 : m_pchNext(NULL), m_pchLimit(NULL), m_phdrCur(NULL)
 {
 #ifdef _WIN32
@@ -20,12 +20,13 @@ TextProcess::Utils::CStringPool::CStringPool()
 #endif
 }
 
-TextProcess::Utils::CStringPool::~CStringPool()
+TextProcess::Utils::Impl::CStringPool::~CStringPool()
 {
 	Clear();
 }
 
-wxChar * TextProcess::Utils::CStringPool::AllocBuffer(wxUint32 cch)
+wxChar * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
+{
 {
 	TextProcess::Utils::CCriticalSectionAccessor a(&m_Section);
 
@@ -75,11 +76,12 @@ OOM:
 	phdrCur->m_cb = cbAlloc;
 	m_phdrCur = phdrCur;
 	m_pchNext = reinterpret_cast<wxChar*>(phdrCur + 1);
+}
 
 	return AllocBuffer(cch);
 }
 
-wxChar * TextProcess::Utils::CStringPool::AllocString(const wxChar* pszBegin, const wxChar* pszEnd)
+wxChar * TextProcess::Utils::Impl::CStringPool::AllocString(const wxChar* pszBegin, const wxChar* pszEnd)
 {
 	TextProcess::Utils::CCriticalSectionAccessor a(&m_Section);
 
@@ -91,7 +93,7 @@ wxChar * TextProcess::Utils::CStringPool::AllocString(const wxChar* pszBegin, co
 	return psz;
 }
 
-void TextProcess::Utils::CStringPool::Clear()
+void TextProcess::Utils::Impl::CStringPool::Clear()
 {
 	TextProcess::Utils::CCriticalSectionAccessor a(&m_Section);
 

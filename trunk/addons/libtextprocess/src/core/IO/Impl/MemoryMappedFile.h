@@ -25,7 +25,7 @@ namespace TextProcess
             private:
                 wxByte * m_p;
                 wxFileOffset   m_cb;
-				TextProcess::Utils::CStringPool m_StringPool;
+				TextProcess::Utils::Impl::CStringPool m_StringPool;
 
     #ifdef _WIN32
                 HANDLE  m_hf;
