@@ -1,1 +1,1 @@
-SUBDIRS = libtextprocess lib7zip
+SUBDIRS = libtextprocess lib7zip libportablethread
