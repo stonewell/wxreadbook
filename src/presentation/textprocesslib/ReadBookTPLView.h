@@ -41,5 +41,6 @@ private:
 	std::auto_ptr<CReadBookDC> m_pClientDCNext;
 	std::auto_ptr<wxRect> m_pClientRect;
 	bool m_bViewLineBuilding;
+	TextProcess::Utils::IReadWriteLock * m_pLineManagerLock;
 };
 

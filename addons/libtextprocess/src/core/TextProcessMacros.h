@@ -41,3 +41,13 @@
 #define DECLARE_TPL_INTERFACE(t) \
 	t() {} \
 	virtual ~t() {}
+
+#ifndef _WIN32
+
+#define WAIT_OBJECT_0 (0)
+#define WAIT_TIMEOUT (1)
+#define WAIT_ABANDONED (2)
+#define INFINITE (-1)
+
+#endif
+

@@ -4,6 +4,8 @@ namespace TextProcess
 {
 	namespace Utils
 	{
+		namespace Impl
+		{
 			class CStringPool
 			{
 			public:
@@ -37,5 +39,6 @@ namespace TextProcess
 
 				CCriticalSection m_Section;
 			};
+		}
 	}
 }

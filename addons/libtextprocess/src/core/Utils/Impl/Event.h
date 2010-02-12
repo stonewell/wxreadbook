@@ -1,17 +1,13 @@
 #pragma once
 
-#ifndef _WIN32
-#define WAIT_OBJECT_0 (0)
-#define WAIT_TIMEOUT (1)
-#define WAIT_ABANDONED (2)
-#define INFINITE (-1)
-#endif
-
 namespace TextProcess
 {
     namespace Utils
     {
-        class CEvent
+		namespace Impl
+		{
+        class CEvent :
+			public IEvent
         {
         public:
             CEvent(int bManualReset = 1, int bInitialized = 0)
@@ -28,7 +24,7 @@ namespace TextProcess
             #endif
             }
 
-            ~CEvent()
+            virtual ~CEvent()
             {
             #ifdef _WIN32
                 CloseHandle(m_hEvent);
@@ -38,7 +34,7 @@ namespace TextProcess
             #endif
             }
 
-            void Set()
+            virtual void Set()
             {
             #ifdef _WIN32
                 SetEvent(m_hEvent);
@@ -50,7 +46,7 @@ namespace TextProcess
             #endif
             }
 
-            void Reset()
+            virtual void Reset()
             {
             #ifdef _WIN32
                 ResetEvent(m_hEvent);
@@ -61,7 +57,7 @@ namespace TextProcess
             #endif
             }
 
-            int Wait(int nTimeout = -1)
+            virtual int Wait(int nTimeout = -1)
             {
             #ifdef _WIN32
                 return WaitForSingleObject(m_hEvent, nTimeout);
@@ -125,6 +121,7 @@ namespace TextProcess
         };
 
         class CMultiWaitEvent //Auto Reset wait ref count == 0
+			: public IMultiWaitEvent
         {
         private:
             int m_nWait;
@@ -137,17 +134,17 @@ namespace TextProcess
             {
             }
 
-            ~CMultiWaitEvent()
+            virtual ~CMultiWaitEvent()
             {
             }
 
-            void NotifyAll()
+            virtual void NotifyAll()
             {
                 CCriticalSectionAccessor a(&m_AccessLock);
                 m_Event.Set();
             }
 
-            void Wait()
+            virtual void Wait()
             {
 				m_AccessLock.Enter();
                 m_nWait++;
@@ -163,6 +160,7 @@ namespace TextProcess
 				m_AccessLock.Leave();
             }
         };
+		}
     }
 }
 

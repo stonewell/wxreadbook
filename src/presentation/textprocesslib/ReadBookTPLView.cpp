@@ -41,6 +41,7 @@ m_BuildPrevThread(new CViewBuilderRunnable())
 ,m_BuildNextThread(new CViewBuilderRunnable())
 ,m_pViewLine(NULL)
 ,m_bViewLineBuilding(false)
+,m_pLineManagerLock(TextProcess::Utils::IReadWriteLock::CreateReadWriteLock())
 {
 }
 
@@ -50,6 +51,7 @@ CReadBookTPLView::~CReadBookTPLView(void)
 
 	delete m_BuildPrevThread.GetPortableRunnable();
 	delete m_BuildNextThread.GetPortableRunnable();
+	delete m_pLineManagerLock;
 }
 
 void CReadBookTPLView::OnDraw(wxDC *pDC)
@@ -80,6 +82,8 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
 
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
+	return;
 	if (m_pViewLine == NULL)
 	{
 		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(currentLine, 0));
@@ -151,6 +155,7 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding)
 		return GetReadBookDoc()->GetCurrentLine();
 
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
 	if (nDelta < 0)
 	{
 		for(int i = 0; i > nDelta; i--)
@@ -187,6 +192,7 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding)
 		return GetReadBookDoc()->GetCurrentLine();
 
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
 	std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
 
 	TextProcess::View::IViewLine * pViewLine = NULL;
@@ -242,7 +248,10 @@ void CReadBookTPLView::StartViewLineBuilder()
 
 	wxFileOffset docPos = GetReadBookDoc()->GetCurrentLine();
 
+	{
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	m_pViewLineManager.reset(TextProcess::View::CViewObjectFactory::CreateLineManager());
+	}
 
 	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
@@ -298,3 +307,4 @@ void CReadBookTPLView::StopViewLineBuilder()
 			m_BuildNextThread.Abort();
 	}
 }
+

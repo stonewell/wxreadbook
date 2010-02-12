@@ -4,6 +4,8 @@ namespace TextProcess
 {
 	namespace Utils
 	{
+		namespace Impl
+		{
 		class wxReadOnlyString : public wxString
 		{
         private:
@@ -35,5 +37,6 @@ namespace TextProcess
 
 			size_t GetPchDataLength() const { return m_pchDataLength; }
 		};
+		}
 	}
 }

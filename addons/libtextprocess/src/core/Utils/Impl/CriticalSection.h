@@ -4,10 +4,13 @@ namespace TextProcess
 {
     namespace Utils
     {
+		namespace Impl
+		{
         /**
          * @class A wrapper-class around Critical Section functionality, WIN32 & PTHREADS.
          */
-        class CCriticalSection
+        class CCriticalSection :
+			public ICriticalSection
         {
         public:
             /**
@@ -27,7 +30,7 @@ namespace TextProcess
             /**
              * @brief CriticalSection class destructor
              */
-            ~CCriticalSection(void)
+            virtual ~CCriticalSection(void)
             {
             #ifdef _WIN32
                 DeleteCriticalSection(&this->m_cSection);
@@ -42,7 +45,7 @@ namespace TextProcess
              * @see TryEnter()
              * @return void
              */
-            void Enter(void)
+            virtual void Enter(void)
             {
             #ifdef _WIN32
                 EnterCriticalSection(&this->m_cSection);
@@ -60,7 +63,7 @@ namespace TextProcess
              * @see Enter()
              * @return void
              */
-            void Leave(void)
+            virtual void Leave(void)
             {
             #ifdef _WIN32
                 LeaveCriticalSection(&this->m_cSection);
@@ -69,21 +72,6 @@ namespace TextProcess
             #endif
             }; // Leave()
 
-            /**
-             * @fn bool TryEnter(void)
-             * @brief Attempt to enter the CriticalSection object
-             * @return bool(true) on success, bool(false) if otherwise
-             */
-            bool TryEnter(void)
-            {
-                // Attempt to acquire ownership:
-            #ifdef _WIN32
-                return(TRUE == TryEnterCriticalSection(&this->m_cSection));
-            #else
-                return(0 == pthread_mutex_trylock(&this->m_cSection));
-            #endif
-            }; // TryEnter()
-
         private:
         #ifdef _WIN32
             CRITICAL_SECTION m_cSection; //!< internal system critical section object (windows)
@@ -91,23 +79,7 @@ namespace TextProcess
             pthread_mutex_t m_cSection; //!< internal system critical section object (*nix)
         #endif
         }; // class CriticalSection
-
-        class CCriticalSectionAccessor
-        {
-        private:
-            CCriticalSection * m_pSec;
-        public:
-            CCriticalSectionAccessor(CCriticalSection * pSec) :
-              m_pSec(pSec)
-              {
-                  m_pSec->Enter();
-              }
-
-              ~CCriticalSectionAccessor()
-              {
-                  m_pSec->Leave();
-              }
-        };
-    }
+		}
+   }
 }
 

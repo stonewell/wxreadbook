@@ -1,16 +1,16 @@
-#include "../TextProcess.h"
-#include "../Impl/TextProcessImpl.h"
+#include "../../TextProcess.h"
+#include "../../Impl/TextProcessImpl.h"
 
-TextProcess::Utils::CReadWriteLock::CReadWriteLock(void) :
+TextProcess::Utils::Impl::CReadWriteLock::CReadWriteLock(void) :
 m_nAccessCount(0)
 {
 }
 
-TextProcess::Utils::CReadWriteLock::~CReadWriteLock(void)
+TextProcess::Utils::Impl::CReadWriteLock::~CReadWriteLock(void)
 {
 }
 
-TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockRead(int timeout)
+TextProcess::Utils::LockStatusEnum TextProcess::Utils::Impl::CReadWriteLock::LockRead(int timeout)
 {
 	m_AccessLock.Enter();
 	while (m_nAccessCount < 0)
@@ -40,7 +40,7 @@ TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockRead(
 	return TextProcess::Utils::Lock_OK;
 }
 
-TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::UnlockRead()
+TextProcess::Utils::LockStatusEnum TextProcess::Utils::Impl::CReadWriteLock::UnlockRead()
 {
 	TextProcess::Utils::CCriticalSectionAccessor a(&m_AccessLock);
 
@@ -55,7 +55,7 @@ TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::UnlockRea
 	return TextProcess::Utils::Lock_OK;
 }
 
-TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockWrite(int timeout)
+TextProcess::Utils::LockStatusEnum TextProcess::Utils::Impl::CReadWriteLock::LockWrite(int timeout)
 {
 	m_AccessLock.Enter();
 
@@ -84,7 +84,7 @@ TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::LockWrite
 	return TextProcess::Utils::Lock_OK;
 }
 
-TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::UnlockWrite()
+TextProcess::Utils::LockStatusEnum TextProcess::Utils::Impl::CReadWriteLock::UnlockWrite()
 {
 	TextProcess::Utils::CCriticalSectionAccessor a(&m_AccessLock);
 
@@ -95,3 +95,9 @@ TextProcess::Utils::LockStatusEnum TextProcess::Utils::CReadWriteLock::UnlockWri
 
 	return TextProcess::Utils::Lock_OK;
 }
+
+TextProcess::Utils::IReadWriteLock * TextProcess::Utils::IReadWriteLock::CreateReadWriteLock()
+{
+	return new TextProcess::Utils::Impl::CReadWriteLock();
+}
+
