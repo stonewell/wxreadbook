@@ -26,7 +26,9 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 		GetDocumentLineManager()->FindLine(pMatcher.get());
 
 	if (pDocLine == NULL)
+	{
 		return 1;
+	}
 
 	if (GetBuilderDirection() == TextProcess::Prev)
 		pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
@@ -60,7 +62,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 				viewLineSize = pDocLine->GetDecodedLength() - viewLineOffset;
 			}
 
-			FixViewLineSize(&docLineData,
+			FixViewLineSize2(&docLineData,
                 viewLineOffset, viewLineSize,
                 cur_all_line_width);
 
@@ -187,6 +189,80 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
 
                 last_width = width;
                 GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, 0, 0, GetViewFont());
+            }
+        }//if
+    }
+    while(false);
+
+	curAllViewLineWidth = last_width;
+}
+
+void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize2(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
+    wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth)
+{
+	long width = 0;
+	long height = 0;
+
+	wxString newString = pDocLineData->substr(0, offset + size);
+
+	GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
+
+    long last_width = width;
+
+    do
+    {
+		if (width < curAllViewLineWidth)
+			break;
+
+        if (width - curAllViewLineWidth < GetClientArea()->GetWidth())
+        {
+			if (offset + size + 1 > pDocLineData->length()) {
+                break;
+            }
+			
+			newString = pDocLineData->substr(0, offset + size + 1);
+
+            last_width = width;
+            GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
+
+            while (!m_Cancel &&
+                (width - curAllViewLineWidth) < GetClientArea()->GetWidth() &&
+                (size_t)(offset + size) <= pDocLineData->GetPchDataLength())
+            {
+                size++;
+			if (offset + size + 1 > pDocLineData->length()) {
+                break;
+            }
+			newString = pDocLineData->substr(0, offset + size + 1);
+	
+                last_width = width;
+                GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
+            }
+        }
+        else if (width - curAllViewLineWidth > GetClientArea()->GetWidth())
+        {
+            size--;
+
+			if (offset + size > pDocLineData->length()) {
+                break;
+            }
+			newString = pDocLineData->substr(0, offset + size);
+	
+            last_width = width;
+            GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
+
+            while (!m_Cancel &&
+                (width - curAllViewLineWidth) > GetClientArea()->GetWidth() &&
+                size > 0)
+            {
+                size--;
+			if (offset + size > pDocLineData->length()) {
+                break;
+            }
+			newString = pDocLineData->substr(0, offset + size);
+
+                last_width = width;
+                GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
             }
         }//if
     }

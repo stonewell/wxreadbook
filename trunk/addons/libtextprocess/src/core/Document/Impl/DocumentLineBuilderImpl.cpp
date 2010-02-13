@@ -14,7 +14,6 @@ INIT_PROPERTY(Cancel, 0)
 
 TextProcess::Document::Impl::CDocumentLineBuilderImpl::~CDocumentLineBuilderImpl(void)
 {
-	int i = 0;
 }
 
 int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
@@ -53,7 +52,21 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 
 		if (pStartPos != pchEOL)
 		{
-			pStartPos = pchEOL + m_CRLength;
+			if (GetBuilderDirection() == TextProcess::Next)
+			{
+				pStartPos = pchEOL + m_CRLength;
+			}
+			else
+			{
+                if (!memcmp(pchEOL - m_LFLength, pLF, m_LFLength))
+                {
+                    pStartPos = pchEOL - m_LFLength;
+                }
+				else
+				{
+					pStartPos = pchEOL;
+				}
+			}
 		}
 		else
 		{

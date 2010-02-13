@@ -38,7 +38,7 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 
 	if (m_pchNext + cch * sizeof(wxChar) + wxStringDataSize <= m_pchLimit)
 	{
-		m_pchNext += (cch * sizeof(wxChar) + wxStringDataSize);
+		m_pchNext += ((cch + 1) * sizeof(wxChar) + wxStringDataSize);
 
 		wxStringData * pStringData =
             reinterpret_cast<wxStringData *>(psz);
@@ -46,6 +46,7 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
         pStringData->nDataLength = cch;
         pStringData->nRefs = 10000;
         pStringData->nAllocLength = cch;
+		pStringData->data()[cch] = wxT('\0');
 
 		return pStringData->data();
 	}
