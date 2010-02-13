@@ -18,12 +18,12 @@ namespace TextProcess
 			    m_pchDataLength = pBufLen;
 
 			    GetStringData()->Lock();
-				m_SavedChar = GetStringData()->data()[length()];
+				m_SavedChar = m_pchData[length()];
 			}
 		
 			~wxReadOnlyString()
 			{
-				GetStringData()->data()[length()] = m_SavedChar;
+				m_pchData[length()] = m_SavedChar;
 			}
 
 			wxReadOnlyString(const wxString & string) :
@@ -36,9 +36,10 @@ namespace TextProcess
 			{
 			    if (newSize >= 0 && newSize <= m_pchDataLength)
 			    {
-					GetStringData()->data()[length()] = m_SavedChar;
+					m_pchData[length()] = m_SavedChar;
                     GetStringData()->nDataLength = newSize;
-					m_SavedChar = GetStringData()->data()[length()];
+					m_SavedChar = m_pchData[length()];
+					m_pchData[length()] = wxT('\0');
 			    }
 
                 return GetStringData()->nDataLength;

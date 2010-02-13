@@ -75,7 +75,9 @@ bool CReadBookTPLDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGu
 		m_pMemoryMappedFile.reset(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(url, pConv));
 	}
 
-	m_pDocumentLineManager.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+	TextProcess::Document::IDocumentLineManager * pDocumentLineManager =
+TextProcess::Document::CDocumentObjectFactory::CreateLineManager();
+	m_pDocumentLineManager.reset(pDocumentLineManager);
 
 	StartDocumentLineBuilder();
 

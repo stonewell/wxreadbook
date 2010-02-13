@@ -25,3 +25,34 @@ int TextProcess::View::Impl::CViewLineMatcherImpl::IsMatch(const ILine * pLine) 
 
 	return 0;
 }
+
+int TextProcess::View::Impl::CViewLineMatcherImpl::IsBeforeLine(const ILine * pLine) const
+{
+	if (pLine->GetType() == ILine::ViewLine)
+    {
+        const IViewLine * pViewLine = dynamic_cast<const IViewLine *>(pLine);
+
+        return  pViewLine->GetDocumentLine()->GetOffset() > GetDocumentLineOffset() ||
+			(pViewLine->GetDocumentLine()->GetOffset() <= GetDocumentLineOffset() &&
+            pViewLine->GetDocumentLine()->GetOffset() + pViewLine->GetDocumentLine()->GetLength() > GetDocumentLineOffset() &&
+            pViewLine->GetOffset() > GetViewLineOffset());
+    }
+
+	return 0;
+}
+
+int TextProcess::View::Impl::CViewLineMatcherImpl::IsAfterLine(const ILine * pLine) const
+{
+	if (pLine->GetType() == ILine::ViewLine)
+    {
+        const IViewLine * pViewLine = dynamic_cast<const IViewLine *>(pLine);
+
+        return pViewLine->GetDocumentLine()->GetOffset() + pViewLine->GetDocumentLine()->GetLength() <= GetDocumentLineOffset() ||
+			(pViewLine->GetDocumentLine()->GetOffset() <= GetDocumentLineOffset() &&
+            pViewLine->GetDocumentLine()->GetOffset() + pViewLine->GetDocumentLine()->GetLength() > GetDocumentLineOffset() &&
+            pViewLine->GetOffset() + pViewLine->GetLength() <= GetViewLineOffset());
+    }
+
+	return 0;
+}
+

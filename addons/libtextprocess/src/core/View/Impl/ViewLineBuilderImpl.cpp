@@ -2,6 +2,8 @@
 #include "../../Impl/TextProcessImpl.h"
 
 #include <memory>
+#include <iostream>
+#include <string>
 
 TextProcess::View::Impl::CViewLineBuilderImpl::CViewLineBuilderImpl(void) :
 INIT_PROPERTY(ClientArea, NULL)
@@ -62,7 +64,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 				viewLineSize = pDocLine->GetDecodedLength() - viewLineOffset;
 			}
 
-			FixViewLineSize2(&docLineData,
+			FixViewLineSize(&docLineData,
                 viewLineOffset, viewLineSize,
                 cur_all_line_width);
 
@@ -197,6 +199,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
 	curAllViewLineWidth = last_width;
 }
 
+/*
 void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize2(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
     wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth)
 {
@@ -270,3 +273,5 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize2(TextProcess
 
 	curAllViewLineWidth = last_width;
 }
+*/
+

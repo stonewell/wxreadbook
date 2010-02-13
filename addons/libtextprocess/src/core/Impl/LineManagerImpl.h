@@ -179,11 +179,28 @@ namespace TextProcess
 						pEntry = pEntry->GetNext();
 					}
 
+					if (m_pHeaderEntry != NULL && 
+						IsHasAllPreviousLines() && 
+						wait && 
+						pMatcher->IsBeforeLine(m_pHeaderEntry->GetLine()))
+					{
+						m_ReadWriteLock.UnlockRead();
+						return m_pHeaderEntry->GetLine();
+					}
+
+					if (m_pTailEntry != NULL && 
+						IsHasAllNextLines() && 
+						wait && 
+						pMatcher->IsAfterLine(m_pTailEntry->GetLine()))
+					{
+						m_ReadWriteLock.UnlockRead();
+						return m_pTailEntry->GetLine();
+					}
+
 					if (!IsHasAllLines() && wait)
 					{
 						m_ReadWriteLock.UnlockRead();
 						WaitNewEntry();
-
 						if (m_bClearing)
 							return NULL;
 
