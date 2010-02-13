@@ -18,6 +18,8 @@ namespace TextProcess
 				IMPL_PROPERTY(wxFileOffset, ViewLineOffset);
 
 				virtual int IsMatch(const ILine * pLine) const;
+				virtual int IsBeforeLine(const ILine * pLine) const;
+				virtual int IsAfterLine(const ILine * pLine) const;
 			};
 		}
 	}

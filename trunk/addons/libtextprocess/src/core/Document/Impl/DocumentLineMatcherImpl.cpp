@@ -23,3 +23,30 @@ int TextProcess::Document::Impl::CDocumentLineMatcherImpl::IsMatch(const ILine *
 
 	return 0;
 }
+
+int TextProcess::Document::Impl::CDocumentLineMatcherImpl::IsBeforeLine(const ILine * pLine) const
+{
+	if (pLine->GetType() == TextProcess::ILine::DocumentLine)
+	{
+		const IDocumentLine * pDocLine = 
+			dynamic_cast<const IDocumentLine *>(pLine);
+
+		return pDocLine->GetOffset() > GetDocumentOffset();
+	}
+
+	return 0;
+}
+
+int TextProcess::Document::Impl::CDocumentLineMatcherImpl::IsAfterLine(const ILine * pLine) const
+{
+	if (pLine->GetType() == TextProcess::ILine::DocumentLine)
+	{
+		const IDocumentLine * pDocLine = 
+			dynamic_cast<const IDocumentLine *>(pLine);
+
+		return pDocLine->GetOffset() + pDocLine->GetLength() <= GetDocumentOffset();
+	}
+
+	return 0;
+}
+
