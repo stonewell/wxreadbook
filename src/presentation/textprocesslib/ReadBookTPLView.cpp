@@ -213,11 +213,11 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 
 	if (pViewLine == NULL)
 	{
-		//m_pLineManagerLock->UnlockRead();
-		//StopViewLineBuilder();
-		//GetReadBookDoc()->ScrollDocumentTo(nLine);
-		//StartViewLineBuilder();
-		//m_pLineManagerLock->LockRead();
+		m_pLineManagerLock->UnlockRead();
+		StopViewLineBuilder();
+		GetReadBookDoc()->ScrollDocumentTo(nLine);
+		StartViewLineBuilder();
+		m_pLineManagerLock->LockRead();
 		pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
 	}
 
