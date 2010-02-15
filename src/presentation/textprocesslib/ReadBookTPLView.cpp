@@ -257,8 +257,8 @@ void CReadBookTPLView::StartViewLineBuilder()
 
 	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
-	m_pClientDCPrev.reset(new CReadBookDC(GetCanvas()));
-	m_pClientDCNext.reset(new CReadBookDC(GetCanvas()));
+	m_pClientDC.reset(new CReadBookDC(GetCanvas()));
+	m_pGraphic.reset(new CViewBuilderGraphic(m_pClientDC.get()));
 
 	m_pClientRect.reset(new wxRect(GetClientRect()));
 
@@ -266,7 +266,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	m_pViewLineBuilderPrev->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderPrev->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
 	m_pViewLineBuilderPrev->SetDocumentLineOffset(docPos);
-	m_pViewLineBuilderPrev->SetGraphics(m_pClientDCPrev.get());
+	m_pViewLineBuilderPrev->SetGraphics(m_pGraphic.get());
 	m_pViewLineBuilderPrev->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderPrev->SetViewLineManager(m_pViewLineManager.get());
 	m_pViewLineBuilderPrev->SetViewLineOffset(0);
@@ -280,7 +280,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderNext->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
 	m_pViewLineBuilderNext->SetDocumentLineOffset(docPos);
-	m_pViewLineBuilderNext->SetGraphics(m_pClientDCNext.get());
+	m_pViewLineBuilderNext->SetGraphics(m_pGraphic.get());
 	m_pViewLineBuilderNext->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderNext->SetViewLineManager(m_pViewLineManager.get());
 	m_pViewLineBuilderNext->SetViewLineOffset(0);

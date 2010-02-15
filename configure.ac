@@ -22,9 +22,9 @@ AC_ARG_ENABLE([debug],
      esac],[debug=no])
 
 if test "$debug" = yes; then
-    DEBUG_FLAG=-g
+    debug_flag="-g -D_DEBUG"
 else
-    DEBUG_FLAG=
+    debug_flag=""
 fi
 
 dnl enable static
@@ -56,9 +56,9 @@ if test "$WX_CONFIG" = no; then
 	AC_MSG_FAILURE(wx-config not exists)
 fi
 
-CXXFLAGS="`wx-config --cxxflags --static=$static --debug=$debug` $DEBUG_FLAG"
-CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` $DEBUG_FLAG"
-CFLAGS="`wx-config --cflags --static=$static --debug=$debug` $DEBUG_FLAG"
+CXXFLAGS="`wx-config --cxxflags --static=$static --debug=$debug` ${debug_flag}"
+CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` ${debug_flag}"
+CFLAGS="`wx-config --cflags --static=$static --debug=$debug` ${debug_flag}"
 LIBS="`wx-config --libs --static=$static --debug=$debug`"
 
 AC_CHECK_HEADERS(["wx/wx.h"],
@@ -80,7 +80,7 @@ AC_CHECK_FUNCS([memset])
 AC_CHECK_FUNCS([sqrt])
 AC_CHECK_FUNCS([gettimeofday])
 AC_CHECK_FUNCS([mmap])
-AC_CHECK_FUNCS([open])
+AC_CHECK_FUNCS([open nanosleep usleep])
 AC_CHECK_HEADERS([algorithm], 
 	[AC_DEFINE([HAVE_ALGORITHM], 1, [Define to 1 if you have <algorithm>.]) ], 
 	[AC_MSG_ERROR([unable to find algorithm, please install libstdc++])])
