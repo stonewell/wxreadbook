@@ -21,7 +21,7 @@ namespace TextProcess
 				IMPL_PROPERTY(wxFileOffset, ViewLineOffset);
 				IMPL_PROPERTY(TextProcess::Document::IDocumentLineManager *, DocumentLineManager);
 				IMPL_PROPERTY(IViewLineManager *, ViewLineManager);
-				IMPL_PROPERTY(wxDC *, Graphics);
+				IMPL_PROPERTY(IViewLineBuilderGraphic *, Graphics);
 
 			public:
 				virtual int BuildLines();
@@ -31,11 +31,6 @@ namespace TextProcess
 				IMPL_PROPERTY_FIELD(int, Cancel);
 				void FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
                     wxFileOffset viewLineOffset, wxFileOffset & viewLineSize, long & curAllViewLineWidth);
-/*
-				void FixViewLineSize2(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
-                    wxFileOffset viewLineOffset, wxFileOffset & viewLineSize, long & curAllViewLineWidth);
-*/
-	
 			};
 		}
 	}

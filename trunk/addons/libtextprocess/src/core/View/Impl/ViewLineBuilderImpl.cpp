@@ -1,9 +1,13 @@
 #include "../../TextProcess.h"
 #include "../../Impl/TextProcessImpl.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_MEMORY
 #include <memory>
-#include <iostream>
-#include <string>
+#endif
 
 TextProcess::View::Impl::CViewLineBuilderImpl::CViewLineBuilderImpl(void) :
 INIT_PROPERTY(ClientArea, NULL)
@@ -23,12 +27,14 @@ TextProcess::View::Impl::CViewLineBuilderImpl::~CViewLineBuilderImpl(void)
 
 int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 {
+TPL_PRINTF("View Line Builder %d Started\n", GetBuilderDirection());
 	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(GetDocumentLineOffset()));
 	TextProcess::Document::IDocumentLine * pDocLine =
 		GetDocumentLineManager()->FindLine(pMatcher.get());
 
 	if (pDocLine == NULL)
 	{
+TPL_PRINTF("View Line Builder %d Stopped 1\n", GetBuilderDirection());
 		return 1;
 	}
 
@@ -45,6 +51,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 
 	while (!m_Cancel && pDocLine != NULL)
 	{
+TPL_PRINTF("View Line Builder %d Running 1\n", GetBuilderDirection());
 		pFirstDocViewLine = NULL;
 		pNextLine = NULL;
 		wxChar * pBuf = NULL;
@@ -53,10 +60,12 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 
 		pDocLine->GetData(0, pDocLine->GetDecodedLength(), &pBuf, &pBufLen);
 
+TPL_PRINTF("View Line Builder %d Running 2\n", GetBuilderDirection());
 		TextProcess::Utils::Impl::wxReadOnlyString docLineData(pBuf, pBufLen);
 
 		while (!m_Cancel && viewLineOffset < pDocLine->GetDecodedLength())
 		{
+TPL_PRINTF("View Line Builder %d Running 3\n", GetBuilderDirection());
 			wxFileOffset viewLineSize = defaultLineCharSize;
 
 			if (viewLineSize + viewLineOffset > pDocLine->GetDecodedLength())
@@ -64,27 +73,35 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 				viewLineSize = pDocLine->GetDecodedLength() - viewLineOffset;
 			}
 
+TPL_PRINTF("View Line Builder %d Running 4\n", GetBuilderDirection());
 			FixViewLineSize(&docLineData,
                 viewLineOffset, viewLineSize,
                 cur_all_line_width);
+TPL_PRINTF("View Line Builder %d Running 5\n", GetBuilderDirection());
 
 			if (m_Cancel) break;
 
 			IViewLine * pLine =
                 CViewObjectFactory::CreateViewLine(viewLineOffset, viewLineSize, pDocLine);
 
+TPL_PRINTF("View Line Builder %d Running 6\n", GetBuilderDirection());
 			if (pFirstDocViewLine == NULL && GetBuilderDirection() == TextProcess::Prev)
 			{
+TPL_PRINTF("View Line Builder %d Running 7\n", GetBuilderDirection());
 				GetViewLineManager()->AddPrevLine(pLine, pFirstDocViewLine);
 				pFirstDocViewLine = pLine;
 				pNextLine = pLine;
+TPL_PRINTF("View Line Builder %d Running 8\n", GetBuilderDirection());
 			}
 			else
 			{
+TPL_PRINTF("View Line Builder %d Running 9\n", GetBuilderDirection());
 				GetViewLineManager()->AddNextLine(pLine, pNextLine);
 				pNextLine = pLine;
+TPL_PRINTF("View Line Builder %d Running 10\n", GetBuilderDirection());
 			}
 
+TPL_PRINTF("New ViewLine Added %d\n", GetBuilderDirection());
 			viewLineOffset += viewLineSize;
 		}
 
@@ -96,15 +113,18 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 			pDocLine = GetDocumentLineManager()->GetNextLine(pDocLine);
 		else
 			pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
-
+TPL_PRINTF("View Builder %d Get New Doc Line\n", GetBuilderDirection());
 		if (pDocLine != NULL)
 		{
+TPL_PRINTF("View Builder %d Get New Doc Line check\n", GetBuilderDirection());
 			std::auto_ptr<IViewLineMatcher> pMatcher(CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
 			if (GetViewLineManager()->FindLine(pMatcher.get(), false) != NULL)
 			{
+TPL_PRINTF("View Builder %d Get New Doc Line check existing\n", GetBuilderDirection());
 				break;
 			}
 		}
+TPL_PRINTF("View Builder %d Get New Doc Line check pass\n", GetBuilderDirection());
 	}
 
 	if (GetBuilderDirection() == TextProcess::Next)
@@ -112,6 +132,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 	else
 		GetViewLineManager()->HasAllPreviousLines();
 
+TPL_PRINTF("View Line Builder %d Stopped 2\n", GetBuilderDirection());
 	return true;
 }
 
@@ -128,12 +149,12 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::Cancel()
 void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
     wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth)
 {
-	long width = 0;
-	long height = 0;
+	wxCoord width = 0;
+	wxCoord height = 0;
 
     wxFileOffset newSize = pDocLineData->ReadOnlyResize(offset + size);
 
-	GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, 0, 0, GetViewFont());
+	GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
 
     long last_width = width;
 
@@ -152,7 +173,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
             }
 
             last_width = width;
-            GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, 0, 0, GetViewFont());
+            GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
 
             while (!m_Cancel &&
                 (width - curAllViewLineWidth) < GetClientArea()->GetWidth() &&
@@ -165,7 +186,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
                     break;
 
                 last_width = width;
-                GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, 0, 0, GetViewFont());
+                GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
             }
         }
         else if (width - curAllViewLineWidth > GetClientArea()->GetWidth())
@@ -177,7 +198,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
                 break;
 
             last_width = width;
-            GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, 0, 0, GetViewFont());
+            GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
 
             while (!m_Cancel &&
                 (width - curAllViewLineWidth) > GetClientArea()->GetWidth() &&
@@ -190,88 +211,12 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
                     break;
 
                 last_width = width;
-                GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, 0, 0, GetViewFont());
+                GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
             }
-        }//if
+        }//
     }
     while(false);
 
 	curAllViewLineWidth = last_width;
 }
-
-/*
-void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize2(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
-    wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth)
-{
-	long width = 0;
-	long height = 0;
-
-	wxString newString = pDocLineData->substr(0, offset + size);
-
-	GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
-
-    long last_width = width;
-
-    do
-    {
-		if (width < curAllViewLineWidth)
-			break;
-
-        if (width - curAllViewLineWidth < GetClientArea()->GetWidth())
-        {
-			if (offset + size + 1 > pDocLineData->length()) {
-                break;
-            }
-			
-			newString = pDocLineData->substr(0, offset + size + 1);
-
-            last_width = width;
-            GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
-
-            while (!m_Cancel &&
-                (width - curAllViewLineWidth) < GetClientArea()->GetWidth() &&
-                (size_t)(offset + size) <= pDocLineData->GetPchDataLength())
-            {
-                size++;
-			if (offset + size + 1 > pDocLineData->length()) {
-                break;
-            }
-			newString = pDocLineData->substr(0, offset + size + 1);
-	
-                last_width = width;
-                GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
-            }
-        }
-        else if (width - curAllViewLineWidth > GetClientArea()->GetWidth())
-        {
-            size--;
-
-			if (offset + size > pDocLineData->length()) {
-                break;
-            }
-			newString = pDocLineData->substr(0, offset + size);
-	
-            last_width = width;
-            GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
-
-            while (!m_Cancel &&
-                (width - curAllViewLineWidth) > GetClientArea()->GetWidth() &&
-                size > 0)
-            {
-                size--;
-			if (offset + size > pDocLineData->length()) {
-                break;
-            }
-			newString = pDocLineData->substr(0, offset + size);
-
-                last_width = width;
-                GetGraphics()->GetTextExtent(newString, &width, &height, 0, 0, GetViewFont());
-            }
-        }//if
-    }
-    while(false);
-
-	curAllViewLineWidth = last_width;
-}
-*/
 

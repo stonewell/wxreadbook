@@ -4898,9 +4898,9 @@ fi
 
 
 if test "$debug" = yes; then
-    DEBUG_FLAG=-g
+    debug_flag="-g -D_DEBUG"
 else
-    DEBUG_FLAG=
+    debug_flag=""
 fi
 
 # Check whether --enable-static was given.
@@ -4983,9 +4983,9 @@ as_fn_error "wx-config not exists
 See \`config.log' for more details." "$LINENO" 5; }
 fi
 
-CXXFLAGS="`wx-config --cxxflags --static=$static --debug=$debug` $DEBUG_FLAG"
-CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` $DEBUG_FLAG"
-CFLAGS="`wx-config --cflags --static=$static --debug=$debug` $DEBUG_FLAG"
+CXXFLAGS="`wx-config --cxxflags --static=$static --debug=$debug` ${debug_flag}"
+CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` ${debug_flag}"
+CFLAGS="`wx-config --cflags --static=$static --debug=$debug` ${debug_flag}"
 LIBS="`wx-config --libs --static=$static --debug=$debug`"
 
 
@@ -5355,12 +5355,14 @@ _ACEOF
 fi
 done
 
-for ac_func in open
+for ac_func in open nanosleep usleep
 do :
-  ac_fn_cxx_check_func "$LINENO" "open" "ac_cv_func_open"
-if test "x$ac_cv_func_open" = x""yes; then :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_cxx_check_func "$LINENO" "$ac_func" "$as_ac_var"
+eval as_val=\$$as_ac_var
+   if test "x$as_val" = x""yes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_OPEN 1
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
 _ACEOF
 
 fi

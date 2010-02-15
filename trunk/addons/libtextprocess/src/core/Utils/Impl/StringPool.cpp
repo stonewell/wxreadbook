@@ -52,7 +52,10 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 	}
 
 	if (cch > MAX_CHARALLOC)
+	{
+TPL_PRINTF("OOM: cch=%ld MAX_CHARALLOC=%ld\n", cch,  MAX_CHARALLOC);
         goto OOM;
+	}
 
 	cbAlloc = RoundUp(wxStringDataSize + cch * sizeof(wxChar) + sizeof(HEADER),
 		m_dwGranularity);
@@ -66,8 +69,10 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 
 	if (!pbNext)
 	{
+TPL_PRINTF("OOM: pbNext is null %ld\n", cbAlloc);
 OOM:
-		static std::bad_alloc OOM;
+//		static std::bad_alloc OOM;
+		static int OOM = 1000;
 		throw(OOM);
 	}
 

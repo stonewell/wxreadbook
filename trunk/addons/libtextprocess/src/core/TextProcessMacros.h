@@ -51,3 +51,10 @@
 
 #endif
 
+#ifdef _DEBUG
+#define TPL_PRINTF printf
+#define TPL_WPRINTF wprintf
+#else
+#define TPL_PRINTF(...)
+#define TPL_WPRINTF(...)
+#endif

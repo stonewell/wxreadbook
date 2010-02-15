@@ -6,6 +6,32 @@
 #include "TextProcess.h"
 #include "PortableThread.h"
 
+class CViewBuilderGraphic :
+	public TextProcess::View::IViewLineBuilderGraphic
+{
+public:
+	CViewBuilderGraphic(CReadBookDC * pDC) : m_pDC(pDC)
+	, m_pSection(TextProcess::Utils::ICriticalSection::CreateCriticalSection())
+	{ }
+
+	virtual ~CViewBuilderGraphic() 
+	{
+		delete m_pSection;
+	}
+
+	virtual void GetTextExtent(const wxString& string,
+                       wxCoord *x, wxCoord *y,
+                       wxFont *theFont = NULL) const
+	{
+		TextProcess::Utils::CCriticalSectionAccessor a(m_pSection);
+		m_pDC->GetTextExtent(string, x, y, NULL, NULL, theFont);
+	}
+
+private:
+	CReadBookDC * m_pDC;
+	TextProcess::Utils::ICriticalSection * m_pSection;
+};
+
 class CReadBookTPLView :
 	public CReadBookView
 {
@@ -37,8 +63,8 @@ private:
 	PortableThread::CPortableThread m_BuildPrevThread;
 	PortableThread::CPortableThread m_BuildNextThread;
 	TextProcess::View::IViewLine * m_pViewLine;
-	std::auto_ptr<CReadBookDC> m_pClientDCPrev;
-	std::auto_ptr<CReadBookDC> m_pClientDCNext;
+	std::auto_ptr<CReadBookDC> m_pClientDC;
+	std::auto_ptr<CViewBuilderGraphic> m_pGraphic;
 	std::auto_ptr<wxRect> m_pClientRect;
 	bool m_bViewLineBuilding;
 	TextProcess::Utils::IReadWriteLock * m_pLineManagerLock;

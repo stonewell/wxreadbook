@@ -1,8 +1,17 @@
 #include "../../TextProcess.h"
 #include "../../Impl/TextProcessImpl.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_ALGORITHM
 #include <algorithm>
+#endif
+
+#ifdef HAVE_MEMORY
 #include <memory>
+#endif
 
 TextProcess::Document::Impl::CDocumentLineBuilderImpl::CDocumentLineBuilderImpl(void) :
 INIT_PROPERTY(DocumentOffset, 0),
@@ -141,6 +150,11 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
             else
                 GetDocumentLineManager()->AddPrevLine(pDocLine, pLastLine);
 
+#ifdef _WIN32
+			Sleep(1);
+#else
+			usleep(1000);
+#endif
             pLastLine = pDocLine;
         }
     }

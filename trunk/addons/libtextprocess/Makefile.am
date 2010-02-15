@@ -33,7 +33,9 @@ libtextprocess_a_SOURCES = ./src/core/Document/DocumentObjectFactory.h \
 	./src/core/Utils/IEvent.h \
 	./src/core/Utils/IReadWriteLock.h \
 	./src/core/Utils/Impl/CriticalSection.h \
+	./src/core/Utils/Impl/CriticalSection.cpp \
 	./src/core/Utils/Impl/Event.h \
+	./src/core/Utils/Impl/Event.cpp \
 	./src/core/Utils/Impl/ReadWriteLock.cpp \
 	./src/core/Utils/Impl/ReadWriteLock.h \
 	./src/core/Utils/Impl/StringPool.h \
