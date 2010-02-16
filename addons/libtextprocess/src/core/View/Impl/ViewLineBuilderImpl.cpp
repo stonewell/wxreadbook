@@ -119,7 +119,10 @@ TPL_PRINTF("ViewLineBuilder %d Wait for last line access offset=%ld, %ld\n", Get
 				while (!m_Cancel)
 				{
 					if (pLine->WaitForAccessing(500) != WAIT_TIMEOUT)
+					{
+TPL_PRINTF("ViewLineBuilder %d Wait quit, %ld, %ld\n", GetBuilderDirection(), pDocLine->GetOffset(), pLine->GetOffset());
 						break;
+					}
 				}
 
 TPL_PRINTF("ViewLineBuilder %d last line waited offset=%ld, %ld\n", GetBuilderDirection(), pDocLine->GetOffset(), pLine->GetOffset());

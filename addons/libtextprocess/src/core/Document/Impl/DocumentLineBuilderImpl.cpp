@@ -179,14 +179,14 @@ TPL_PRINTF("DocumentLineBuilder %d last line waited offset=%ld\n", GetBuilderDir
 			else
 			{
 #ifdef _WIN32
-				Sleep(100);
+				Sleep(1);
 #elif HAVE_NANOSLEEP
 				struct timespec req;
 				req.tv_sec = 0;
-				req.tv_nsec = 100 * 1000;
+				req.tv_nsec = 1000 * 1000;
 				nanosleep(&req, NULL);
 #elif HAVE_USLEEP
-				usleep(100);
+				usleep(1000);
 #endif
 			}//build line count
         }//not empty line

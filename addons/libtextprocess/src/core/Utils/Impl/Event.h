@@ -76,9 +76,9 @@ namespace TextProcess
                         struct timezone tz;
 
                         gettimeofday(&now, &tz);
-                        nTimeout /= 1000;
-                        timeout.tv_sec = now.tv_sec + nTimeout;
-                        timeout.tv_nsec = now.tv_usec * 1000;
+						nTimeout = 1000;
+                        timeout.tv_sec = now.tv_sec + nTimeout / 1000;
+                        timeout.tv_nsec = (now.tv_usec + (nTimeout % 1000) * 1000) * 1000;
                         retcode = pthread_cond_timedwait(&m_Cond, &m_Mutex, &timeout);
                         if (retcode == ETIMEDOUT) {
                             /* timeout occurred */

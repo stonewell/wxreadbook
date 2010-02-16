@@ -117,6 +117,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 		pDC->DrawText(line, clientRect.GetLeft(), y);
 		
 		pViewLine->AccessLine();
+TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 
 		y += m_FontSize.GetY();
 
@@ -132,6 +133,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 			break;
 
 		pViewLine->AccessLine();
+TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 	}//for each line
 
 	pDC->SetFont(pOldFont);
@@ -170,6 +172,7 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 			if (pViewLine == NULL) break;
 
 			pViewLine->AccessLine();
+TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 
 			m_pViewLine = pViewLine;
 		}
@@ -184,6 +187,7 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 			if (pViewLine == NULL) break;
 
 			pViewLine->AccessLine();
+TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 
 			m_pViewLine = pViewLine;
 		}
@@ -218,7 +222,7 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 #elif HAVE_NANOSLEEP
 			struct timespec req;
 			req.tv_sec = 0;
-			req.tv_nsec = 100 * 1000;
+			req.tv_nsec = 100 * 1000 * 1000;
 			nanosleep(&req, NULL);
 #elif HAVE_USLEEP
 			usleep(100);
@@ -241,6 +245,7 @@ TPL_PRINTF("ReadBookTPLView ScrollDocument To %ld\n", nLine);
 		return GetReadBookDoc()->GetCurrentLine();
 
 	pViewLine->AccessLine();
+TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 
 	wxInt32 nViewLineOffset = 
 		pViewLine->GetDocumentLine()->GetDecodedLength() *
