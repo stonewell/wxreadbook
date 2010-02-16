@@ -94,6 +94,15 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
         std::swap(pEndPos, pStartPos);
     }
 
+TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pStartPos - pFileBegin);
+
+	wxUint32 nBuildLineCount = GetBuildLineCount();
+
+	if (!nBuildLineCount)
+	{
+		TPL_PRINTF("DocumentLineBuilder %d BuildLineCount is zero\n", GetBuilderDirection());
+	}
+
     while(!m_Cancel && pStartPos < pEndPos)
     {
         wxFileOffset length = 0;
@@ -150,19 +159,45 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
             else
                 GetDocumentLineManager()->AddPrevLine(pDocLine, pLastLine);
 
+           pLastLine = pDocLine;
+
+			if (nBuildLineCount > 0)
+				nBuildLineCount--;
+
+			if (!nBuildLineCount)
+			{
+TPL_PRINTF("DocumentLineBuilder %d Wait for last line access offset=%ld\n", GetBuilderDirection(), pLastLine->GetOffset());
+				while(!m_Cancel) 
+				{
+					if (pLastLine->WaitForAccessing(500) != WAIT_TIMEOUT)
+						break;
+				}
+
+TPL_PRINTF("DocumentLineBuilder %d last line waited offset=%ld\n", GetBuilderDirection(), pLastLine->GetOffset());
+				nBuildLineCount = GetBuildLineCount();
+			}
+			else
+			{
 #ifdef _WIN32
-			Sleep(1);
-#else
-			usleep(1000);
+				Sleep(100);
+#elif HAVE_NANOSLEEP
+				struct timespec req;
+				req.tv_sec = 0;
+				req.tv_nsec = 100 * 1000;
+				nanosleep(&req, NULL);
+#elif HAVE_USLEEP
+				usleep(100);
 #endif
-            pLastLine = pDocLine;
-        }
-    }
+			}//build line count
+        }//not empty line
+    }//while
 
 	if (GetBuilderDirection() == TextProcess::Next)
 		GetDocumentLineManager()->HasAllNextLines();
 	else
 		GetDocumentLineManager()->HasAllPreviousLines();
+
+TPL_PRINTF("DocumentLineBuilder %d Stopped\n", GetBuilderDirection());
 
 	return 1;
 }

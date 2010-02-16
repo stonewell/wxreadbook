@@ -18,5 +18,9 @@ namespace TextProcess
 		DECLARE_PROPERTY(wxFileOffset, Offset);
 		DECLARE_PROPERTY(wxFileOffset, Length);
 		DECLARE_PROPERTY(wxUint32, Index);
+		
+		virtual int WaitForAccessing(int timeout = INFINITE) = 0;
+		virtual void AccessLine() = 0;
+		virtual void ClearAccess() = 0;
 	};
 }

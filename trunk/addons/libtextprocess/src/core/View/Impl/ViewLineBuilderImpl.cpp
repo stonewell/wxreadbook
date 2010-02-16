@@ -27,7 +27,7 @@ TextProcess::View::Impl::CViewLineBuilderImpl::~CViewLineBuilderImpl(void)
 
 int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 {
-TPL_PRINTF("View Line Builder %d Started\n", GetBuilderDirection());
+TPL_PRINTF("View Line Builder %d Started, %ld\n", GetBuilderDirection(), GetDocumentLineOffset());
 	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(GetDocumentLineOffset()));
 	TextProcess::Document::IDocumentLine * pDocLine =
 		GetDocumentLineManager()->FindLine(pMatcher.get());
@@ -48,6 +48,13 @@ TPL_PRINTF("View Line Builder %d Stopped 1\n", GetBuilderDirection());
 
 	IViewLine * pNextLine = NULL;
 	IViewLine * pFirstDocViewLine = NULL;
+
+	wxUint32 nBuildLineCount = GetBuildLineCount();
+
+    if (!nBuildLineCount)
+    {
+        TPL_PRINTF("ViewLineBuilder %d BuildLineCount is zero\n", GetBuilderDirection());
+    }
 
 	while (!m_Cancel && pDocLine != NULL)
 	{
@@ -102,6 +109,23 @@ TPL_PRINTF("View Line Builder %d Running 10\n", GetBuilderDirection());
 			}
 
 TPL_PRINTF("New ViewLine Added %d\n", GetBuilderDirection());
+
+            if (nBuildLineCount > 0)
+                nBuildLineCount--;
+
+            if (!nBuildLineCount)
+            {
+TPL_PRINTF("ViewLineBuilder %d Wait for last line access offset=%ld, %ld\n", GetBuilderDirection(), pDocLine->GetOffset(), pLine->GetOffset());
+				while (!m_Cancel)
+				{
+					if (pLine->WaitForAccessing(500) != WAIT_TIMEOUT)
+						break;
+				}
+
+TPL_PRINTF("ViewLineBuilder %d last line waited offset=%ld, %ld\n", GetBuilderDirection(), pDocLine->GetOffset(), pLine->GetOffset());
+                nBuildLineCount = GetBuildLineCount();
+            }
+
 			viewLineOffset += viewLineSize;
 		}
 

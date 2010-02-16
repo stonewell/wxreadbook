@@ -12,3 +12,19 @@ INIT_PROPERTY(Type, nLineType)
 TextProcess::Impl::CLineImpl::~CLineImpl(void)
 {
 }
+
+int TextProcess::Impl::CLineImpl::WaitForAccessing(int timeout)
+{
+	return m_AccessEvent.Wait(timeout);
+}
+
+void TextProcess::Impl::CLineImpl::AccessLine()
+{
+	m_AccessEvent.Set();
+}
+
+void TextProcess::Impl::CLineImpl::ClearAccess()
+{
+	m_AccessEvent.Reset();
+}
+
