@@ -32,6 +32,8 @@ void TextProcess::Document::Impl::CDocumentLineImpl::GetData(wxFileOffset nOffse
 
 	*ppBuf = pDataBuf + nOffset;
 	*ppBufLen = nLength;
+
+	AccessLine();
 }
 
 wxString TextProcess::Document::Impl::CDocumentLineImpl::GetData(wxFileOffset nOffset, wxFileOffset nLength)

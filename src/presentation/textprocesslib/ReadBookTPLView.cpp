@@ -115,6 +115,8 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 		wxString line = pViewLine->GetDocumentLine()->GetData(pViewLine->GetOffset(), pViewLine->GetLength());
 
 		pDC->DrawText(line, clientRect.GetLeft(), y);
+		
+		pViewLine->AccessLine();
 
 		y += m_FontSize.GetY();
 
@@ -128,6 +130,8 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 
 		if (pViewLine == NULL)
 			break;
+
+		pViewLine->AccessLine();
 	}//for each line
 
 	pDC->SetFont(pOldFont);
@@ -165,6 +169,8 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 
 			if (pViewLine == NULL) break;
 
+			pViewLine->AccessLine();
+
 			m_pViewLine = pViewLine;
 		}
 	}
@@ -176,6 +182,8 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 				m_pViewLineManager->GetNextLine(m_pViewLine);
 
 			if (pViewLine == NULL) break;
+
+			pViewLine->AccessLine();
 
 			m_pViewLine = pViewLine;
 		}
@@ -204,17 +212,25 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 		if (pViewLine != NULL)
 			break;
 		else
+		{
 #ifdef _WIN32
-			Sleep(1000);
-#else
-			sleep(1);
+			Sleep(100);
+#elif HAVE_NANOSLEEP
+			struct timespec req;
+			req.tv_sec = 0;
+			req.tv_nsec = 100 * 1000;
+			nanosleep(&req, NULL);
+#elif HAVE_USLEEP
+			usleep(100);
 #endif
+		}
 	}
 
 	if (pViewLine == NULL)
 	{
 		m_pLineManagerLock->UnlockRead();
 		StopViewLineBuilder();
+TPL_PRINTF("ReadBookTPLView ScrollDocument To %ld\n", nLine);
 		GetReadBookDoc()->ScrollDocumentTo(nLine);
 		StartViewLineBuilder();
 		m_pLineManagerLock->LockRead();
@@ -223,6 +239,8 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 
 	if (pViewLine == NULL)
 		return GetReadBookDoc()->GetCurrentLine();
+
+	pViewLine->AccessLine();
 
 	wxInt32 nViewLineOffset = 
 		pViewLine->GetDocumentLine()->GetDecodedLength() *

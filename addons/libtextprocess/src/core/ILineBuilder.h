@@ -13,6 +13,7 @@ namespace TextProcess
 	public:
 		DECLARE_TPL_INTERFACE(ILineBuilder);
 		DECLARE_PROPERTY(LineBuilderDirectionEnum, BuilderDirection);
+		DECLARE_PROPERTY(wxUint32, BuildLineCount);
 
 	public:
 		virtual int BuildLines() = 0;
