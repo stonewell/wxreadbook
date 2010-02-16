@@ -140,6 +140,8 @@ TPL_PRINTF("ViewLineBuilder %d last line waited offset=%ld, %ld\n", GetBuilderDi
 TPL_PRINTF("View Builder %d Get New Doc Line\n", GetBuilderDirection());
 		if (pDocLine != NULL)
 		{
+			pDocLine->AccessLine();
+
 TPL_PRINTF("View Builder %d Get New Doc Line check\n", GetBuilderDirection());
 			std::auto_ptr<IViewLineMatcher> pMatcher(CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
 			if (GetViewLineManager()->FindLine(pMatcher.get(), false) != NULL)
