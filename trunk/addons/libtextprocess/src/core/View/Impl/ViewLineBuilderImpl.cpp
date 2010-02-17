@@ -115,6 +115,8 @@ TPL_PRINTF("New ViewLine Added %d\n", GetBuilderDirection());
 
             if (!nBuildLineCount)
             {
+				if (!GetWaitForLineAccessed()) 
+					return 2;
 TPL_PRINTF("ViewLineBuilder %d Wait for last line access offset=%ld, %ld\n", GetBuilderDirection(), pDocLine->GetOffset(), pLine->GetOffset());
 				while (!m_Cancel)
 				{
@@ -261,7 +263,7 @@ TPL_PRINTF("FixViewLine %d Size 18\n", GetBuilderDirection());
 TPL_PRINTF("FixViewLine %d Size 19\n", GetBuilderDirection());
                 last_width = width;
                 GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
-TPL_PRINTF("FixViewLine %d Size 20\n");
+TPL_PRINTF("FixViewLine %d Size 20\n", GetBuilderDirection());
             }
         }//
     }
