@@ -82,7 +82,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 
 	wxInt16 lineMargin = wxGetApp().GetPreference()->GetLineMargin();
 
-	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 
 	if (m_pViewLine == NULL)
 	{
@@ -117,7 +117,6 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 		pDC->DrawText(line, clientRect.GetLeft(), y);
 		
 		pViewLine->AccessLine();
-TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 
 		y += m_FontSize.GetY();
 
@@ -131,9 +130,6 @@ TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOff
 
 		if (pViewLine == NULL)
 			break;
-
-		pViewLine->AccessLine();
-TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 	}//for each line
 
 	pDC->SetFont(pOldFont);
@@ -152,6 +148,7 @@ void CReadBookTPLView::Recalculate()
 {
 	CReadBookView::Recalculate();
 
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	StopViewLineBuilder();
 	StartViewLineBuilder();
 }
@@ -161,7 +158,7 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding)
 		return GetReadBookDoc()->GetCurrentLine();
 
-	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	if (nDelta < 0)
 	{
 		for(int i = 0; i > nDelta; i--)
@@ -172,8 +169,6 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 			if (pViewLine == NULL) break;
 
 			pViewLine->AccessLine();
-TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
-
 			m_pViewLine = pViewLine;
 		}
 	}
@@ -187,7 +182,6 @@ TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOff
 			if (pViewLine == NULL) break;
 
 			pViewLine->AccessLine();
-TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 
 			m_pViewLine = pViewLine;
 		}
@@ -204,7 +198,7 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding)
 		return GetReadBookDoc()->GetCurrentLine();
 
-	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
 
 	TextProcess::View::IViewLine * pViewLine = NULL;
@@ -232,12 +226,9 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 
 	if (pViewLine == NULL)
 	{
-		m_pLineManagerLock->UnlockRead();
 		StopViewLineBuilder();
-TPL_PRINTF("ReadBookTPLView ScrollDocument To %d\n", nLine);
 		GetReadBookDoc()->ScrollDocumentTo(nLine);
 		StartViewLineBuilder();
-		m_pLineManagerLock->LockRead();
 		pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
 	}
 
@@ -245,7 +236,6 @@ TPL_PRINTF("ReadBookTPLView ScrollDocument To %d\n", nLine);
 		return GetReadBookDoc()->GetCurrentLine();
 
 	pViewLine->AccessLine();
-TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOffset(), pViewLine->GetOffset());
 
 	wxInt32 nViewLineOffset = 
 		pViewLine->GetDocumentLine()->GetDecodedLength() *
@@ -259,6 +249,7 @@ TPL_PRINTF("ViewLine Accessed, %ld, %ld\n", pViewLine->GetDocumentLine()->GetOff
 	if (pViewLine != NULL)
 		m_pViewLine = pViewLine;
 
+	m_pViewLine->AccessLine();
 	wxFileOffset offset = m_pViewLine->GetDocumentLine()->GetOffset();
 	GetReadBookDoc()->SetCurrentLine(offset + m_pViewLine->GetOffset());
 
@@ -272,11 +263,8 @@ void CReadBookTPLView::StartViewLineBuilder()
 
 	wxFileOffset docPos = GetReadBookDoc()->GetCurrentLine();
 
-	{
-	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	m_pViewLineManager.reset(TextProcess::View::CViewObjectFactory::CreateLineManager());
 	m_pViewLine = NULL;
-	}
 
 	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
