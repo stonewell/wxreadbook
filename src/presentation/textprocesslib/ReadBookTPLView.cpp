@@ -56,6 +56,7 @@ CReadBookTPLView::~CReadBookTPLView(void)
 
 void CReadBookTPLView::OnDraw(wxDC *pDC)
 {
+TPL_PRINTF("OnDraw Enter\n");
 	CReadBookTPLDoc* pDoc = GetReadBookDoc();
 
 	if (!pDoc || !pDoc->IsDocumentLoading() || !m_bViewLineBuilding)
@@ -98,6 +99,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 		}
 		else
 		{
+			m_pViewLine->AccessLine();
 			pMatcher->SetViewLineOffset(currentLine - m_pViewLine->GetDocumentLine()->GetOffset());
 		}
 
@@ -135,6 +137,7 @@ void CReadBookTPLView::OnDraw(wxDC *pDC)
 	pDC->SetFont(pOldFont);
 	pDC->SetTextForeground(oldColor);
 	pDC->SetBackground(oldBkColor);
+TPL_PRINTF("OnDraw Done\n");
 }
 
 void CReadBookTPLView::CalculateViewSize()
@@ -155,6 +158,7 @@ void CReadBookTPLView::Recalculate()
 
 wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 {
+TPL_PRINTF("ScrollLine Enter\n");
 	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding)
 		return GetReadBookDoc()->GetCurrentLine();
 
@@ -174,22 +178,29 @@ wxInt32 CReadBookTPLView::ScrollLine(wxInt16 nDelta)
 	}
 	else if (nDelta > 0)
 	{
+TPL_PRINTF("ScrollLine Next Start\n");
 		for(int i = 0; i < nDelta; i++)
 		{
+TPL_PRINTF("ScrollLine Next 1\n");
 			TextProcess::View::IViewLine * pViewLine = 
 				m_pViewLineManager->GetNextLine(m_pViewLine);
 
+TPL_PRINTF("ScrollLine Next 2\n");
 			if (pViewLine == NULL) break;
 
+TPL_PRINTF("ScrollLine Next 3\n");
 			pViewLine->AccessLine();
 
+TPL_PRINTF("ScrollLine Next 4\n");
 			m_pViewLine = pViewLine;
 		}
+TPL_PRINTF("ScrollLine Next Done\n");
 	}
 
 	wxFileOffset offset = m_pViewLine->GetDocumentLine()->GetOffset();
 	GetReadBookDoc()->SetCurrentLine(offset + m_pViewLine->GetOffset());
 
+TPL_PRINTF("ScrollLine Leave\n");
 	return GetReadBookDoc()->GetCurrentLine();
 }
 
@@ -248,10 +259,15 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 
 	if (pViewLine != NULL)
 		m_pViewLine = pViewLine;
+	else
+		m_pViewLine = NULL;
 
-	m_pViewLine->AccessLine();
-	wxFileOffset offset = m_pViewLine->GetDocumentLine()->GetOffset();
-	GetReadBookDoc()->SetCurrentLine(offset + m_pViewLine->GetOffset());
+	if (m_pViewLine != NULL)
+	{
+		m_pViewLine->AccessLine();
+		wxFileOffset offset = m_pViewLine->GetDocumentLine()->GetOffset();
+		GetReadBookDoc()->SetCurrentLine(offset + m_pViewLine->GetOffset());
+	}
 
 	return GetReadBookDoc()->GetCurrentLine();
 }
@@ -280,6 +296,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	m_pViewLineBuilderPrev->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderPrev->SetViewLineManager(m_pViewLineManager.get());
 	m_pViewLineBuilderPrev->SetViewLineOffset(0);
+	m_pViewLineBuilderPrev->SetBuildLineCount(m_nPageSize * 3);
 
 	m_BuildPrevThread.SetRunningArgument(m_pViewLineBuilderPrev.get());
 	m_BuildPrevThread.Start();
@@ -294,6 +311,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 	m_pViewLineBuilderNext->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderNext->SetViewLineManager(m_pViewLineManager.get());
 	m_pViewLineBuilderNext->SetViewLineOffset(0);
+	m_pViewLineBuilderNext->SetBuildLineCount(m_nPageSize * 3);
 
 	m_BuildNextThread.SetRunningArgument(m_pViewLineBuilderNext.get());
 	m_BuildNextThread.Start();
