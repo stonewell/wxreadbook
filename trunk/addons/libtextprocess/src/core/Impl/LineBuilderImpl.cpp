@@ -3,7 +3,7 @@
 
 TextProcess::Impl::CLineBuilderImpl::CLineBuilderImpl(void) :
 INIT_PROPERTY(BuilderDirection, TextProcess::Next)
-,INIT_PROPERTY(BuildLineCount, 20)
+,INIT_PROPERTY(BuildLineCount, 200)
 {
 }
 
