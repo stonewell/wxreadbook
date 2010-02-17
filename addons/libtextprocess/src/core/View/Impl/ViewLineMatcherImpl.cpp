@@ -56,3 +56,12 @@ int TextProcess::View::Impl::CViewLineMatcherImpl::IsAfterLine(const ILine * pLi
 	return 0;
 }
 
+int TextProcess::View::Impl::CViewLineMatcherImpl::Compare(const ILine * pLine) const
+{
+	if (IsMatch(pLine)) return 0;
+
+	if (IsAfterLine(pLine)) return 1;
+
+	return -1;
+}
+

@@ -178,74 +178,96 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::Cancel()
 void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
     wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth)
 {
+TPL_PRINTF("FixViewLine %d Size Start\n", GetBuilderDirection());
 	wxCoord width = 0;
 	wxCoord height = 0;
 
     wxFileOffset newSize = pDocLineData->ReadOnlyResize(offset + size);
 
+TPL_PRINTF("FixViewLine %d Size 1\n", GetBuilderDirection());
 	GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
 
+TPL_PRINTF("FixViewLine %d Size 2\n", GetBuilderDirection());
     long last_width = width;
 
     do
     {
+TPL_PRINTF("FixViewLine %d Size 3\n", GetBuilderDirection());
 		if (width < curAllViewLineWidth)
 			break;
 
+TPL_PRINTF("FixViewLine %d Size 4\n", GetBuilderDirection());
         if (width - curAllViewLineWidth < GetClientArea()->GetWidth())
         {
+TPL_PRINTF("FixViewLine %d Size 5\n", GetBuilderDirection());
             newSize = pDocLineData->ReadOnlyResize(offset + size + 1);
+TPL_PRINTF("FixViewLine %d Size 6\n", GetBuilderDirection());
 
             if (newSize != offset + size + 1)
             {
                 break;
             }
 
+TPL_PRINTF("FixViewLine %d Size 7\n", GetBuilderDirection());
             last_width = width;
             GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
 
+TPL_PRINTF("FixViewLine %d Size 8\n", GetBuilderDirection());
             while (!m_Cancel &&
                 (width - curAllViewLineWidth) < GetClientArea()->GetWidth() &&
                 (size_t)(offset + size) <= pDocLineData->GetPchDataLength())
             {
+TPL_PRINTF("FixViewLine %d Size 9\n", GetBuilderDirection());
                 size++;
                 newSize = pDocLineData->ReadOnlyResize(offset + size + 1);
 
+TPL_PRINTF("FixViewLine %d Size 10\n", GetBuilderDirection());
                 if (newSize != offset + size + 1)
                     break;
 
+TPL_PRINTF("FixViewLine %d Size 11\n", GetBuilderDirection());
                 last_width = width;
                 GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
+TPL_PRINTF("FixViewLine %d Size 12\n", GetBuilderDirection());
             }
         }
         else if (width - curAllViewLineWidth > GetClientArea()->GetWidth())
         {
+TPL_PRINTF("FixViewLine %d Size 13\n", GetBuilderDirection());
             size--;
             newSize = pDocLineData->ReadOnlyResize(offset + size);
 
+TPL_PRINTF("FixViewLine %d Size 14\n", GetBuilderDirection());
             if (newSize != offset + size)
                 break;
 
+TPL_PRINTF("FixViewLine %d Size 15\n", GetBuilderDirection());
             last_width = width;
             GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
 
+TPL_PRINTF("FixViewLine %d Size 16\n", GetBuilderDirection());
             while (!m_Cancel &&
                 (width - curAllViewLineWidth) > GetClientArea()->GetWidth() &&
                 size > 0)
             {
+TPL_PRINTF("FixViewLine %d Size 17\n", GetBuilderDirection());
                 size--;
                 newSize = pDocLineData->ReadOnlyResize(offset + size);
 
+TPL_PRINTF("FixViewLine %d Size 18\n", GetBuilderDirection());
                 if (newSize != offset + size)
                     break;
 
+TPL_PRINTF("FixViewLine %d Size 19\n", GetBuilderDirection());
                 last_width = width;
                 GetGraphics()->GetTextExtent(*pDocLineData, &width, &height, GetViewFont());
+TPL_PRINTF("FixViewLine %d Size 20\n");
             }
         }//
     }
     while(false);
 
 	curAllViewLineWidth = last_width;
+TPL_PRINTF("FixViewLine %d Size Quit\n", GetBuilderDirection());
 }
 

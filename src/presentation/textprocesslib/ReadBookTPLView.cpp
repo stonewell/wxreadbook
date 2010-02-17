@@ -234,7 +234,7 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 	{
 		m_pLineManagerLock->UnlockRead();
 		StopViewLineBuilder();
-TPL_PRINTF("ReadBookTPLView ScrollDocument To %ld\n", nLine);
+TPL_PRINTF("ReadBookTPLView ScrollDocument To %d\n", nLine);
 		GetReadBookDoc()->ScrollDocumentTo(nLine);
 		StartViewLineBuilder();
 		m_pLineManagerLock->LockRead();
