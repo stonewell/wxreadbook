@@ -108,6 +108,10 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	presentation/textprocesslib/ReadBookTPLDoc.cpp \
 	presentation/textprocesslib/ReadBookTPLView.cpp \
 	presentation/textprocesslib/ReadBookTPLView.h \
+	presentation/textprocesslib/ReadBookTPLDoc2.h \
+	presentation/textprocesslib/ReadBookTPLDoc2.cpp \
+	presentation/textprocesslib/ReadBookTPLView2.cpp \
+	presentation/textprocesslib/ReadBookTPLView2.h \
 	version.h
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \

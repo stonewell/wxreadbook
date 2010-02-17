@@ -14,6 +14,7 @@ namespace TextProcess
 		public:
 			IMPL_PROPERTY(LineBuilderDirectionEnum, BuilderDirection);
 			IMPL_PROPERTY(wxUint32, BuildLineCount);
+			IMPL_PROPERTY(int, WaitForLineAccessed);
 		};
 	}
 }

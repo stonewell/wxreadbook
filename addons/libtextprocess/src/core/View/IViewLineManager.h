@@ -24,6 +24,8 @@ namespace TextProcess
 			virtual void HasAllNextLines() = 0;
 
 			virtual int IsHasAllLines() = 0;
+			virtual int IsHasAllPreviousLines() = 0;
+			virtual int IsHasAllNextLines() = 0;
 		};
 	}
 }

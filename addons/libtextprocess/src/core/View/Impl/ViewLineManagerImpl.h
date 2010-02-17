@@ -59,6 +59,18 @@ namespace TextProcess
 				{
 					return TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::IsHasAllLines();
 				}
+
+				virtual int IsHasAllPreviousLines()
+				{
+					return TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::IsHasAllPreviousLines();
+				}
+
+				virtual int IsHasAllNextLines()
+				{
+					return TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::IsHasAllNextLines();
+				}
+
+
 			};
 		}
 	}

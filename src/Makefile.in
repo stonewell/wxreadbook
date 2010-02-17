@@ -70,7 +70,8 @@ am_wxReadBook_OBJECTS = ArchiveExplorerDlg.$(OBJEXT) \
 	UnicodeHelper.$(OBJEXT) ReadBookDC.$(OBJEXT) \
 	ObjectCache.$(OBJEXT) ReadBookDocManager.$(OBJEXT) \
 	ReadBookHelperFunc.$(OBJEXT) ReadBookTPLDoc.$(OBJEXT) \
-	ReadBookTPLView.$(OBJEXT)
+	ReadBookTPLView.$(OBJEXT) ReadBookTPLDoc2.$(OBJEXT) \
+	ReadBookTPLView2.$(OBJEXT)
 wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
 wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
@@ -334,6 +335,10 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	presentation/textprocesslib/ReadBookTPLDoc.cpp \
 	presentation/textprocesslib/ReadBookTPLView.cpp \
 	presentation/textprocesslib/ReadBookTPLView.h \
+	presentation/textprocesslib/ReadBookTPLDoc2.h \
+	presentation/textprocesslib/ReadBookTPLDoc2.cpp \
+	presentation/textprocesslib/ReadBookTPLView2.cpp \
+	presentation/textprocesslib/ReadBookTPLView2.h \
 	version.h
 
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
@@ -444,7 +449,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookSimpleDoc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookSimpleView.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookTPLDoc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookTPLDoc2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookTPLView.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookTPLView2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ReadBookView.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UnicodeHelper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nsBIG5Statistics.Po@am__quote@
@@ -1061,6 +1068,34 @@ ReadBookTPLView.obj: presentation/textprocesslib/ReadBookTPLView.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/textprocesslib/ReadBookTPLView.cpp' object='ReadBookTPLView.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookTPLView.obj `if test -f 'presentation/textprocesslib/ReadBookTPLView.cpp'; then $(CYGPATH_W) 'presentation/textprocesslib/ReadBookTPLView.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/textprocesslib/ReadBookTPLView.cpp'; fi`
+
+ReadBookTPLDoc2.o: presentation/textprocesslib/ReadBookTPLDoc2.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookTPLDoc2.o -MD -MP -MF $(DEPDIR)/ReadBookTPLDoc2.Tpo -c -o ReadBookTPLDoc2.o `test -f 'presentation/textprocesslib/ReadBookTPLDoc2.cpp' || echo '$(srcdir)/'`presentation/textprocesslib/ReadBookTPLDoc2.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookTPLDoc2.Tpo $(DEPDIR)/ReadBookTPLDoc2.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/textprocesslib/ReadBookTPLDoc2.cpp' object='ReadBookTPLDoc2.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookTPLDoc2.o `test -f 'presentation/textprocesslib/ReadBookTPLDoc2.cpp' || echo '$(srcdir)/'`presentation/textprocesslib/ReadBookTPLDoc2.cpp
+
+ReadBookTPLDoc2.obj: presentation/textprocesslib/ReadBookTPLDoc2.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookTPLDoc2.obj -MD -MP -MF $(DEPDIR)/ReadBookTPLDoc2.Tpo -c -o ReadBookTPLDoc2.obj `if test -f 'presentation/textprocesslib/ReadBookTPLDoc2.cpp'; then $(CYGPATH_W) 'presentation/textprocesslib/ReadBookTPLDoc2.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/textprocesslib/ReadBookTPLDoc2.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookTPLDoc2.Tpo $(DEPDIR)/ReadBookTPLDoc2.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/textprocesslib/ReadBookTPLDoc2.cpp' object='ReadBookTPLDoc2.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookTPLDoc2.obj `if test -f 'presentation/textprocesslib/ReadBookTPLDoc2.cpp'; then $(CYGPATH_W) 'presentation/textprocesslib/ReadBookTPLDoc2.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/textprocesslib/ReadBookTPLDoc2.cpp'; fi`
+
+ReadBookTPLView2.o: presentation/textprocesslib/ReadBookTPLView2.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookTPLView2.o -MD -MP -MF $(DEPDIR)/ReadBookTPLView2.Tpo -c -o ReadBookTPLView2.o `test -f 'presentation/textprocesslib/ReadBookTPLView2.cpp' || echo '$(srcdir)/'`presentation/textprocesslib/ReadBookTPLView2.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookTPLView2.Tpo $(DEPDIR)/ReadBookTPLView2.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/textprocesslib/ReadBookTPLView2.cpp' object='ReadBookTPLView2.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookTPLView2.o `test -f 'presentation/textprocesslib/ReadBookTPLView2.cpp' || echo '$(srcdir)/'`presentation/textprocesslib/ReadBookTPLView2.cpp
+
+ReadBookTPLView2.obj: presentation/textprocesslib/ReadBookTPLView2.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ReadBookTPLView2.obj -MD -MP -MF $(DEPDIR)/ReadBookTPLView2.Tpo -c -o ReadBookTPLView2.obj `if test -f 'presentation/textprocesslib/ReadBookTPLView2.cpp'; then $(CYGPATH_W) 'presentation/textprocesslib/ReadBookTPLView2.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/textprocesslib/ReadBookTPLView2.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ReadBookTPLView2.Tpo $(DEPDIR)/ReadBookTPLView2.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='presentation/textprocesslib/ReadBookTPLView2.cpp' object='ReadBookTPLView2.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ReadBookTPLView2.obj `if test -f 'presentation/textprocesslib/ReadBookTPLView2.cpp'; then $(CYGPATH_W) 'presentation/textprocesslib/ReadBookTPLView2.cpp'; else $(CYGPATH_W) '$(srcdir)/presentation/textprocesslib/ReadBookTPLView2.cpp'; fi`
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.

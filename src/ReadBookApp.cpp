@@ -47,6 +47,9 @@
 #include "presentation/textprocesslib/ReadBookTPLDoc.h"
 #include "presentation/textprocesslib/ReadBookTPLView.h"
 
+#include "presentation/textprocesslib/ReadBookTPLDoc2.h"
+#include "presentation/textprocesslib/ReadBookTPLView2.h"
+
 #ifndef __WXMSW__
 #include "res/file.xpm"
 #include "res/file32.xpm"
@@ -94,8 +97,8 @@ bool CReadBookApp::OnInit(void)
 #define VIEW_CLASS CReadBookTPLView
 #endif
 #else
-#define DOC_CLASS CReadBookTPLDoc
-#define VIEW_CLASS CReadBookTPLView
+#define DOC_CLASS CReadBookTPLDoc2
+#define VIEW_CLASS CReadBookTPLView2
 #endif
 	(void) new wxDocTemplate(m_pDocManager,
         wxT("ReadBook Files"),
