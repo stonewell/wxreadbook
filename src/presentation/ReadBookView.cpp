@@ -31,11 +31,11 @@
 
 const CReadBookView::LineNumberMapping ZeroMap = {0,0};
 
-extern const wxString & STANDARD_LINE =
+const wxString & STANDARD_LINE =
 wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890,?!.()+-");
 
 #if wxUSE_UNICODE
-extern const wxString & STANDARD_LINE_MB =
+const wxString & STANDARD_LINE_MB =
 wxT("你好挨打啊挖出赫赫有名的确他山之石科研项目你么啊大案要案屗骂拉帮结伙");
 #endif
 

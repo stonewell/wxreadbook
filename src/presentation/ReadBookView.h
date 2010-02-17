@@ -53,6 +53,7 @@ public:
 
     virtual void PreferenceChanged();
 	virtual bool GoTo();
+	virtual wxWindow * GetCanvas() const { return reinterpret_cast<wxWindow *>(GetCurrentCanvas()); }
 
     DECLARE_EVENT_TABLE()
 
@@ -121,7 +122,6 @@ protected:
 
 	virtual void RefreshCanvas();
 
-	virtual wxWindow * GetCanvas() const { return reinterpret_cast<wxWindow *>(GetCurrentCanvas()); }
 
 	virtual void InitViewMode();
 };
