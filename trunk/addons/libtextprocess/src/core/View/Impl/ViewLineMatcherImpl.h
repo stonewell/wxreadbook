@@ -20,6 +20,7 @@ namespace TextProcess
 				virtual int IsMatch(const ILine * pLine) const;
 				virtual int IsBeforeLine(const ILine * pLine) const;
 				virtual int IsAfterLine(const ILine * pLine) const;
+				virtual int Compare(const ILine * pLine) const;
 			};
 		}
 	}

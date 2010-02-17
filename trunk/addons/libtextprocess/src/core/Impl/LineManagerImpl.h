@@ -165,15 +165,28 @@ namespace TextProcess
 				while(true)
 				{
 					CLineEntry * pEntry = m_pHeaderEntry;
+					T * pPrevLine = NULL;
 
 					while (pEntry != NULL)
 					{
 						T * pLine = pEntry->GetLine();
 
-						if (pLine != NULL && pMatcher->IsMatch(pLine))
+						if (pLine != NULL) 
 						{
-							m_ReadWriteLock.UnlockRead();
-							return pLine;
+							int compare = pMatcher->Compare(pLine);
+
+							if (!compare)
+							{
+								m_ReadWriteLock.UnlockRead();
+								return pLine;
+							}
+							else if (compare < 0 && pPrevLine != NULL && pMatcher->Compare(pPrevLine) == 1)
+							{
+								m_ReadWriteLock.UnlockRead();
+								return pLine;
+							}
+
+							pPrevLine = pLine;
 						}
 
 						pEntry = pEntry->GetNext();

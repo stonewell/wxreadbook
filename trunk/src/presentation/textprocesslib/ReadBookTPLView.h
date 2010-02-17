@@ -23,8 +23,11 @@ public:
                        wxCoord *x, wxCoord *y,
                        wxFont *theFont = NULL) const
 	{
+TPL_PRINTF("Graphic Before Critical Section\n");
 		TextProcess::Utils::CCriticalSectionAccessor a(m_pSection);
+TPL_PRINTF("Graphic Enter Critical Section\n");
 		m_pDC->GetTextExtent(string, x, y, NULL, NULL, theFont);
+TPL_PRINTF("Graphic Leave Critical Section\n");
 	}
 
 private:
