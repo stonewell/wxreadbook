@@ -25,30 +25,22 @@ class CViewBuilderGraphic2 :
 	public TextProcess::View::IViewLineBuilderGraphic
 {
 public:
-	CViewBuilderGraphic2(CReadBookView * pView) : m_pView(pView)
-	, m_pSection(TextProcess::Utils::ICriticalSection::CreateCriticalSection())
+	CViewBuilderGraphic2(CReadBookDC * pDC) : m_pDC(pDC)
 	{ }
 
 	virtual ~CViewBuilderGraphic2() 
 	{
-		delete m_pSection;
 	}
 
 	virtual void GetTextExtent(const wxString& string,
                        wxCoord *x, wxCoord *y,
                        wxFont *theFont = NULL) const
 	{
-TPL_PRINTF("Graphic Before Critical Section\n");
-		TextProcess::Utils::CCriticalSectionAccessor a(m_pSection);
-TPL_PRINTF("Graphic Enter Critical Section\n");
-		CReadBookDC dc(m_pView->GetCanvas());
-		dc.GetTextExtent(string, x, y, NULL, NULL, theFont);
-TPL_PRINTF("Graphic Leave Critical Section\n");
+		m_pDC->GetTextExtent(string, x, y, NULL, NULL, theFont);
 	}
 
 private:
-	CReadBookView * m_pView;
-	TextProcess::Utils::ICriticalSection * m_pSection;
+	CReadBookDC * m_pDC;
 };
 
 
@@ -283,7 +275,8 @@ void CReadBookTPLView2::StartViewLineBuilder()
 
 	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
-	CViewBuilderGraphic2 graphic(this);
+	CReadBookDC dc(GetCanvas());
+	CViewBuilderGraphic2 graphic(&dc);
 
 	m_pClientRect.reset(new wxRect(GetClientRect()));
 
