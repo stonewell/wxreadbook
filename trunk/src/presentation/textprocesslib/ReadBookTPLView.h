@@ -10,7 +10,7 @@ class CViewBuilderGraphic :
 	public TextProcess::View::IViewLineBuilderGraphic
 {
 public:
-	CViewBuilderGraphic(CReadBookDC * pDC) : m_pDC(pDC)
+	CViewBuilderGraphic(CReadBookView * pView) : m_pView(pView)
 	, m_pSection(TextProcess::Utils::ICriticalSection::CreateCriticalSection())
 	{ }
 
@@ -26,12 +26,13 @@ public:
 TPL_PRINTF("Graphic Before Critical Section\n");
 		TextProcess::Utils::CCriticalSectionAccessor a(m_pSection);
 TPL_PRINTF("Graphic Enter Critical Section\n");
-		m_pDC->GetTextExtent(string, x, y, NULL, NULL, theFont);
+		CReadBookDC dc(m_pView->GetCanvas());
+		dc.GetTextExtent(string, x, y, NULL, NULL, theFont);
 TPL_PRINTF("Graphic Leave Critical Section\n");
 	}
 
 private:
-	CReadBookDC * m_pDC;
+	CReadBookView * m_pView;
 	TextProcess::Utils::ICriticalSection * m_pSection;
 };
 
@@ -66,7 +67,6 @@ private:
 	PortableThread::CPortableThread m_BuildPrevThread;
 	PortableThread::CPortableThread m_BuildNextThread;
 	TextProcess::View::IViewLine * m_pViewLine;
-	std::auto_ptr<CReadBookDC> m_pClientDC;
 	std::auto_ptr<CViewBuilderGraphic> m_pGraphic;
 	std::auto_ptr<wxRect> m_pClientRect;
 	bool m_bViewLineBuilding;

@@ -280,8 +280,7 @@ void CReadBookTPLView::StartViewLineBuilder()
 
 	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 
-	m_pClientDC.reset(new CReadBookDC(GetCanvas()));
-	m_pGraphic.reset(new CViewBuilderGraphic(m_pClientDC.get()));
+	m_pGraphic.reset(new CViewBuilderGraphic(this));
 
 	m_pClientRect.reset(new wxRect(GetClientRect()));
 
