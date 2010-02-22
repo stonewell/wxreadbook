@@ -14,6 +14,8 @@ namespace TextProcess
 			virtual IViewLine * GetNextLine(IViewLine * pLine, int wait = 1) = 0;
 
 			virtual IViewLine * GetPrevLine(IViewLine * pLine, int wait = 1) = 0;
+			virtual IViewLine * GetHeaderLine(int wait = 1) = 0;
+			virtual IViewLine * GetTailLine(int wait = 1) = 0;
 
 			virtual void AddNextLine(IViewLine * pNextLine, IViewLine * pLine) = 0;
 			virtual void AddPrevLine(IViewLine * pPrevLine, IViewLine * pLine) = 0;

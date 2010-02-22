@@ -299,6 +299,20 @@ void CReadBookTPLView2::StartViewLineBuilder(wxFileOffset docOffset, wxFileOffse
 	m_pViewLineBuilderPrev->SetWaitForLineAccessed(0);
 	m_pViewLineBuilderPrev->BuildLines();
 
+	TextProcess::View::IViewLine * pLastLine = m_pViewLineManager->GetTailLine(0);
+
+	if (pLastLine != NULL)
+	{
+		viewOffset = pLastLine->GetOffset() + pLastLine->GetLength();
+		
+		if (viewOffset >= pLastLine->GetDocumentLine()->GetDecodedLength())
+		{
+			docOffset = pLastLine->GetDocumentLine()->GetOffset() +
+				pLastLine->GetDocumentLine()->GetLength();
+			viewOffset = 0;
+		}
+	}
+
 	m_pViewLineBuilderNext.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 	m_pViewLineBuilderNext->SetBuilderDirection(TextProcess::Next);
 	m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());
