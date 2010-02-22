@@ -41,6 +41,7 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 	const wxByte * pCREnd = pCR + m_CRLength;
 	const wxByte * pLFEnd = pLF + m_LFLength;
     const wxByte * pchEOL = NULL;
+    const wxByte * pchEOL2 = NULL;
 
 	if (pStartPos > pFileEnd)
 		pStartPos = pFileEnd;
@@ -59,18 +60,37 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines()
 	}
 	else
 	{
+		bool cr = true;
         pchEOL = std::find_end(pFileBegin, pStartPos,
             pCR, pCREnd);
+        pchEOL2 = std::find_end(pFileBegin, pStartPos,
+            pLF, pLFEnd);
+
+		if (pchEOL2 < pchEOL)
+		{
+			pchEOL = pchEOL2;
+			cr = false;
+		}
 
 		if (pStartPos != pchEOL)
 		{
 			if (GetBuilderDirection() == TextProcess::Next)
 			{
-				pStartPos = pchEOL + m_CRLength;
+				if (cr)
+					pStartPos = pchEOL + m_CRLength;
+				else if (pchEOL + m_LFLength + m_CRLength < pFileEnd &&
+						!memcmp(pchEOL + m_LFLength, pCR, m_CRLength))
+				{
+					pStartPos = pchEOL + m_LFLength + m_CRLength;
+				}
+				else
+				{
+					pStartPos = pchEOL + m_LFLength;
+				}
 			}
 			else
 			{
-                if (!memcmp(pchEOL - m_LFLength, pLF, m_LFLength))
+                if (cr && !memcmp(pchEOL - m_LFLength, pLF, m_LFLength))
                 {
                     pStartPos = pchEOL - m_LFLength;
                 }
@@ -113,13 +133,35 @@ TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pSt
 
         if (GetBuilderDirection() == TextProcess::Next)
         {
+			bool cr = true;
             pchEOL = std::search(pStartPos, pEndPos, pCR, pCREnd);
+            pchEOL2 = std::search(pStartPos, pEndPos, pLF, pLFEnd);
+
+			if (pchEOL2 < pchEOL)
+			{
+				pchEOL = pchEOL2;
+				cr = false;
+			}
+
             length = pchEOL - pStartPos;
             offset = pStartPos - pFileBegin;
 
-            pStartPos = pchEOL + m_CRLength;
+			if (cr)
+			{
+            	pStartPos = pchEOL + m_CRLength;
+			}
+			else
+			{
+				pStartPos = pchEOL + m_LFLength;
+				
+				if (pStartPos + m_CRLength <= pEndPos)
+				{
+					if (!memcmp(pStartPos, pCR, m_CRLength))
+						pStartPos += m_CRLength;
+				}
+			}
 
-            if (length >= m_LFLength)
+            if (cr && length >= m_LFLength)
             {
                 if (!memcmp(pFileBegin + offset + length - m_LFLength, pLF, m_LFLength))
                 {
@@ -129,8 +171,17 @@ TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pSt
         }
         else
         {
+			bool cr = true;
             pchEOL = std::find_end(pStartPos, pEndPos,
                 pCR, pCREnd);
+            pchEOL2 = std::find_end(pStartPos, pEndPos,
+                pLF, pLFEnd);
+
+			if (pchEOL2 < pchEOL)
+			{
+				cr = false;
+				pchEOL = pchEOL2;
+			}
 
 			if (pchEOL == pEndPos)
 			{
@@ -139,13 +190,23 @@ TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pSt
 			}
 			else
 			{
-				offset = (pchEOL + m_CRLength) - pFileBegin;
-				length = (pEndPos - (pchEOL + m_CRLength)) + 1;
-
-				if (length >= m_LFLength)
+				if (cr)
 				{
-					if (!memcmp(pFileBegin + offset, pLF, m_LFLength))
-						offset += m_LFLength;
+					offset = (pchEOL + m_CRLength) - pFileBegin;
+					length = (pEndPos - (pchEOL + m_CRLength)) + 1;
+
+					if (pchEOL - m_LFLength >= pStartPos)
+					{
+						if (!memcmp(pchEOL - m_LFLength, pLF, m_LFLength))
+						{
+							pchEOL -= m_LFLength;
+						}
+					}
+				}
+				else
+				{
+					offset = (pchEOL + m_LFLength) - pFileBegin;
+					length = (pEndPos - (pchEOL + m_LFLength)) + 1;
 				}
 			}
 
