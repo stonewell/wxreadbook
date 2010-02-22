@@ -970,7 +970,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\presentation\textprocesslib\ReadBookTPLDoc2.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\presentation\textprocesslib\ReadBookTPLView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\presentation\textprocesslib\ReadBookTPLView2.cpp"
 				>
 			</File>
 			<File
@@ -1213,7 +1221,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\presentation\textprocesslib\ReadBookTPLDoc2.h"
+				>
+			</File>
+			<File
 				RelativePath=".\presentation\textprocesslib\ReadBookTPLView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\presentation\textprocesslib\ReadBookTPLView2.h"
 				>
 			</File>
 			<File

@@ -3,8 +3,6 @@
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
-
 #ifdef HAVE_ALGORITHM
 #include <algorithm>
 #endif
@@ -12,6 +10,11 @@
 #ifdef HAVE_MEMORY
 #include <memory>
 #endif
+#else
+#include <memory>
+#include <algorithm>
+#endif
+
 
 TextProcess::Document::Impl::CDocumentLineBuilderImpl::CDocumentLineBuilderImpl(void) :
 INIT_PROPERTY(DocumentOffset, 0),
