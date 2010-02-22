@@ -418,6 +418,12 @@ wxInt32 CReadBookTPLView2::ScrollPosToLine(wxInt32 nPos)
 
 	if (GetReadBookDoc()->GetDocumentLineInfo(nPos, offset, length, decodedLength))
 	{
+		if (nPos - offset == length)
+		{
+			//handle the last line problem
+			return offset + decodedLength - 1;
+		}
+
 		return offset + decodedLength * (double)(nPos - offset) / (double)length;
 	}
 	else
