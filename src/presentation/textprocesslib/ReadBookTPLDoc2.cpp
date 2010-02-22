@@ -66,15 +66,19 @@ bool CReadBookTPLDoc2::LoadBuffer(const wxString & url, wxMBConv * conv, bool bG
 
 	wxMBConv * pConv = GetSuitableMBConv(pInput, conv, bGuess);
 
+TPL_WPRINTF(wxT("Create Archive File 1:%ls\n"), url.c_str());
 	if (IsArchiveFileUrl(url))
 	{
+TPL_WPRINTF(wxT("Create Archive File 2:%ls\n"), url.c_str());
 		m_pMemoryMappedFile.reset(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(pInput, pConv));
 	}
 	else
 	{
+TPL_WPRINTF(wxT("Create Archive File 3:%ls\n"), url.c_str());
 		m_pMemoryMappedFile.reset(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(url, pConv));
 	}
 
+TPL_WPRINTF(wxT("Create Archive File 4:%ls\n"), url.c_str());
 	TextProcess::Document::IDocumentLineManager * pDocumentLineManager =
 TextProcess::Document::CDocumentObjectFactory::CreateLineManager();
 	m_pDocumentLineManager.reset(pDocumentLineManager);

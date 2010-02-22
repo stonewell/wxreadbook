@@ -94,25 +94,38 @@ INIT_PROPERTY(Encoding, pEncoding)
 #else
 	off_t pa_offset;
 
-	m_hf = shm_open(SHARE_MEMORY_NAME, O_RDWR, 0x1ED);
+TPL_WPRINTF(wxT("shm open \n"));
+	m_hf = shm_open(SHARE_MEMORY_NAME, O_RDWR | O_CREAT, 0x1ED);
 
-	if (m_hf == -1) return;
+	if (m_hf == -1) 
+	{
+		TPL_WPRINTF(wxT("shm open fail, errno=%d, %d, %d, %d,%d,%d,%d,%d\n"), errno,
+		EACCES, EEXIST, EINVAL, EMFILE, ENAMETOOLONG, ENFILE, ENOENT);
+		return;
+	}
+TPL_WPRINTF(wxT("shm open success\n"));
 
 	pa_offset = 0 & ~(sysconf(_SC_PAGE_SIZE) - 1);
 
+TPL_WPRINTF(wxT("shm open %ld\n"), pa_offset);
 	m_cb = pInput->GetLength();
+
+	ftruncate(m_hf, m_cb);
 
 	m_p = reinterpret_cast<wxByte *>(mmap(NULL, m_cb + 0 - pa_offset, PROT_READ | PROT_WRITE,
 		MAP_PRIVATE, m_hf, 0));
 
+TPL_WPRINTF(wxT("mmap %d %d\n"), pa_offset, m_cb);
 	if (m_p == MAP_FAILED)
 	{
 		m_p = NULL;
 		return;
 	}
 
+TPL_WPRINTF(wxT("mmap success %d %d\n"), pa_offset, m_cb);
 	pInput->SeekI(0);
 	pInput->Read(m_p, m_cb);
+TPL_WPRINTF(wxT("Read Done %d %d\n"), pa_offset, m_cb);
 #endif
 }
 
