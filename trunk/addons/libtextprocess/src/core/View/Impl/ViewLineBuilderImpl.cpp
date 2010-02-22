@@ -42,15 +42,6 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 
 	int defaultLineCharSize = GetClientArea()->GetWidth() / width;
 
-	if (GetBuilderDirection() == TextProcess::Prev)
-	{
-		if (viewLineOffset > 0)
-		{
-		}
-
-		pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
-	}
-
 	IViewLine * pNextLine = NULL;
 	IViewLine * pFirstDocViewLine = NULL;
 
@@ -65,6 +56,12 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 		long cur_all_line_width = 0;
 		bool use_readonly_string = true;
 
+		wxFileOffset startOffset = 0;
+		
+		if (pDocLine->GetDecodedLength() > 
+		viewLineOffset - defaultLineCharSize * nBuildLineCount * 2;
+
+		if (startOffset
 		pDocLine->GetData(0, pDocLine->GetDecodedLength(), &pBuf, &pBufLen);
 
 		if (pDocLine->GetDecodedLength() > 200)
@@ -334,3 +331,74 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(const wxStri
 		size = 1;
 }
 
+int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
+	TextProcess::Document::IDocumentLine * pDocLine,
+	wxFileOffset startOffset,
+	wxFileOffset & endOffset,
+	std::vector<TextProcess::View::IViewLine *> & lines)
+{
+	wxChar * pBuf = NULL;
+	wxFileOffset pBufLen = 0;
+	long cur_all_line_width = 0;
+	bool use_readonly_string = true;
+	wxInt32 decodedLength = pDocLine->GetDecodedLength();
+	float width = GetViewFont()->GetPointSize();
+
+	int defaultLineCharSize = GetClientArea()->GetWidth() / width;
+
+	pDocLine->GetData(0, decodedLength, &pBuf, &pBufLen);
+
+	if (decodedLength > 200)
+		use_readonly_string = false;
+
+	TextProcess::Utils::Impl::wxReadOnlyString docLineData(pBuf, pBufLen);
+
+	if (use_readonly_string && startOffset > 0)
+	{
+		docLineData.ReadOnlyResize(startOffset);
+
+		wxCoord width, height;
+
+		GetGraphics()->GetTextExtent(docLineData, &width, &height, GetViewFont());
+
+		cur_all_line_width = width;
+	}
+
+	wxFileOffset viewLineOffset = startOffset;
+
+	while (!m_Cancel && viewLineOffset < endOffset)
+	{
+		wxFileOffset viewLineSize = defaultLineCharSize;
+
+		if (viewLineSize + viewLineOffset > decodedLength)
+		{
+			viewLineSize = decodedLength - viewLineOffset;
+		}
+
+		if (use_readonly_string)
+		{
+			FixViewLineSize(&docLineData,
+				viewLineOffset, viewLineSize,
+				cur_all_line_width);
+		}
+		else
+		{
+			FixViewLineSize(docLineData,
+				viewLineOffset, viewLineSize);
+		}
+
+		if (m_Cancel) 
+			break;
+
+		IViewLine * pLine =
+            CViewObjectFactory::CreateViewLine(viewLineOffset, viewLineSize, pDocLine);
+
+		lines.push_back(pLine);
+
+		viewLineOffset += viewLineSize;
+	}
+
+	endOffset = viewLineOffset;
+
+	return 1;
+}
