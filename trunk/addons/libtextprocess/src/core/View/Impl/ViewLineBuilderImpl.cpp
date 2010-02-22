@@ -260,13 +260,13 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess:
 		size = 1;
 }
 
-void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(const wxString & docLineData,
+void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
     wxFileOffset offset, wxFileOffset & size)
 {
 	wxCoord width = 0;
 	wxCoord height = 0;
 
-	wxString data = docLineData.substr(offset, size);
+	wxString data = pDocLineData->substr(offset, size);
 
 	GetGraphics()->GetTextExtent(data, &width, &height, GetViewFont());
 
@@ -274,9 +274,9 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(const wxStri
     {
         if (width < GetClientArea()->GetWidth())
         {
-			if ((size_t)(offset + size + 1) <= docLineData.length())
+			if ((size_t)(offset + size + 1) <= pDocLineData->GetPchDataLength())
 			{
-				data = docLineData.substr(offset, size + 1);
+				data = pDocLineData->substr(offset, size + 1);
 				GetGraphics()->GetTextExtent(data, &width, &height, GetViewFont());
 
 				while (!m_Cancel &&
@@ -284,10 +284,10 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(const wxStri
 				{
 
 					size++;
-					if ((size_t)(offset + size + 1) > docLineData.length())
+					if ((size_t)(offset + size + 1) > pDocLineData->GetPchDataLength())
 						break;
 
-					data = docLineData.substr(offset, size + 1);
+					data = pDocLineData->substr(offset, size + 1);
 					GetGraphics()->GetTextExtent(data, &width, &height, GetViewFont());
 				}
 			}
@@ -298,7 +298,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(const wxStri
 
 			if (size > 0)
 			{
-				data = docLineData.substr(offset, size);
+				data = pDocLineData->substr(offset, size);
 				GetGraphics()->GetTextExtent(data, &width, &height, GetViewFont());
 
 				while (!m_Cancel &&
@@ -310,7 +310,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(const wxStri
 					if (size <= 0)
 						break;
 
-					data = docLineData.substr(offset, size);
+					data = pDocLineData->substr(offset, size);
 					GetGraphics()->GetTextExtent(data, &width, &height, GetViewFont());
 				}
 			}
@@ -375,7 +375,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 		}
 		else
 		{
-			FixViewLineSize(docLineData,
+			FixViewLineSize(&docLineData,
 				viewLineOffset, viewLineSize);
 		}
 
