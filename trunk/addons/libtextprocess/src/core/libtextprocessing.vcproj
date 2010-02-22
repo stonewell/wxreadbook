@@ -151,6 +151,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\Utils\Impl\CriticalSection.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Document\Impl\DocumentLineBuilderImpl.cpp"
 				>
 			</File>
@@ -171,6 +175,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Utils\Impl\Event.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IO\IMemoryMappedFile.cpp"
 				>
 			</File>
@@ -187,11 +195,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Utils\ReadWriteLock.cpp"
+				RelativePath=".\Utils\Impl\ReadWriteLock.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Utils\StringPool.cpp"
+				RelativePath=".\Utils\Impl\StringPool.cpp"
 				>
 			</File>
 			<File
@@ -221,7 +229,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Utils\CriticalSection.h"
+				RelativePath=".\Utils\Impl\CriticalSection.h"
 				>
 			</File>
 			<File
@@ -245,7 +253,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Utils\Event.h"
+				RelativePath=".\Utils\Impl\Event.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils\ICriticalSection.h"
 				>
 			</File>
 			<File
@@ -265,6 +277,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Utils\IEvent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ILine.h"
 				>
 			</File>
@@ -278,6 +294,10 @@
 			</File>
 			<File
 				RelativePath=".\IO\IMemoryMappedFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils\IReadWriteLock.h"
 				>
 			</File>
 			<File
@@ -317,7 +337,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Utils\ReadWriteLock.h"
+				RelativePath=".\Utils\Impl\ReadWriteLock.h"
 				>
 			</File>
 			<File
@@ -325,7 +345,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Utils\StringPool.h"
+				RelativePath=".\Utils\Impl\StringPool.h"
 				>
 			</File>
 			<File
@@ -361,7 +381,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Utils\wxReadOnlyString.h"
+				RelativePath=".\Utils\Impl\wxReadOnlyString.h"
 				>
 			</File>
 		</Filter>

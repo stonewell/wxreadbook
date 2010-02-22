@@ -13,7 +13,7 @@ namespace TextProcess
             CEvent(int bManualReset = 1, int bInitialized = 0)
             {
             #ifdef _WIN32
-                m_hEvent = CreateEvent(NULL,
+				m_hEvent = ::CreateEvent(NULL,
                     bManualReset ? TRUE : FALSE,
                     bInitialized ? TRUE : FALSE, NULL);
             #else
