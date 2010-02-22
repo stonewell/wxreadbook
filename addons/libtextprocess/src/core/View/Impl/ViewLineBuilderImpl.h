@@ -33,7 +33,7 @@ namespace TextProcess
 				IMPL_PROPERTY_FIELD(int, Cancel);
 				void FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
 					wxFileOffset viewLineOffset, wxFileOffset & viewLineSize, long & curAllViewLineWidth);
-				void FixViewLineSize(const wxString & docLineData,
+				void FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
 					wxFileOffset offset, wxFileOffset & size);
 				int InternalBuildLines(TextProcess::Document::IDocumentLine * pDocLine,
 					wxFileOffset startOffset,

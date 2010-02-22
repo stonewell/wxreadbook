@@ -194,7 +194,6 @@ namespace TextProcess
 
 					if (m_pHeaderEntry != NULL && 
 						IsHasAllPreviousLines() && 
-						wait && 
 						pMatcher->IsBeforeLine(m_pHeaderEntry->GetLine()))
 					{
 						m_ReadWriteLock.UnlockRead();
@@ -203,7 +202,6 @@ namespace TextProcess
 
 					if (m_pTailEntry != NULL && 
 						IsHasAllNextLines() && 
-						wait && 
 						pMatcher->IsAfterLine(m_pTailEntry->GetLine()))
 					{
 						m_ReadWriteLock.UnlockRead();
