@@ -230,7 +230,7 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 			req.tv_nsec = 100 * 1000 * 1000;
 			nanosleep(&req, NULL);
 #elif HAVE_USLEEP
-			usleep(100);
+			usleep(100 * 1000);
 #endif
 		}
 	}

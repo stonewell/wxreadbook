@@ -95,7 +95,7 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(currentLine, 0));
 
 		m_pViewLine = 
-			m_pViewLineManager->FindLine(pMatcher.get());
+			m_pViewLineManager->FindLine(pMatcher.get(), 0);
 
 		if (m_pViewLine == NULL)
 		{
@@ -108,7 +108,17 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 		}
 
 		m_pViewLine = 
-			m_pViewLineManager->FindLine(pMatcher.get());
+			m_pViewLineManager->FindLine(pMatcher.get(), 0);
+
+		if (m_pViewLine == NULL)
+		{
+			StopViewLineBuilder();
+			StartViewLineBuilder(pMatcher->GetDocumentLineOffset(), 
+				pMatcher->GetViewLineOffset());
+
+			m_pViewLine = 
+				m_pViewLineManager->FindLine(pMatcher.get(), 0);
+		}
 	}
 
 	if (m_pViewLine == NULL)
@@ -209,35 +219,15 @@ wxInt32 CReadBookTPLView2::ScrollToLine(wxInt32 nLine)
 	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
 
-	TextProcess::View::IViewLine * pViewLine = NULL;
-
-	for(int i=0; i < 3; i++)
-	{
-		pViewLine = m_pViewLineManager->FindLine(pMatcher.get(), 0);
-
-		if (pViewLine != NULL)
-			break;
-		else
-		{
-#ifdef _WIN32
-			Sleep(100);
-#elif HAVE_NANOSLEEP
-			struct timespec req;
-			req.tv_sec = 0;
-			req.tv_nsec = 100 * 1000 * 1000;
-			nanosleep(&req, NULL);
-#elif HAVE_USLEEP
-			usleep(100);
-#endif
-		}
-	}
+	TextProcess::View::IViewLine * pViewLine = 
+		m_pViewLineManager->FindLine(pMatcher.get(), 0);
 
 	if (pViewLine == NULL)
 	{
 		StopViewLineBuilder();
 		GetReadBookDoc()->ScrollDocumentTo(nLine);
 		StartViewLineBuilder();
-		pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
+		pViewLine = m_pViewLineManager->FindLine(pMatcher.get(), 0);
 	}
 
 	if (pViewLine == NULL)
@@ -252,7 +242,20 @@ wxInt32 CReadBookTPLView2::ScrollToLine(wxInt32 nLine)
 	pMatcher->SetViewLineOffset(nViewLineOffset);
 
 	pViewLine = 
-		m_pViewLineManager->FindLine(pMatcher.get());
+		m_pViewLineManager->FindLine(pMatcher.get(), 0);
+
+	if (pViewLine == NULL)
+	{
+		StopViewLineBuilder();
+		GetReadBookDoc()->ScrollDocumentTo(pMatcher->GetDocumentLineOffset() + 
+			pMatcher->GetViewLineOffset());
+		StartViewLineBuilder(pMatcher->GetDocumentLineOffset(),
+			pMatcher->GetViewLineOffset());
+		pViewLine = m_pViewLineManager->FindLine(pMatcher.get(), 0);
+	}
+
+	if (pViewLine == NULL)
+		return GetReadBookDoc()->GetCurrentLine();
 
 	if (pViewLine != NULL)
 		m_pViewLine = pViewLine;
@@ -265,10 +268,15 @@ wxInt32 CReadBookTPLView2::ScrollToLine(wxInt32 nLine)
 
 void CReadBookTPLView2::StartViewLineBuilder()
 {
+	wxFileOffset docPos = GetReadBookDoc()->GetCurrentLine();
+
+	StartViewLineBuilder(docPos, 0);
+}
+
+void CReadBookTPLView2::StartViewLineBuilder(wxFileOffset docOffset, wxFileOffset viewOffset)
+{
 	if (!GetReadBookDoc()->IsDocumentLoading())
 		return;
-
-	wxFileOffset docPos = GetReadBookDoc()->GetCurrentLine();
 
 	m_pViewLineManager.reset(TextProcess::View::CViewObjectFactory::CreateLineManager());
 	m_pViewLine = NULL;
@@ -283,11 +291,11 @@ void CReadBookTPLView2::StartViewLineBuilder()
 	m_pViewLineBuilderPrev->SetBuilderDirection(TextProcess::Prev);
 	m_pViewLineBuilderPrev->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderPrev->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
-	m_pViewLineBuilderPrev->SetDocumentLineOffset(docPos);
+	m_pViewLineBuilderPrev->SetDocumentLineOffset(docOffset);
 	m_pViewLineBuilderPrev->SetGraphics(&graphic);
 	m_pViewLineBuilderPrev->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderPrev->SetViewLineManager(m_pViewLineManager.get());
-	m_pViewLineBuilderPrev->SetViewLineOffset(0);
+	m_pViewLineBuilderPrev->SetViewLineOffset(viewOffset);
 	m_pViewLineBuilderPrev->SetBuildLineCount(m_nPageSize * 3);
 	m_pViewLineBuilderPrev->SetWaitForLineAccessed(0);
 	m_pViewLineBuilderPrev->BuildLines();
@@ -297,11 +305,11 @@ void CReadBookTPLView2::StartViewLineBuilder()
 	m_pViewLineBuilderNext->SetBuilderDirection(TextProcess::Next);
 	m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderNext->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
-	m_pViewLineBuilderNext->SetDocumentLineOffset(docPos);
+	m_pViewLineBuilderNext->SetDocumentLineOffset(docOffset);
 	m_pViewLineBuilderNext->SetGraphics(&graphic);
 	m_pViewLineBuilderNext->SetViewFont(wxGetApp().GetPreference()->GetFont());
 	m_pViewLineBuilderNext->SetViewLineManager(m_pViewLineManager.get());
-	m_pViewLineBuilderNext->SetViewLineOffset(0);
+	m_pViewLineBuilderNext->SetViewLineOffset(viewOffset);
 	m_pViewLineBuilderNext->SetBuildLineCount(m_nPageSize * 3);
 	m_pViewLineBuilderPrev->SetWaitForLineAccessed(0);
 	m_pViewLineBuilderNext->SetWaitForLineAccessed(0);
@@ -329,10 +337,10 @@ TextProcess::View::IViewLine * CReadBookTPLView2::GetPreviousLine(TextProcess::V
 		GetReadBookDoc()->SetCurrentLine(doc_offset + view_offset);
 
 		StopViewLineBuilder();
-		StartViewLineBuilder();
+		StartViewLineBuilder(doc_offset, view_offset);
 
 		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(doc_offset, view_offset));
-		pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
+		pViewLine = m_pViewLineManager->FindLine(pMatcher.get(), 0);
 		pViewLine = m_pViewLineManager->GetPrevLine(pViewLine);
 	}
 
@@ -356,14 +364,14 @@ TextProcess::View::IViewLine * CReadBookTPLView2::GetNextLine(TextProcess::View:
 		wxFileOffset saved_view_offset = m_pViewLine->GetOffset();
 	
 		StopViewLineBuilder();
-		StartViewLineBuilder();
+		StartViewLineBuilder(doc_offset, view_offset);
 
 		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(doc_offset, view_offset));
-		pViewLine = m_pViewLineManager->FindLine(pMatcher.get());
+		pViewLine = m_pViewLineManager->FindLine(pMatcher.get(), 0);
 		pViewLine = m_pViewLineManager->GetNextLine(pViewLine);
 
 		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher2(TextProcess::View::CViewObjectFactory::CreateLineMatcher(saved_doc_offset, saved_view_offset));
-		m_pViewLine = m_pViewLineManager->FindLine(pMatcher2.get());
+		m_pViewLine = m_pViewLineManager->FindLine(pMatcher2.get(), 0);
 	}
 
 	return pViewLine;

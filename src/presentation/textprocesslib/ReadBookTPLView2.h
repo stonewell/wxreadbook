@@ -31,6 +31,7 @@ protected:
 
 private:
 	void StartViewLineBuilder();
+	void StartViewLineBuilder(wxFileOffset docOffset, wxFileOffset viewOffset);
 	void StopViewLineBuilder();
 
 	std::auto_ptr<TextProcess::View::IViewLineManager> m_pViewLineManager;
