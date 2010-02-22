@@ -30,10 +30,12 @@ namespace TextProcess
 				IMPL_PROPERTY_FIELD(wxCharBuffer, LFBuffer);
 				IMPL_PROPERTY_FIELD(wxCharBuffer, SpaceBuffer);
 				IMPL_PROPERTY_FIELD(wxCharBuffer, TabBuffer);
+				IMPL_PROPERTY_FIELD(wxCharBuffer, Space2Buffer);
 				IMPL_PROPERTY_FIELD(int, CRLength);
 				IMPL_PROPERTY_FIELD(int, LFLength);
 				IMPL_PROPERTY_FIELD(int, SpaceLength);
 				IMPL_PROPERTY_FIELD(int, TabLength);
+				IMPL_PROPERTY_FIELD(int, Space2Length);
 
 				void InitBuffers();
 				int IsEmptyLine(wxFileOffset offset, wxFileOffset length);

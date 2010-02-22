@@ -53,6 +53,7 @@ protected:
 	virtual void Recalculate();
 	virtual wxInt32 ScrollLine(wxInt16 nDelta);
 	virtual wxInt32 ScrollToLine(wxInt32 nLine);
+	virtual void UpdateScrollPos(void);
 
 private:
 	void StartViewLineBuilder();

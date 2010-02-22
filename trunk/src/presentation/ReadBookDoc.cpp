@@ -180,6 +180,10 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 		}
 	}
 
+	CFileInfo * pFileInfo = NULL;
+
+	m_nCurrentLine = wxGetApp().GetPreference()->GetFileInfo(m_strFileName, &pFileInfo);
+
 	if (!LoadBuffer(url, conv, bGuess))
 		return true;
 
@@ -187,12 +191,9 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 
 	SetFilename(m_strFileName, true);
 
-	CFileInfo * pFileInfo = NULL;
-
-	m_nCurrentLine = wxGetApp().GetPreference()->GetFileInfo(m_strFileName, &pFileInfo);
-
 	if (pFileInfo == NULL)
 	{
+		m_nCurrentLine = 0;
 		wxGetApp().GetPreference()->SetFileInfo(m_strFileName, m_nCurrentLine, 0);
 	}
 

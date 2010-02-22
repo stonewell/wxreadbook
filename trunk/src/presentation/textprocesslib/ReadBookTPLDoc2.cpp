@@ -66,21 +66,18 @@ bool CReadBookTPLDoc2::LoadBuffer(const wxString & url, wxMBConv * conv, bool bG
 
 	wxMBConv * pConv = GetSuitableMBConv(pInput, conv, bGuess);
 
-TPL_WPRINTF(wxT("Create Archive File 1:%ls\n"), url.c_str());
 	if (IsArchiveFileUrl(url))
 	{
-TPL_WPRINTF(wxT("Create Archive File 2:%ls\n"), url.c_str());
 		m_pMemoryMappedFile.reset(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(pInput, pConv));
 	}
 	else
 	{
-TPL_WPRINTF(wxT("Create Archive File 3:%ls\n"), url.c_str());
 		m_pMemoryMappedFile.reset(TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(url, pConv));
 	}
 
-TPL_WPRINTF(wxT("Create Archive File 4:%ls\n"), url.c_str());
 	TextProcess::Document::IDocumentLineManager * pDocumentLineManager =
-TextProcess::Document::CDocumentObjectFactory::CreateLineManager();
+		TextProcess::Document::CDocumentObjectFactory::CreateLineManager();
+
 	m_pDocumentLineManager.reset(pDocumentLineManager);
 
 	StartDocumentLineBuilder();
@@ -162,4 +159,50 @@ void CReadBookTPLDoc2::ScrollDocumentTo(wxFileOffset nOffset)
 	m_pDocumentLineManager.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
 	m_pMemoryMappedFile->Reset();
 	StartDocumentLineBuilder();
+}
+
+bool CReadBookTPLDoc2::GetDocumentLineInfo(wxInt32 nPos, 
+		wxInt32 & nOffset, wxInt32 & nLength, wxInt32 & nDecodedLength)
+{
+	if (!m_bDocumentLoading) return false;
+	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher>
+		pMatcher(TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(nPos));
+
+	TextProcess::Document::IDocumentLine * pLine =
+		m_pDocumentLineManager->FindLine(pMatcher.get(), 0);
+
+	if (pLine == NULL)
+	{
+		std::auto_ptr<TextProcess::Document::IDocumentLineManager>
+			pDocumentLineManager(TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+
+		std::auto_ptr<TextProcess::Document::IDocumentLineBuilder>
+			pDocumentLineBuilder(TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+
+		pDocumentLineBuilder->SetBuilderDirection(TextProcess::Next);
+		pDocumentLineBuilder->SetDocumentFile(m_pMemoryMappedFile.get());
+		pDocumentLineBuilder->SetDocumentLineManager(pDocumentLineManager.get());
+		pDocumentLineBuilder->SetDocumentOffset(nPos);
+		pDocumentLineBuilder->SetBuildLineCount(1);
+		pDocumentLineBuilder->SetWaitForLineAccessed(0);
+		pDocumentLineBuilder->BuildLines();
+
+		pLine =
+			pDocumentLineManager->FindLine(pMatcher.get(), 0);
+
+		if (pLine == NULL)
+			return false;
+
+		nOffset = pLine->GetOffset();
+		nLength = pLine->GetLength();
+		nDecodedLength = pLine->GetDecodedLength();
+	}
+	else
+	{
+		nOffset = pLine->GetOffset();
+		nLength = pLine->GetLength();
+		nDecodedLength = pLine->GetDecodedLength();
+	}
+
+	return true;
 }
