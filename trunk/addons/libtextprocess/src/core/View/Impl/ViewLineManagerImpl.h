@@ -70,6 +70,15 @@ namespace TextProcess
 					return TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::IsHasAllNextLines();
 				}
 
+				virtual IViewLine * GetHeaderLine(int wait = 1)
+				{
+					return TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::GetHeaderLine(wait);
+				}
+
+				virtual IViewLine * GetTailLine(int wait = 1)
+				{
+					return TextProcess::Impl::CLineManagerImpl<IViewLine, IViewLineMatcher>::GetTailLine(wait);
+				}
 
 			};
 		}

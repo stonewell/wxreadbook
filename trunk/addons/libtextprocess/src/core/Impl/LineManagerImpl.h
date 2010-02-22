@@ -529,6 +529,87 @@ namespace TextProcess
 				TextProcess::Utils::CReadWriteLockAccessor locker(&m_ReadWriteLock);
 				return m_bHasAllNextLines;
 			}
+
+			virtual T * GetHeaderLine(int wait = 1)
+			{
+				m_ReadWriteLock.LockRead();
+
+				while(true)
+				{
+					CLineEntry * pEntry = m_pHeaderEntry;
+
+					if (pEntry != NULL)
+					{
+						T * pLine = pEntry->GetLine();
+
+						if (pLine != NULL) 
+						{
+							m_ReadWriteLock.UnlockRead();
+							return pLine;
+						}
+					}
+
+					if (!IsHasAllLines() && wait)
+					{
+						m_ReadWriteLock.UnlockRead();
+						WaitNewEntry();
+
+						if (m_bClearing)
+							return NULL;
+
+						m_ReadWriteLock.LockRead();
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				m_ReadWriteLock.UnlockRead();
+
+				return NULL;
+			}
+
+			virtual T * GetTailLine(int wait = 1)
+			{
+				m_ReadWriteLock.LockRead();
+
+				while(true)
+				{
+					CLineEntry * pEntry = m_pTailEntry;
+
+					if (pEntry != NULL)
+					{
+						T * pLine = pEntry->GetLine();
+
+						if (pLine != NULL) 
+						{
+							m_ReadWriteLock.UnlockRead();
+							return pLine;
+						}
+					}
+
+					if (!IsHasAllLines() && wait)
+					{
+						m_ReadWriteLock.UnlockRead();
+						WaitNewEntry();
+
+						if (m_bClearing)
+							return NULL;
+
+						m_ReadWriteLock.LockRead();
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				m_ReadWriteLock.UnlockRead();
+
+				return NULL;
+			}
 		};
 	}
 }
+

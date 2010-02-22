@@ -38,6 +38,7 @@ namespace TextProcess
 				int InternalBuildLines(TextProcess::Document::IDocumentLine * pDocLine,
 					wxFileOffset startOffset,
 					wxFileOffset & endOffset,
+					wxInt32 nBuildCount,
 					std::vector<TextProcess::View::IViewLine *> & lines);
 			};
 		}

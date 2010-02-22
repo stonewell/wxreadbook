@@ -260,7 +260,7 @@ void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers()
 	m_SpaceLength = strlen(m_SpaceBuffer.data());
 	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"));
 	m_TabLength = strlen(m_TabBuffer.data());
-	m_Space2Buffer = pEncoding->cWC2MB(wxT("¡¡"));
+	m_Space2Buffer = pEncoding->cWC2MB(wxT("ã€€"));
 	m_Space2Length = strlen(m_Space2Buffer.data());
 
 	m_CRBuffer = pEncoding->cWC2MB(wxT("\n"));

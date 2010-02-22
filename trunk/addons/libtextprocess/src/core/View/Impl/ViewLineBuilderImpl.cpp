@@ -28,7 +28,8 @@ TextProcess::View::Impl::CViewLineBuilderImpl::~CViewLineBuilderImpl(void)
 
 int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 {
-	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(GetDocumentLineOffset()));
+	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> 
+		pMatcher(TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(GetDocumentLineOffset()));
 	TextProcess::Document::IDocumentLine * pDocLine =
 		GetDocumentLineManager()->FindLine(pMatcher.get());
 
@@ -42,106 +43,92 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 
 	int defaultLineCharSize = GetClientArea()->GetWidth() / width;
 
-	IViewLine * pNextLine = NULL;
-	IViewLine * pFirstDocViewLine = NULL;
+	IViewLine * pLastLine = NULL;
 
 	wxUint32 nBuildLineCount = GetBuildLineCount();
 
 	while (!m_Cancel && pDocLine != NULL)
 	{
-		pFirstDocViewLine = NULL;
-		pNextLine = NULL;
-		wxChar * pBuf = NULL;
-		wxFileOffset pBufLen = 0;
-		long cur_all_line_width = 0;
-		bool use_readonly_string = true;
+		wxFileOffset startOffset = viewLineOffset;
+		wxFileOffset endOffset = pDocLine->GetDecodedLength();
 
-		wxFileOffset startOffset = 0;
+		if (GetBuilderDirection() == TextProcess::Prev)
+		{
+			startOffset = viewLineOffset - defaultLineCharSize * nBuildLineCount * 2;
 		
-		if (pDocLine->GetDecodedLength() > 
-		viewLineOffset - defaultLineCharSize * nBuildLineCount * 2;
-
-		if (startOffset
-		pDocLine->GetData(0, pDocLine->GetDecodedLength(), &pBuf, &pBufLen);
-
-		if (pDocLine->GetDecodedLength() > 200)
-			use_readonly_string = false;
-
-		TextProcess::Utils::Impl::wxReadOnlyString docLineData(pBuf, pBufLen);
-
-		if (use_readonly_string && viewLineOffset > 0)
-		{
-			docLineData.ReadOnlyResize(viewLineOffset);
-
-			wxCoord width, height;
-
-			GetGraphics()->GetTextExtent(docLineData, &width, &height, GetViewFont());
-
-			cur_all_line_width = width;
+			if (startOffset < 0) startOffset = 0; 
+			endOffset = viewLineOffset;
 		}
 
-		while (!m_Cancel && viewLineOffset < pDocLine->GetDecodedLength())
+		std::vector<TextProcess::View::IViewLine *> lines;
+
+		InternalBuildLines(pDocLine, startOffset, endOffset, nBuildLineCount, lines);
+
+		if (m_Cancel) 
 		{
-
-			wxFileOffset viewLineSize = defaultLineCharSize;
-
-			if (viewLineSize + viewLineOffset > pDocLine->GetDecodedLength())
+			std::vector<TextProcess::View::IViewLine *>::reverse_iterator it;
+			for (it=lines.rbegin(); it != lines.rend(); it++)
 			{
-				viewLineSize = pDocLine->GetDecodedLength() - viewLineOffset;
+				pLastLine = *it;
+				delete pLastLine;
 			}
+			break;
+		}
 
-			if (use_readonly_string)
+		if (GetBuilderDirection() == TextProcess::Prev)
+		{
+			std::vector<TextProcess::View::IViewLine *>::reverse_iterator it;
+
+			for (it=lines.rbegin(); it != lines.rend(); it++)
 			{
-				FixViewLineSize(&docLineData,
-					viewLineOffset, viewLineSize,
-					cur_all_line_width);
-			}
-			else
-			{
-				FixViewLineSize(docLineData,
-					viewLineOffset, viewLineSize);
-			}
-
-			if (m_Cancel) break;
-
-			IViewLine * pLine =
-                CViewObjectFactory::CreateViewLine(viewLineOffset, viewLineSize, pDocLine);
-
-			if (pFirstDocViewLine == NULL && GetBuilderDirection() == TextProcess::Prev)
-			{
-				GetViewLineManager()->AddPrevLine(pLine, pFirstDocViewLine);
-				pFirstDocViewLine = pLine;
-				pNextLine = pLine;
-
-			}
-			else
-			{
-				GetViewLineManager()->AddNextLine(pLine, pNextLine);
-				pNextLine = pLine;
-
-			}
-
-            if (nBuildLineCount > 0)
-                nBuildLineCount--;
-
-            if (!nBuildLineCount)
-            {
-				if (!GetWaitForLineAccessed()) 
-					return 2;
-
-				while (!m_Cancel)
+				if (nBuildLineCount)
 				{
-					if (pLine->WaitForAccessing(500) != WAIT_TIMEOUT)
-					{
-						break;
-					}
+					GetViewLineManager()->AddPrevLine(*it, pLastLine);
+					pLastLine = *it;
+					nBuildLineCount--;
 				}
-
-                nBuildLineCount = GetBuildLineCount();
-            }
-
-			viewLineOffset += viewLineSize;
+				else
+				{
+					TextProcess::View::IViewLine * pLine = *it;
+					delete pLine;
+				}
+			}
 		}
+		else
+		{
+			std::vector<TextProcess::View::IViewLine *>::iterator it;
+
+			for (it=lines.begin(); it != lines.end(); it++)
+			{
+				if (nBuildLineCount)
+				{
+					GetViewLineManager()->AddNextLine(*it, pLastLine);
+					pLastLine = *it;
+					nBuildLineCount--;
+				}
+				else
+				{
+					TextProcess::View::IViewLine * pLine = *it;
+					delete pLine;
+				}
+			}
+		}
+
+        if (!nBuildLineCount)
+        {
+			if (!GetWaitForLineAccessed()) 
+				return 2;
+
+			while (!m_Cancel)
+			{
+				if (pLastLine->WaitForAccessing(500) != WAIT_TIMEOUT)
+				{
+					break;
+				}
+			}
+
+            nBuildLineCount = GetBuildLineCount();
+        }
 
 		if (m_Cancel) break;
 
@@ -150,16 +137,20 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 		if (GetBuilderDirection() == TextProcess::Next)
 			pDocLine = GetDocumentLineManager()->GetNextLine(pDocLine);
 		else
+		{
 			pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
+
+			if (pDocLine != NULL)
+				viewLineOffset = pDocLine->GetDecodedLength();
+		}
 
 		if (pDocLine != NULL)
 		{
 			pDocLine->AccessLine();
 
 			std::auto_ptr<IViewLineMatcher> pMatcher(CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
-			if (GetViewLineManager()->FindLine(pMatcher.get(), false) != NULL)
+			if (GetViewLineManager()->FindLine(pMatcher.get(), 0) != NULL)
 			{
-
 				break;
 			}
 		}
@@ -335,6 +326,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 	TextProcess::Document::IDocumentLine * pDocLine,
 	wxFileOffset startOffset,
 	wxFileOffset & endOffset,
+	wxInt32 nBuildCount,
 	std::vector<TextProcess::View::IViewLine *> & lines)
 {
 	wxChar * pBuf = NULL;
@@ -396,9 +388,15 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 		lines.push_back(pLine);
 
 		viewLineOffset += viewLineSize;
+
+		nBuildCount--;
+
+		if (!nBuildCount && GetBuilderDirection() == TextProcess::Next)
+			break;
 	}
 
 	endOffset = viewLineOffset;
 
 	return 1;
 }
+
