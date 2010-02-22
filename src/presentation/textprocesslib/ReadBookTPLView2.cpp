@@ -281,13 +281,12 @@ void CReadBookTPLView2::StartViewLineBuilder(wxFileOffset docOffset, wxFileOffse
 	if (!GetReadBookDoc()->IsDocumentLoading())
 		return;
 
-	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
-
 	CReadBookDC dc(GetCanvas());
 	CViewBuilderGraphic2 graphic(&dc);
 
 	m_pClientRect.reset(new wxRect(GetClientRect()));
 
+	m_pViewLineBuilderPrev.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
 	m_pViewLineBuilderPrev->SetBuilderDirection(TextProcess::Prev);
 	m_pViewLineBuilderPrev->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderPrev->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
@@ -301,7 +300,6 @@ void CReadBookTPLView2::StartViewLineBuilder(wxFileOffset docOffset, wxFileOffse
 	m_pViewLineBuilderPrev->BuildLines();
 
 	m_pViewLineBuilderNext.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
-
 	m_pViewLineBuilderNext->SetBuilderDirection(TextProcess::Next);
 	m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());
 	m_pViewLineBuilderNext->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());

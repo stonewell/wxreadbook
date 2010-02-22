@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace TextProcess
 {
 	namespace View
@@ -33,6 +35,10 @@ namespace TextProcess
 					wxFileOffset viewLineOffset, wxFileOffset & viewLineSize, long & curAllViewLineWidth);
 				void FixViewLineSize(const wxString & docLineData,
 					wxFileOffset offset, wxFileOffset & size);
+				int InternalBuildLines(TextProcess::Document::IDocumentLine * pDocLine,
+					wxFileOffset startOffset,
+					wxFileOffset & endOffset,
+					std::vector<TextProcess::View::IViewLine *> & lines);
 			};
 		}
 	}

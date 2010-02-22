@@ -210,7 +210,8 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 		return GetReadBookDoc()->GetCurrentLine();
 
 	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
-	std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
+	std::auto_ptr<TextProcess::View::IViewLineMatcher> 
+		pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
 
 	TextProcess::View::IViewLine * pViewLine = NULL;
 
@@ -248,9 +249,8 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 
 	pViewLine->AccessLine();
 
-	wxInt32 nViewLineOffset = 
-		pViewLine->GetDocumentLine()->GetDecodedLength() *
-		((nLine - pViewLine->GetDocumentLine()->GetOffset()) / pViewLine->GetDocumentLine()->GetLength());
+	wxInt32 nViewLineOffset =
+		nLine - pViewLine->GetDocumentLine()->GetOffset();
 
 	pMatcher->SetViewLineOffset(nViewLineOffset);
 
@@ -351,5 +351,33 @@ void CReadBookTPLView::UpdateScrollPos(void)
 			((double)m_pViewLine->GetOffset() / (double)m_pViewLine->GetDocumentLine()->GetDecodedLength());
 
 		SetVertScrollPos(docOffset + viewOffset);
+	}
+}
+
+wxInt32 CReadBookTPLView::ScrollPosToLine(wxInt32 nPos)
+{
+	wxInt32 offset, length, decodedLength;
+
+	if (GetReadBookDoc()->GetDocumentLineInfo(nPos, offset, length, decodedLength))
+	{
+		return offset + decodedLength * (double)(nPos - offset) / (double)length;
+	}
+	else
+	{
+		return nPos;
+	}
+}
+
+wxInt32 CReadBookTPLView::ScrollLineToPos(wxInt32 nLine)
+{
+	wxInt32 offset, length, decodedLength;
+
+	if (GetReadBookDoc()->GetDocumentLineInfo(nLine, offset, length, decodedLength))
+	{
+		return offset + length * (double)(nLine - offset) / (double)decodedLength;
+	}
+	else
+	{
+		return nLine;
 	}
 }
