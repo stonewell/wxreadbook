@@ -30,7 +30,9 @@ namespace TextProcess
 			private:
 				IMPL_PROPERTY_FIELD(int, Cancel);
 				void FixViewLineSize(TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
-                    wxFileOffset viewLineOffset, wxFileOffset & viewLineSize, long & curAllViewLineWidth);
+					wxFileOffset viewLineOffset, wxFileOffset & viewLineSize, long & curAllViewLineWidth);
+				void FixViewLineSize(const wxString & docLineData,
+					wxFileOffset offset, wxFileOffset & size);
 			};
 		}
 	}

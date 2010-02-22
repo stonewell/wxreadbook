@@ -169,6 +169,9 @@ TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pSt
 
 			if (!nBuildLineCount)
 			{
+				if (!GetWaitForLineAccessed()) 
+					return 2;
+
 TPL_PRINTF("DocumentLineBuilder %d Wait for last line access offset=%ld\n", GetBuilderDirection(), pLastLine->GetOffset());
 				while(!m_Cancel) 
 				{
@@ -224,6 +227,7 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(wxFileOff
     const wxByte * pEnd = pBegin + length;
 
 	const wxByte * pSpace = reinterpret_cast<const wxByte *>(m_SpaceBuffer.data());
+	const wxByte * pSpace2 = reinterpret_cast<const wxByte *>(m_Space2Buffer.data());
     const wxByte * pTab = reinterpret_cast<const wxByte *>(m_TabBuffer.data());
 
     while(pBegin < pEnd)
@@ -233,6 +237,10 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(wxFileOff
 	        pBegin += m_SpaceLength;
 		}
 		else if (!memcmp(pBegin, pTab, m_TabLength))
+		{
+            pBegin += m_TabLength;
+		}
+		else if (!memcmp(pBegin, pSpace2, m_Space2Length))
 		{
             pBegin += m_TabLength;
 		}
@@ -249,9 +257,12 @@ void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers()
 {
 	wxMBConv * pEncoding = GetDocumentFile()->GetEncoding();
 	m_SpaceBuffer = pEncoding->cWC2MB(wxT(" "));
-	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"));
 	m_SpaceLength = strlen(m_SpaceBuffer.data());
+	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"));
 	m_TabLength = strlen(m_TabBuffer.data());
+	m_Space2Buffer = pEncoding->cWC2MB(wxT("¡¡"));
+	m_Space2Length = strlen(m_Space2Buffer.data());
+
 	m_CRBuffer = pEncoding->cWC2MB(wxT("\n"));
 	m_LFBuffer = pEncoding->cWC2MB(wxT("\r"));
 	m_CRLength = strlen(m_CRBuffer.data());

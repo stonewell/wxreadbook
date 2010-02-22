@@ -338,3 +338,18 @@ void CReadBookTPLView::StopViewLineBuilder()
 	}
 }
 
+void CReadBookTPLView::UpdateScrollPos(void)
+{
+	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock);
+
+	if (m_pViewLine == NULL)
+		SetVertScrollPos(GetReadBookDoc()->GetCurrentLine());
+	else
+	{
+		wxFileOffset docOffset = m_pViewLine->GetDocumentLine()->GetOffset();
+		wxFileOffset viewOffset = m_pViewLine->GetDocumentLine()->GetLength() *
+			((double)m_pViewLine->GetOffset() / (double)m_pViewLine->GetDocumentLine()->GetDecodedLength());
+
+		SetVertScrollPos(docOffset + viewOffset);
+	}
+}

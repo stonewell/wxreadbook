@@ -25,6 +25,9 @@ protected:
 	virtual void Recalculate();
 	virtual wxInt32 ScrollLine(wxInt16 nDelta);
 	virtual wxInt32 ScrollToLine(wxInt32 nLine);
+	virtual void UpdateScrollPos(void);
+	virtual wxInt32 ScrollPosToLine(wxInt32 nPos);
+	virtual wxInt32 ScrollLineToPos(wxInt32 nLine);
 
 	virtual TextProcess::View::IViewLine * GetPreviousLine(TextProcess::View::IViewLine * pCurViewLine);
 	virtual TextProcess::View::IViewLine * GetNextLine(TextProcess::View::IViewLine * pCurViewLine);

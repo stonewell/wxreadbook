@@ -20,6 +20,8 @@ public:
 	TextProcess::Document::IDocumentLineManager * GetDocumentLineManager() const { return m_pDocumentLineManager.get(); }
 	bool IsDocumentLoading() const { return m_bDocumentLoading; }
 	void ScrollDocumentTo(wxFileOffset nOffset);
+	virtual bool GetDocumentLineInfo(wxInt32 nPos, 
+		wxInt32 & nOffset, wxInt32 & nLength, wxInt32 & nDecodedLength);
 
 protected:
 	virtual bool LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess);

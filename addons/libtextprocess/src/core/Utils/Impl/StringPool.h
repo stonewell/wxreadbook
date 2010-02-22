@@ -27,8 +27,8 @@ namespace TextProcess
 
 				enum 
 				{ 
-					MIN_CBCHUNK = 32000,
-					MAX_CHARALLOC = 1024*1024 
+					MIN_CBCHUNK = 64 * 1024,
+					MAX_CHARALLOC = 1024 * 1024 * 1024 
 				};
 
 			private:
