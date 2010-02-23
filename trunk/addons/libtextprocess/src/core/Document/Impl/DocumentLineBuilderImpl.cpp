@@ -316,16 +316,17 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(wxFileOff
 
 void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers()
 {
+	size_t size = 0;
 	wxMBConv * pEncoding = GetDocumentFile()->GetEncoding();
-	m_SpaceBuffer = pEncoding->cWC2MB(wxT(" "));
-	m_SpaceLength = strlen(m_SpaceBuffer.data());
-	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"));
-	m_TabLength = strlen(m_TabBuffer.data());
-	m_Space2Buffer = pEncoding->cWC2MB(wxT("　"));
-	m_Space2Length = strlen(m_Space2Buffer.data());
+	m_SpaceBuffer = pEncoding->cWC2MB(wxT(" "), wxStrlen_(wxT(" ")), &size);
+	m_SpaceLength = size;
+	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"), wxStrlen_(wxT("\t")), &size);
+	m_TabLength = size;
+	m_Space2Buffer = pEncoding->cWC2MB(wxT("　"), wxStrlen_(wxT("　")), &size);
+	m_Space2Length = size;
 
-	m_CRBuffer = pEncoding->cWC2MB(wxT("\n"));
-	m_LFBuffer = pEncoding->cWC2MB(wxT("\r"));
-	m_CRLength = strlen(m_CRBuffer.data());
-	m_LFLength = strlen(m_LFBuffer.data());
+	m_CRBuffer = pEncoding->cWC2MB(wxT("\n"), 1, &size);
+	m_CRLength = size;
+	m_LFBuffer = pEncoding->cWC2MB(wxT("\r"), 1, &size);
+	m_LFLength = size;
 }
