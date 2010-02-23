@@ -13,7 +13,8 @@ namespace TextProcess
 				~CStringPool();
 
 				virtual wxChar * AllocString(const wxChar* pszBegin, const wxChar* pszEnd);
-				virtual wxChar * AllocBuffer(wxUint32 cch);
+				virtual wxByte * AllocBuffer(wxUint32 cch);
+				virtual wxChar * AllocReadOnlyString(wxUint32 cch);
 				virtual void Clear();
 
 			private:
@@ -22,7 +23,7 @@ namespace TextProcess
 						HEADER* m_phdrPrev;
 						wxFileOffset  m_cb;
 					};
-					wxChar alignment;
+					wxByte alignment;
 				};
 
 				enum 
@@ -32,8 +33,8 @@ namespace TextProcess
 				};
 
 			private:
-				wxChar*  m_pchNext;   // first available byte
-				wxChar*  m_pchLimit;  // one past last available byte
+				wxByte *  m_pchNext;   // first available byte
+				wxByte *  m_pchLimit;  // one past last available byte
 				HEADER*  m_phdrCur;   // current block
 				wxUint32   m_dwGranularity;
 
