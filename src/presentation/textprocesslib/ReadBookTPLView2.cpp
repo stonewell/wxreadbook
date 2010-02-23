@@ -21,6 +21,11 @@
 #include "ReadBookTPLDoc2.h"
 #include "ReadBookTPLView2.h"
 
+#if wxUSE_UNICODE
+#include "../../ns/nsDetector.h"
+#include "../../unicode/GBBig5Table.h"
+#endif
+
 class CViewBuilderGraphic2 :
 	public TextProcess::View::IViewLineBuilderGraphic
 {
@@ -129,6 +134,19 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 	for (int i=0; i < m_nPageSize; i++)
 	{
 		wxString line = pViewLine->GetDocumentLine()->GetData(pViewLine->GetOffset(), pViewLine->GetLength());
+
+		if (GetDisplayAs() != wxReadBook::DisplayAsOriginal)
+    	{
+       		wxChar tmp1[2], tmp2[2];
+
+        	for(int i=0;i<gb2big5TableSize;i+=2)
+        	{
+            	tmp1[0] = GetDisplayAs() == wxReadBook::DisplayAsSimplify ? gb2big5[i + 1] : gb2big5[i]; tmp1[1] = 0;
+            	tmp2[0] = GetDisplayAs() == wxReadBook::DisplayAsSimplify ? gb2big5[i] : gb2big5[i + 1]; tmp2[1] = 0;
+
+            	line.Replace(tmp1, tmp2);
+        	}
+    	}
 
 		pDC->DrawText(line, clientRect.GetLeft(), y);
 
