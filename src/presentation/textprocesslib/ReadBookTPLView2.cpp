@@ -173,7 +173,7 @@ void CReadBookTPLView2::Recalculate()
 
 wxInt32 CReadBookTPLView2::ScrollLine(wxInt16 nDelta)
 {
-	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding)
+	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding || nDelta == 0)
 		return GetReadBookDoc()->GetCurrentLine();
 
 	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);

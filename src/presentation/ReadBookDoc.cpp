@@ -260,6 +260,7 @@ wxUint32 CReadBookDoc::GuessDataEncoding(wxInputStream * pInput)
 		if (ppCharsets.size() > 0 || ob.m_bDone)
 		{
 			String charsets = ob.m_bDone ? ob.m_Charset : ppCharsets[0];
+/*
 			if (charsets.compare(wxT("windows-1252")) == 0)
 			{
 				for(size_t i = 0;i<ppCharsets.size();i++)
@@ -270,6 +271,11 @@ wxUint32 CReadBookDoc::GuessDataEncoding(wxInputStream * pInput)
 						break;
 					}
 				}
+			}
+*/
+			if (charsets.compare(wxT("windows-1252")) == 0)
+			{
+				return IDM_ENCODE_WINDOWS_1252;
 			}
 
 			if (charsets.compare(wxT("Big5")) == 0)

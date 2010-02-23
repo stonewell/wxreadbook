@@ -208,6 +208,7 @@ void CReadBookMainFrm::Init()
     pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_BE, wxT("Unicode Big Endian"));
     pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32, wxT("Unicode 32"));
     pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32_BE, wxT("Unicode 32 Big Endian"));
+    pEncodingMenu->AppendCheckItem(IDM_ENCODE_WINDOWS_1252, wxT("Windows-1252"));
 
     wxMenu * pViewMenu = new wxMenu;
     pViewMenu->AppendCheckItem(IDM_VIEW_AS_HTML, wxT("View as &Html"));
@@ -551,7 +552,7 @@ void CReadBookMainFrm::UpdateEncoding(wxUint32 id)
 #if defined(_WIN32) || defined(WINDOWSCE)
 			m_pMBConv = new wxCSConv(wxFONTENCODING_CP1252);
 #else
-			m_pMBConv = new_wxMBConv_iconv(wxT("WINDOWS_1253"));
+			m_pMBConv = new_wxMBConv_iconv(wxT("WINDOWS-1252"));
 #endif
 			break;
 		}

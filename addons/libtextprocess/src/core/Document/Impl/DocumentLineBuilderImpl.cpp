@@ -293,17 +293,17 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(wxFileOff
 
     while(pBegin < pEnd)
     {
-        if (!memcmp(pBegin, pSpace, m_SpaceLength))
+        if (m_SpaceLength > 0 && !memcmp(pBegin, pSpace, m_SpaceLength))
 		{
 	        pBegin += m_SpaceLength;
 		}
-		else if (!memcmp(pBegin, pTab, m_TabLength))
+		else if (m_TabLength > 0 && !memcmp(pBegin, pTab, m_TabLength))
 		{
             pBegin += m_TabLength;
 		}
-		else if (!memcmp(pBegin, pSpace2, m_Space2Length))
+		else if (m_Space2Length > 0 && !memcmp(pBegin, pSpace2, m_Space2Length))
 		{
-            pBegin += m_TabLength;
+            pBegin += m_Space2Length;
 		}
 		else
 		{
@@ -322,7 +322,7 @@ void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers()
 	m_SpaceLength = size;
 	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"), wxStrlen_(wxT("\t")), &size);
 	m_TabLength = size;
-	m_Space2Buffer = pEncoding->cWC2MB(wxT("　"), wxStrlen_(wxT("　")), &size);
+	m_Space2Buffer = pEncoding->cWC2MB(wxT("\xe380\x800a"), wxStrlen_(wxT("\xe380\x800a")), &size);
 	m_Space2Length = size;
 
 	m_CRBuffer = pEncoding->cWC2MB(wxT("\n"), 1, &size);
