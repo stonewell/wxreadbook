@@ -104,6 +104,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="2"
 				AdditionalIncludeDirectories="..\includes"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;INITGUID"
 				RuntimeLibrary="0"
