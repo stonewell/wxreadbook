@@ -41,7 +41,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 	float width = GetViewFont()->GetPointSize();
 	wxFileOffset viewLineOffset = GetViewLineOffset();
 
-	int defaultLineCharSize = GetClientArea()->GetWidth() / width;
+	int defaultLineCharSize = CalculateDefaultLineCharSize(pDocLine);
 
 	IViewLine * pLastLine = NULL;
 
@@ -57,6 +57,9 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 			startOffset = viewLineOffset - defaultLineCharSize * nBuildLineCount * 2;
 		
 			if (startOffset < 0) startOffset = 0; 
+
+			startOffset = startOffset / defaultLineCharSize * defaultLineCharSize;
+
 			endOffset = viewLineOffset;
 		}
 
@@ -336,7 +339,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 	wxInt32 decodedLength = pDocLine->GetDecodedLength();
 	float width = GetViewFont()->GetPointSize();
 
-	int defaultLineCharSize = GetClientArea()->GetWidth() / width;
+	int defaultLineCharSize = CalculateDefaultLineCharSize(pDocLine);
 
 	pDocLine->GetData(0, decodedLength, &pBuf, &pBufLen);
 
@@ -400,3 +403,26 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 	return 1;
 }
 
+wxInt32 TextProcess::View::Impl::CViewLineBuilderImpl::CalculateDefaultLineCharSize(TextProcess::Document::IDocumentLine * pDocLine)
+{
+	wxChar * pBuf = NULL;
+	wxFileOffset pBufLen = 0;
+	wxInt32 length = pDocLine->GetDecodedLength();
+
+	pDocLine->GetData(0, length, &pBuf, &pBufLen);
+	TextProcess::Utils::Impl::wxReadOnlyString docLineData(pBuf, pBufLen);
+
+	if (length > 200)
+		length = 200;
+
+	wxString data = docLineData.substr(0, length);
+
+	wxCoord width, height;
+
+	GetGraphics()->GetTextExtent(data, &width, &height, GetViewFont());
+
+	if (width == 0)
+		return GetClientArea()->GetWidth() / GetViewFont()->GetPointSize();
+
+	return GetClientArea()->GetWidth() * length / width;
+}

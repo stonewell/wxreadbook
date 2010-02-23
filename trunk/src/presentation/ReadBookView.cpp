@@ -305,7 +305,7 @@ void CReadBookView::CalculateScrollSize(void)
 	if (m_nViewSize < m_nPageSize)
 		m_nPageSize = m_nViewSize;
 
-	SetVertScrollbar(GetReadBookDoc()->GetCurrentLine(),
+	SetVertScrollbar(ScrollLineToPos(GetReadBookDoc()->GetCurrentLine()),
 		m_nPageSize,
 		m_nViewSize);
 }

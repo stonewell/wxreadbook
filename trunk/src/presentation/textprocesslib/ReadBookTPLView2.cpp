@@ -301,6 +301,8 @@ void CReadBookTPLView2::StartViewLineBuilder(wxFileOffset docOffset, wxFileOffse
 
 	TextProcess::View::IViewLine * pLastLine = m_pViewLineManager->GetTailLine(0);
 
+	bool build_next = true;
+
 	if (pLastLine != NULL)
 	{
 		viewOffset = pLastLine->GetOffset() + pLastLine->GetLength();
@@ -310,22 +312,40 @@ void CReadBookTPLView2::StartViewLineBuilder(wxFileOffset docOffset, wxFileOffse
 			docOffset = pLastLine->GetDocumentLine()->GetOffset() +
 				pLastLine->GetDocumentLine()->GetLength();
 			viewOffset = 0;
+
+			std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> 
+				pMatcher(TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(docOffset));
+
+			TextProcess::Document::IDocumentLine * pNextDocLine =
+				GetReadBookDoc()->GetDocumentLineManager()->FindLine(pMatcher.get(), 0);
+
+			if (pNextDocLine == pLastLine->GetDocumentLine())
+			{
+				build_next = false;
+			}
 		}
 	}
 
-	m_pViewLineBuilderNext.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
-	m_pViewLineBuilderNext->SetBuilderDirection(TextProcess::Next);
-	m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());
-	m_pViewLineBuilderNext->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
-	m_pViewLineBuilderNext->SetDocumentLineOffset(docOffset);
-	m_pViewLineBuilderNext->SetGraphics(&graphic);
-	m_pViewLineBuilderNext->SetViewFont(wxGetApp().GetPreference()->GetFont());
-	m_pViewLineBuilderNext->SetViewLineManager(m_pViewLineManager.get());
-	m_pViewLineBuilderNext->SetViewLineOffset(viewOffset);
-	m_pViewLineBuilderNext->SetBuildLineCount(m_nPageSize * 3);
-	m_pViewLineBuilderPrev->SetWaitForLineAccessed(0);
-	m_pViewLineBuilderNext->SetWaitForLineAccessed(0);
-	m_pViewLineBuilderNext->BuildLines();
+	if (build_next)
+	{
+		m_pViewLineBuilderNext.reset(TextProcess::View::CViewObjectFactory::CreateLineBuilder());
+		m_pViewLineBuilderNext->SetBuilderDirection(TextProcess::Next);
+		m_pViewLineBuilderNext->SetClientArea(m_pClientRect.get());
+		m_pViewLineBuilderNext->SetDocumentLineManager(GetReadBookDoc()->GetDocumentLineManager());
+		m_pViewLineBuilderNext->SetDocumentLineOffset(docOffset);
+		m_pViewLineBuilderNext->SetGraphics(&graphic);
+		m_pViewLineBuilderNext->SetViewFont(wxGetApp().GetPreference()->GetFont());
+		m_pViewLineBuilderNext->SetViewLineManager(m_pViewLineManager.get());
+		m_pViewLineBuilderNext->SetViewLineOffset(viewOffset);
+		m_pViewLineBuilderNext->SetBuildLineCount(m_nPageSize * 3);
+		m_pViewLineBuilderPrev->SetWaitForLineAccessed(0);
+		m_pViewLineBuilderNext->SetWaitForLineAccessed(0);
+		m_pViewLineBuilderNext->BuildLines();
+	}
+	else
+	{
+		m_pViewLineManager->HasAllNextLines();
+	}
 
 	m_bViewLineBuilding = true;
 }
