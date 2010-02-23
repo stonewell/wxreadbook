@@ -23,7 +23,11 @@ namespace TextProcess
                     throw("Could not create a CriticalSection");
             #else
                 if (pthread_mutex_init(&this->m_cSection, NULL) != 0)
+			#ifdef BUILD_ANGSTROM
+					exit(2);
+			#else
                     throw("Could not create a CriticalSection");
+			#endif
             #endif
             }; // CriticalSection()
 

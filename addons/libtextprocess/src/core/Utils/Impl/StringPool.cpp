@@ -61,8 +61,12 @@ wxByte * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 		if (!pbNext)
 		{
 OOM:
+#ifdef BUILD_ANGSTROM
+			exit(2);
+#else
 			static std::bad_alloc OOM;
 			throw(OOM);
+#endif
 		}
 
 		m_pchLimit = pbNext + cbAlloc;

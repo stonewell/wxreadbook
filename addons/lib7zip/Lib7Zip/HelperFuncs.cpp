@@ -1,5 +1,9 @@
 #include "lib7zip.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef S_OK
 #undef S_OK
 #endif
@@ -253,7 +257,7 @@ UInt64 ConvertPropVariantToUInt64(const PROPVARIANT &prop)
 	case VT_UI4: return prop.ulVal;
 	case VT_UI8: return (UInt64)prop.uhVal.QuadPart;
 	default:
-#ifndef _WIN32_WCE
+#if !defined(_WIN32_WCE) && !defined(BUILD_ANGSTROM)
 		throw 151199;
 #else
 		return 0;

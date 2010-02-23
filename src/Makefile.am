@@ -117,8 +117,10 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
 	../addons/libportablethread/libportablethread.a \
-	../addons/lib7zip/Lib7Zip/lib7zip.a
+	../addons/lib7zip/Lib7Zip/lib7zip.a 
 
+wxReadBook_LDFLAGS = -lpthread -lrt
+	
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
 
 dist-hook:

@@ -2,6 +2,10 @@
 
 #include <wx/wx.h>
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "TextProcessMacros.h"
 
 #include "./IO/IMemoryMappedFile.h"
