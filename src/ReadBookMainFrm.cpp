@@ -546,6 +546,15 @@ void CReadBookMainFrm::UpdateEncoding(wxUint32 id)
 
 	switch(id)
 	{
+	case IDM_ENCODE_WINDOWS_1252:
+		{
+#if defined(_WIN32) || defined(WINDOWSCE)
+			m_pMBConv = new wxCSConv(wxFONTENCODING_CP1252);
+#else
+			m_pMBConv = new_wxMBConv_iconv(wxT("WINDOWS_1253"));
+#endif
+			break;
+		}
 	case IDM_ENCODE_GB:
 		{
 #if defined(_WIN32) || defined(WINDOWSCE)
