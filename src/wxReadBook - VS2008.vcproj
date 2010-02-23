@@ -540,6 +540,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="2"
 				AdditionalIncludeDirectories="..\addons\libportablethread\includes;..\addons\libtextprocess\src\core;..\addons\lib7Zip\Lib7Zip;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)\lib\vc_lib\mswu&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;__WXMSW__"
 				RuntimeLibrary="0"
