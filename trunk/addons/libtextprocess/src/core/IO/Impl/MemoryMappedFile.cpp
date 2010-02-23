@@ -155,8 +155,12 @@ wxChar * TextProcess::IO::Impl::CMemoryMappedFile::DecodeData(wxFileOffset nOffs
 
 	if (nDecodedSize == wxCONV_FAILED)
 	{
+#ifdef BUILD_ANGSTROM
+		exit(2);
+#else
 		static std::bad_alloc OOM;
 		throw(OOM);
+#endif
 	}
 
 	wxChar * pBuf = m_StringPool.AllocReadOnlyString(nDecodedSize);

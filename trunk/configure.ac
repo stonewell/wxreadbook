@@ -61,6 +61,10 @@ CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` ${debug_flag}"
 CFLAGS="`wx-config --cflags --static=$static --debug=$debug` ${debug_flag}"
 LIBS="`wx-config --libs --static=$static --debug=$debug`"
 
+if test "${host}" = "arm-angstrom-linux-gnueabi"; then
+	AC_DEFINE([BUILD_ANGSTROM], 1, [Build for angstrom])
+fi
+
 AC_CHECK_HEADERS(["wx/wx.h"],
 	[AC_MSG_RESULT(checking for wx/wx.h... OK)], 
 	[AC_MSG_FAILURE(wx/wx.h is not found)]
