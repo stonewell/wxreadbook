@@ -40,6 +40,7 @@ namespace TextProcess
 					wxFileOffset & endOffset,
 					wxInt32 nBuildCount,
 					std::vector<TextProcess::View::IViewLine *> & lines);
+				wxInt32 CalculateDefaultLineCharSize(TextProcess::Document::IDocumentLine * pDocLine);
 			};
 		}
 	}

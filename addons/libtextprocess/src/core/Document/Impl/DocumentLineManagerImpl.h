@@ -59,6 +59,16 @@ namespace TextProcess
 				{
 					return TextProcess::Impl::CLineManagerImpl<IDocumentLine, IDocumentLineMatcher>::IsHasAllLines();
 				}
+
+				virtual IDocumentLine * GetHeaderLine(int wait = 1)
+				{
+					return TextProcess::Impl::CLineManagerImpl<IDocumentLine, IDocumentLineMatcher>::GetHeaderLine(wait);
+				}
+
+				virtual IDocumentLine * GetTailLine(int wait = 1)
+				{
+					return TextProcess::Impl::CLineManagerImpl<IDocumentLine, IDocumentLineMatcher>::GetTailLine(wait);
+				}
 			};
 		}
 	}

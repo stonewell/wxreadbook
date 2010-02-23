@@ -191,7 +191,30 @@ bool CReadBookTPLDoc2::GetDocumentLineInfo(wxInt32 nPos,
 			pDocumentLineManager->FindLine(pMatcher.get(), 0);
 
 		if (pLine == NULL)
-			return false;
+		{
+			pDocumentLineManager.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+
+			pDocumentLineBuilder.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+
+			pDocumentLineBuilder->SetBuilderDirection(TextProcess::Prev);
+			pDocumentLineBuilder->SetDocumentFile(m_pMemoryMappedFile.get());
+			pDocumentLineBuilder->SetDocumentLineManager(pDocumentLineManager.get());
+			pDocumentLineBuilder->SetDocumentOffset(nPos);
+			pDocumentLineBuilder->SetBuildLineCount(1);
+			pDocumentLineBuilder->SetWaitForLineAccessed(0);
+			pDocumentLineBuilder->BuildLines();
+
+			pLine =
+				pDocumentLineManager->FindLine(pMatcher.get(), 0);
+
+			if (pLine == NULL)
+			{
+				pLine = pDocumentLineManager->GetHeaderLine(0);
+
+				if (pLine == NULL)
+					return false;
+			}
+		}
 
 		nOffset = pLine->GetOffset();
 		nLength = pLine->GetLength();
