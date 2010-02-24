@@ -66,9 +66,10 @@ wxDocParentFrame(manager, frame, id, title, pos, size, type),
 m_pCanvas(NULL),
 m_pRecentFileMenu(NULL),
 m_nEncoding(0),
-m_pMBConv(NULL)
+m_pMBConv(NULL),
+m_pEncodingMenu(NULL)
 {
-	UpdateEncoding(IDM_ENCODE_GB);
+	UpdateEncoding(MenuIDToCharset(IDM_ENCODE_GB));
 }
 
 CReadBookMainFrm::~CReadBookMainFrm()
@@ -149,16 +150,8 @@ void CReadBookMainFrm::Init()
     //// Make a menubar
     wxMenu *pFileMenu = new wxMenu;
 
-    //pFileMenu->Append(wxID_NEW, wxT("&New..."));
     pFileMenu->Append(wxID_OPEN, wxT("&Open...\tCTRL+O"));
-
     pFileMenu->Append(wxID_CLOSE, wxT("&Close"));
-    //pFileMenu->Append(wxID_SAVE, wxT("&Save"));
-    //pFileMenu->Append(wxID_SAVEAS, wxT("Save &As..."));
-    //pFileMenu->AppendSeparator();
-    //pFileMenu->Append(wxID_PRINT, wxT("&Print..."));
-    //pFileMenu->Append(wxID_PRINT_SETUP, wxT("Print &Setup..."));
-    //pFileMenu->Append(wxID_PREVIEW, wxT("Print Pre&view"));
 
     pFileMenu->AppendSeparator();
 
@@ -185,30 +178,21 @@ void CReadBookMainFrm::Init()
     pFileMenu->AppendSeparator();
     pFileMenu->Append(wxID_EXIT, wxT("E&xit\tCTRL+X"));
 
-    // A nice touch: a history of files visited. Use this menu.
-    //GetDocumentManager()->FileHistoryUseMenu(pFileMenu);
-
     wxMenu * pEditMenu = new wxMenu;
-    //pEditMenu->Append(wxID_UNDO, wxT("&Undo"));
-    //pEditMenu->Append(wxID_REDO, wxT("&Redo"));
-    //pEditMenu->Append(wxID_COPY, wxT("&Copy"));
-    //pEditMenu->Append(wxID_CUT, wxT("C&ut"));
-    //pEditMenu->Append(wxID_PASTE, wxT("&Paste"));
-    //pEditMenu->AppendSeparator();
     pEditMenu->Append(IDM_PREFERENCE, wxT("&Preference..."));
     pEditMenu->AppendSeparator();
     pEditMenu->Append(IDM_GOTO, wxT("&Goto...\tCTRL+G"));
 
-	wxMenu * pEncodingMenu = new wxMenu;
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_GB, wxT("GB2312/GB18030"));
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_BIG5, wxT("Big5"));
-	pEncodingMenu->AppendCheckItem(IDM_ENCODE_UTF7, wxT("UTF7"));
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_UTF8, wxT("UTF8"));
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE, wxT("Unicode"));
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_BE, wxT("Unicode Big Endian"));
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32, wxT("Unicode 32"));
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32_BE, wxT("Unicode 32 Big Endian"));
-    pEncodingMenu->AppendCheckItem(IDM_ENCODE_WINDOWS_1252, wxT("Windows-1252"));
+	m_pEncodingMenu = new wxMenu;
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_GB, wxT("GB2312/GB18030"));
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_BIG5, wxT("Big5"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UTF7, wxT("UTF7"));
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UTF8, wxT("UTF8"));
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE, wxT("Unicode"));
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_BE, wxT("Unicode Big Endian"));
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32, wxT("Unicode 32"));
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32_BE, wxT("Unicode 32 Big Endian"));
+    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_WINDOWS_1252, wxT("Windows-1252"));
 
     wxMenu * pViewMenu = new wxMenu;
     pViewMenu->AppendCheckItem(IDM_VIEW_AS_HTML, wxT("View as &Html"));
@@ -229,7 +213,7 @@ void CReadBookMainFrm::Init()
 
 #if wxUSE_UNICODE
 	pViewMenu->AppendSeparator();
-    pViewMenu->AppendSubMenu(pEncodingMenu, wxT("Encoding..."));
+    pViewMenu->AppendSubMenu(m_pEncodingMenu, wxT("Encoding..."));
 
 	pViewMenu->AppendSeparator();
 	pViewMenu->AppendSubMenu(pDisplayMenu, wxT("Display as..."));
@@ -519,7 +503,7 @@ void CReadBookMainFrm::OnEncoding(wxCommandEvent& event)
 			return;
 		}
 
-		UpdateEncoding(event.GetId());
+		UpdateEncoding(MenuIDToCharset(event.GetId()));
 
 		if (m_pMBConv != NULL)
 			pDoc->ReloadByEncoding(m_pMBConv);
@@ -531,12 +515,10 @@ void CReadBookMainFrm::OnEncodingUpdateUI(wxUpdateUIEvent& event)
 	event.Check(m_nEncoding == event.GetId());
 }
 
-#if !defined(_WIN32) || !defined(WINDOWSCE)
-extern wxMBConv* new_wxMBConv_iconv( const wxChar* name );
-#endif
-
-void CReadBookMainFrm::UpdateEncoding(wxUint32 id)
+void CReadBookMainFrm::UpdateEncoding(const wxString & charset)
 {
+	wxInt32 id = CharsetToMenuID(charset);
+
 	if (m_nEncoding == id && m_pMBConv != NULL)
 		return;
 
@@ -544,81 +526,12 @@ void CReadBookMainFrm::UpdateEncoding(wxUint32 id)
 		delete m_pMBConv;
 
 	m_nEncoding = id;
+	m_pMBConv = CreateEncoding(charset);
 
-	switch(id)
+	if (id == IDM_ENCODE_CHARSET)
 	{
-	case IDM_ENCODE_WINDOWS_1252:
-		{
-#if defined(_WIN32) || defined(WINDOWSCE)
-			m_pMBConv = new wxCSConv(wxFONTENCODING_CP1252);
-#else
-			m_pMBConv = new_wxMBConv_iconv(wxT("WINDOWS-1252"));
-#endif
-			break;
-		}
-	case IDM_ENCODE_GB:
-		{
-#if defined(_WIN32) || defined(WINDOWSCE)
-			m_pMBConv = new wxCSConv(wxFONTENCODING_CP936);
-#else
-			m_pMBConv = new_wxMBConv_iconv(wxT("GB18030"));
-#endif
-			break;
-		}
-	case IDM_ENCODE_BIG5:
-		{
-#if defined(_WIN32) || defined(WINDOWSCE)
-			m_pMBConv = new wxCSConv(wxFONTENCODING_CP950);
-#else
-			m_pMBConv = new_wxMBConv_iconv(wxT("BIG5"));
-#endif
-			break;
-		}
-	case IDM_ENCODE_UTF7:
-		{
-			m_pMBConv = new wxMBConvUTF7;
-			break;
-		}
-	case IDM_ENCODE_UTF8:
-		{
-			m_pMBConv = new wxMBConvUTF8;
-			break;
-		}
-	case IDM_ENCODE_UNICODE:
-		{
-			m_pMBConv = new wxMBConvUTF16LE;
-			break;
-		}
-	case IDM_ENCODE_UNICODE_BE:
-		{
-			m_pMBConv = new wxMBConvUTF16BE;
-			break;
-		}
-	case IDM_ENCODE_UNICODE_32:
-		{
-			m_pMBConv = new wxMBConvUTF32LE;
-			break;
-		}
-	case IDM_ENCODE_UNICODE_32_BE:
-		{
-			m_pMBConv = new wxMBConvUTF32BE;
-			break;
-		}
-	default:
-		break;
+		UpdateCharsetMenuItemText(charset);
 	}
-}
-
-void CReadBookMainFrm::OnBookMarks(wxCommandEvent& event)
-{
-}
-
-void CReadBookMainFrm::OnAddBookMark(wxCommandEvent& event)
-{
-}
-
-void CReadBookMainFrm::OnClearBookMarks(wxCommandEvent& event)
-{
 }
 
 void CReadBookMainFrm::OnViewDisplayOriginal(wxCommandEvent& WXUNUSED(event))
@@ -700,4 +613,48 @@ void CReadBookMainFrm::OnGoto(wxCommandEvent& WXUNUSED(event))
 	CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
 
 	pView->GoTo();
+}
+
+void CReadBookMainFrm::UpdateCharsetMenuItemText(const wxString & text)
+{
+	if (m_pEncodingMenu == NULL)
+		return;
+
+    wxMenuItem * pItem = m_pEncodingMenu->FindItem(IDM_ENCODE_CHARSET);
+
+    if (pItem != NULL)
+    {
+		pItem->SetText(text);
+    }
+	else
+	{
+		m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_CHARSET, text);
+	}
+}
+
+wxString CReadBookMainFrm::GetCharsetMenuItemText()
+{
+	if (m_pEncodingMenu == NULL)
+		return wxEmptyString;
+
+    wxMenuItem * pItem = m_pEncodingMenu->FindItem(IDM_ENCODE_CHARSET);
+
+    if (pItem != NULL)
+    {
+		return pItem->GetText();
+    }
+
+	return wxEmptyString;
+}
+
+void CReadBookMainFrm::OnBookMarks(wxCommandEvent& event)
+{
+}
+
+void CReadBookMainFrm::OnAddBookMark(wxCommandEvent& event)
+{
+}
+
+void CReadBookMainFrm::OnClearBookMarks(wxCommandEvent& event)
+{
 }

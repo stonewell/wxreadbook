@@ -84,3 +84,77 @@ bool IsValidUnicode(wxChar ch)
 
 	return true;
 }
+
+#if wxUSE_UNICODE
+#include "../ns/nsDetector.h"
+
+class CObserver : public CnsICharsetDetectionObserver
+{
+public:
+	bool m_bDone;
+	String m_Charset;
+
+	CObserver() :
+	m_bDone(false),
+		m_Charset(wxT(""))
+	{
+	}
+
+	virtual void Notify(String charset) 
+	{
+		if (!m_bDone)
+		{
+			m_Charset = charset;
+			m_bDone = true;
+		}
+	}
+};
+#endif
+
+bool GuessDataEncoding(wxInputStream * pInput, wxString & charsets)
+{
+	CObserver ob;
+
+	CnsDetector det(CnsPSMDetector::CHINESE);
+
+	det.Init(&ob);
+
+	char buf[1024] = {0};
+
+	bool done = false;
+	bool isAscii = false;
+
+	while(!done && !ob.m_bDone && !pInput->Eof())
+	{
+		pInput->Read(buf, 1024);
+
+		size_t count = pInput->LastRead();
+
+		isAscii = det.isAscii(buf, count);
+		
+		if (!isAscii && !done)
+			done = det.DoIt(buf, count, false);
+	}
+	det.DataEnd();
+
+	StringVector ppCharsets;
+	det.GetProbableCharsets(ppCharsets);
+
+	if (ppCharsets.size() > 0 || ob.m_bDone)
+	{
+		charsets = ob.m_bDone ? ob.m_Charset : ppCharsets[0];
+
+		return true;
+	}
+	else if (isAscii)
+	{
+		charsets = wxT("GB18030");
+		return true;
+	}
+	else
+	{
+		charsets = wxT("GB18030");
+		return true;
+	}
+}
+

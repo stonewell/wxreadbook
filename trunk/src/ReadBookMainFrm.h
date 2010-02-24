@@ -52,7 +52,10 @@ public:
 
 	wxMBConv * GetMBConv() const { return m_pMBConv; }
 
-	void UpdateEncoding(wxUint32 id);
+	void UpdateEncoding(const wxString & charset);
+
+	void UpdateCharsetMenuItemText(const wxString & text);
+	wxString GetCharsetMenuItemText();
 
 	DECLARE_EVENT_TABLE()
 
@@ -60,6 +63,7 @@ private:
 	CReadBookCanvas * m_pCanvas;
 
 	wxMenu * m_pRecentFileMenu;
+	wxMenu * m_pEncodingMenu;
 	wxMenuItem * m_pRecentFileMenuItem;
 
 	wxUint32 m_nEncoding;
