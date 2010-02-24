@@ -14,7 +14,7 @@ private:
 	static CnsVerifier * TRADITIONAL_CHINESE_VERIFIER[];
 	static CnsEUCStatistics * TRADITIONAL_CHINESE_STATISTICS[];
 	static CnsVerifier * KOREAN_VERIFIER[];
-	static CnsEUCStatistics * KOREAN_STATISTICS[];
+	static CnsEUCStatistics * KOREANN_STATISTICS[];
 	static CnsVerifier * SIMPLIFIED_CHINESE_VERIFIER[];
 	static CnsEUCStatistics * SIMPLIFIED_CHINESE_STATISTICS[];
 	static CnsVerifier * JAPANESE_VERIFIER[];

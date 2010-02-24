@@ -9,6 +9,7 @@
 #endif
 
 #include "UnicodeHelper.h"
+#include "../ReadBookIds.h"
 
 static wxInt32 VALID_UNICODE[][2] =
 {
@@ -111,11 +112,25 @@ public:
 };
 #endif
 
-bool GuessDataEncoding(wxInputStream * pInput, wxString & charsets)
+bool GuessDataEncoding(wxInputStream * pInput, wxString & charsets, int lang)
 {
 	CObserver ob;
 
-	CnsDetector det(CnsPSMDetector::CHINESE);
+	int detLang = CnsPSMDetector::CHINESE;
+
+	switch(lang)
+	{
+	case IDM_LANG_JAPANESE:
+		detLang = CnsPSMDetector::JAPANESE;
+		break;
+	case IDM_LANG_KOREAN:
+		detLang = CnsPSMDetector::KOREAN;
+		break;
+	case IDM_LANG_CHINESE:
+	default:
+		break;
+	}
+	CnsDetector det(detLang);
 
 	det.Init(&ob);
 

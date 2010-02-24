@@ -41,6 +41,8 @@ public:
 	void OnEncodingUpdateUI(wxUpdateUIEvent& event);
 	void OnHide(wxCommandEvent& event);
 	void OnHotKeyShowWindow(wxKeyEvent& event);
+	void OnLang(wxCommandEvent& event);
+	void OnLangUpdateUI(wxUpdateUIEvent& event);
 
     virtual wxToolBar* OnCreateToolBar(long style,
                                         wxWindowID id,
@@ -57,6 +59,8 @@ public:
 	void UpdateCharsetMenuItemText(const wxString & text);
 	wxString GetCharsetMenuItemText();
 
+	wxInt32 GetCurrentLang() const { return m_nLang; }
+
 	DECLARE_EVENT_TABLE()
 
 private:
@@ -67,6 +71,7 @@ private:
 	wxMenuItem * m_pRecentFileMenuItem;
 
 	wxUint32 m_nEncoding;
+	wxUint32 m_nLang;
 
 	wxMBConv * m_pMBConv;
 

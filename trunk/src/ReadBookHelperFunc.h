@@ -29,3 +29,5 @@ wxMBConv * CreateEncoding(const wxString & charset);
 
 void UpdateCharsetMenuItemText(const wxString & text);
 wxString GetCharsetMenuItemText();
+
+wxInt32 GetCurrentLang();

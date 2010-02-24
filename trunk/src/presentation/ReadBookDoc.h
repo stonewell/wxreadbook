@@ -37,6 +37,7 @@ public:
 	virtual wxFileOffset GetBufferSize(void) const;
 
 	void ReloadByEncoding(wxMBConv * conv);
+	void ReloadCurrentDocument();
 
 	void UpdateDisplay(wxReadBook::DisplayAsEnum displayAs,
 		wxReadBook::ViewModeEnum viewMode);

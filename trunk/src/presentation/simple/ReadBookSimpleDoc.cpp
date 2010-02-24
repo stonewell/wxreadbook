@@ -20,7 +20,6 @@
 #endif
 
 #include "../../ReadBookApp.h"
-#include "../../ReadBookMainFrm.h"
 #include "ReadBookSimpleDoc.h"
 #include "../../unicode/UnicodeHelper.h"
 

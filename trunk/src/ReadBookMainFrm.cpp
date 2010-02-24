@@ -34,40 +34,43 @@ const wxInt32 RECENT_FILE_SIZE = 20;
 IMPLEMENT_CLASS(CReadBookMainFrm, wxDocParentFrame)
 
 BEGIN_EVENT_TABLE(CReadBookMainFrm, wxDocParentFrame)
-    EVT_MENU(IDM_ABOUT, CReadBookMainFrm::OnAbout)
-    EVT_MENU(IDM_PREFERENCE, CReadBookMainFrm::OnPreference)
-    EVT_MENU(IDM_GOTO, CReadBookMainFrm::OnGoto)
-    EVT_MENU(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtml)
-    EVT_MENU(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsText)
-    EVT_MENU(IDM_VIEW_DISPLAY_ORIGINAL, CReadBookMainFrm::OnViewDisplayOriginal)
-    EVT_MENU(IDM_VIEW_DISPLAY_SIMPLIFY, CReadBookMainFrm::OnViewDisplaySimplify)
-    EVT_MENU(IDM_VIEW_DISPLAY_TRADITIONAL, CReadBookMainFrm::OnViewDisplayTraditional)
-    EVT_UPDATE_UI(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtmlUpdateUI)
-    EVT_UPDATE_UI(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsTextUpdateUI)
-    EVT_UPDATE_UI(IDM_VIEW_DISPLAY_ORIGINAL, CReadBookMainFrm::OnViewDisplayOriginalUpdateUI)
-    EVT_UPDATE_UI(IDM_VIEW_DISPLAY_SIMPLIFY, CReadBookMainFrm::OnViewDisplaySimplifyUpdateUI)
-    EVT_UPDATE_UI(IDM_VIEW_DISPLAY_TRADITIONAL, CReadBookMainFrm::OnViewDisplayTraditionalUpdateUI)
-    EVT_MENU(IDM_NEXT_FILE, CReadBookMainFrm::OnNextFile)
-    EVT_MENU(IDM_PREV_FILE, CReadBookMainFrm::OnPrevFile)
-    EVT_MENU(IDM_BOOKMARKS, CReadBookMainFrm::OnBookMarks)
-    EVT_MENU(IDM_ADD_BOOKMARK, CReadBookMainFrm::OnAddBookMark)
-    EVT_MENU(IDM_CLEAR_BOOKMARKS, CReadBookMainFrm::OnClearBookMarks)
-    EVT_MENU(IDM_HIDE, CReadBookMainFrm::OnHide)
-    EVT_MENU(IDM_FULL_SCREEN, CReadBookMainFrm::OnFullScreen)
-    EVT_MENU_RANGE(IDM_ENCODE_ID_START, IDM_ENCODE_ID_END, CReadBookMainFrm::OnEncoding)
-    EVT_UPDATE_UI_RANGE(IDM_ENCODE_ID_START, IDM_ENCODE_ID_END, CReadBookMainFrm::OnEncodingUpdateUI)
-    EVT_MENU_RANGE(IDM_RECENT_FILE, IDM_RECENT_FILE_END, CReadBookMainFrm::OnRecentFile)
+EVT_MENU(IDM_ABOUT, CReadBookMainFrm::OnAbout)
+EVT_MENU(IDM_PREFERENCE, CReadBookMainFrm::OnPreference)
+EVT_MENU(IDM_GOTO, CReadBookMainFrm::OnGoto)
+EVT_MENU(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtml)
+EVT_MENU(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsText)
+EVT_MENU(IDM_VIEW_DISPLAY_ORIGINAL, CReadBookMainFrm::OnViewDisplayOriginal)
+EVT_MENU(IDM_VIEW_DISPLAY_SIMPLIFY, CReadBookMainFrm::OnViewDisplaySimplify)
+EVT_MENU(IDM_VIEW_DISPLAY_TRADITIONAL, CReadBookMainFrm::OnViewDisplayTraditional)
+EVT_UPDATE_UI(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtmlUpdateUI)
+EVT_UPDATE_UI(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsTextUpdateUI)
+EVT_UPDATE_UI(IDM_VIEW_DISPLAY_ORIGINAL, CReadBookMainFrm::OnViewDisplayOriginalUpdateUI)
+EVT_UPDATE_UI(IDM_VIEW_DISPLAY_SIMPLIFY, CReadBookMainFrm::OnViewDisplaySimplifyUpdateUI)
+EVT_UPDATE_UI(IDM_VIEW_DISPLAY_TRADITIONAL, CReadBookMainFrm::OnViewDisplayTraditionalUpdateUI)
+EVT_MENU(IDM_NEXT_FILE, CReadBookMainFrm::OnNextFile)
+EVT_MENU(IDM_PREV_FILE, CReadBookMainFrm::OnPrevFile)
+EVT_MENU(IDM_BOOKMARKS, CReadBookMainFrm::OnBookMarks)
+EVT_MENU(IDM_ADD_BOOKMARK, CReadBookMainFrm::OnAddBookMark)
+EVT_MENU(IDM_CLEAR_BOOKMARKS, CReadBookMainFrm::OnClearBookMarks)
+EVT_MENU(IDM_HIDE, CReadBookMainFrm::OnHide)
+EVT_MENU(IDM_FULL_SCREEN, CReadBookMainFrm::OnFullScreen)
+EVT_MENU_RANGE(IDM_ENCODE_ID_START, IDM_ENCODE_ID_END, CReadBookMainFrm::OnEncoding)
+EVT_UPDATE_UI_RANGE(IDM_ENCODE_ID_START, IDM_ENCODE_ID_END, CReadBookMainFrm::OnEncodingUpdateUI)
+EVT_MENU_RANGE(IDM_RECENT_FILE, IDM_RECENT_FILE_END, CReadBookMainFrm::OnRecentFile)
+EVT_MENU_RANGE(IDM_LANG_ID_START, IDM_LANG_ID_END, CReadBookMainFrm::OnLang)
+EVT_UPDATE_UI_RANGE(IDM_LANG_ID_START, IDM_LANG_ID_END, CReadBookMainFrm::OnLangUpdateUI)
 END_EVENT_TABLE()
 
 CReadBookMainFrm::CReadBookMainFrm(wxDocManager *manager,
-                wxFrame *frame, wxWindowID id, const wxString& title,
-                const wxPoint& pos, const wxSize& size, const long type):
+								   wxFrame *frame, wxWindowID id, const wxString& title,
+								   const wxPoint& pos, const wxSize& size, const long type):
 wxDocParentFrame(manager, frame, id, title, pos, size, type),
 m_pCanvas(NULL),
 m_pRecentFileMenu(NULL),
 m_nEncoding(0),
 m_pMBConv(NULL),
-m_pEncodingMenu(NULL)
+m_pEncodingMenu(NULL),
+m_nLang(IDM_LANG_CHINESE)
 {
 	UpdateEncoding(MenuIDToCharset(IDM_ENCODE_GB));
 }
@@ -75,8 +78,8 @@ m_pEncodingMenu(NULL)
 CReadBookMainFrm::~CReadBookMainFrm()
 {
 #ifdef __WXMSW__
-    UnregisterHotKey(m_nHotKeyId);
-    ::GlobalDeleteAtom(m_nHotKeyId);
+	UnregisterHotKey(m_nHotKeyId);
+	::GlobalDeleteAtom(m_nHotKeyId);
 #endif
 
 	if (m_pMBConv != NULL)
@@ -88,34 +91,34 @@ CReadBookMainFrm::~CReadBookMainFrm()
 class MyAboutDialog : public wxGenericAboutDialog
 {
 public:
-    MyAboutDialog(const wxAboutDialogInfo& info)
-    {
-        Create(info);
-    }
+	MyAboutDialog(const wxAboutDialogInfo& info)
+	{
+		Create(info);
+	}
 
-    // add some custom controls
-    virtual void DoAddCustomControls()
-    {
-        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+	// add some custom controls
+	virtual void DoAddCustomControls()
+	{
+		AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
 		wxString strAbout = wxT("Keyboard Short Cut:\n");
 		strAbout += wxT("\tF11  Toggle FullScreenView\n\n");
 		strAbout += wxT("Windows Only Keyboard Short Cut:\n");
 		strAbout += wxT("\tESCAPE Boss Key Hide the Main Frame\n");
 		strAbout += wxT("\tCTRL+ALT+S Restore the Hidden Main Frame\n");
-        AddText(strAbout);
-        AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
-    }
+		AddText(strAbout);
+		AddControl(new wxStaticLine(this), wxSizerFlags().Expand());
+	}
 };
 
 void CReadBookMainFrm::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
 	wxAboutDialogInfo info;
-    info.SetName(_T("wxReadBook"));
-    info.SetVersion(VERSION_NUM_DOT_STRING_T);
-    info.SetDescription(_T("a Book reader created using wxWidget"));
-    info.SetCopyright(_T("(C) 2008-2009 Angel & Stone"));
-    info.AddDeveloper(_T("Jingnan Si"));
-    info.SetWebSite(_T("http://code.google.com/p/wxreadbook/"), 
+	info.SetName(_T("wxReadBook"));
+	info.SetVersion(VERSION_NUM_DOT_STRING_T);
+	info.SetDescription(_T("a Book reader created using wxWidget"));
+	info.SetCopyright(_T("(C) 2008-2009 Angel & Stone"));
+	info.AddDeveloper(_T("Jingnan Si"));
+	info.SetWebSite(_T("http://code.google.com/p/wxreadbook/"), 
 		_T("Support site: http://code.google.com/p/wxreadbook/"));
 
 	MyAboutDialog dlg(info);
@@ -125,81 +128,90 @@ void CReadBookMainFrm::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 CReadBookCanvas * CReadBookMainFrm::CreateCanvas(wxView *view, wxFrame *parent)
 {
-    int width, height;
-    parent->GetClientSize(&width, &height);
+	int width, height;
+	parent->GetClientSize(&width, &height);
 
-    // Non-retained m_pCanvas
-    CReadBookCanvas * pCanvas = new CReadBookCanvas(view,
-        parent,
-        wxPoint(0, 0),
-        wxSize(width, height), 0);
-    //pCanvas->SetCursor(wxCursor(wxCURSOR_PENCIL));
+	// Non-retained m_pCanvas
+	CReadBookCanvas * pCanvas = new CReadBookCanvas(view,
+		parent,
+		wxPoint(0, 0),
+		wxSize(width, height), 0);
+	//pCanvas->SetCursor(wxCursor(wxCURSOR_PENCIL));
 
-    // Give it scrollbars
-    //pCanvas->SetBackgroundColour(*wxWHITE);
-    pCanvas->SetBackgroundColour(wxGetApp().GetPreference()->GetBackgroundColor());
-    pCanvas->ClearBackground();
+	// Give it scrollbars
+	//pCanvas->SetBackgroundColour(*wxWHITE);
+	pCanvas->SetBackgroundColour(wxGetApp().GetPreference()->GetBackgroundColor());
+	pCanvas->ClearBackground();
 
-    return pCanvas;
+	return pCanvas;
 }
 
 void CReadBookMainFrm::Init()
 {
-    m_pCanvas = CreateCanvas(NULL, this);
+	m_pCanvas = CreateCanvas(NULL, this);
 
-    //// Make a menubar
-    wxMenu *pFileMenu = new wxMenu;
+	//// Make a menubar
+	wxMenu *pFileMenu = new wxMenu;
 
-    pFileMenu->Append(wxID_OPEN, wxT("&Open...\tCTRL+O"));
-    pFileMenu->Append(wxID_CLOSE, wxT("&Close"));
+	pFileMenu->Append(wxID_OPEN, wxT("&Open...\tCTRL+O"));
+	pFileMenu->Append(wxID_CLOSE, wxT("&Close"));
 
-    pFileMenu->AppendSeparator();
+	pFileMenu->AppendSeparator();
 
-    m_pRecentFileMenu = CreateRecentFilesMenu();
+	m_pRecentFileMenu = CreateRecentFilesMenu();
 
-    if (m_pRecentFileMenu != NULL)
-    {
-        m_pRecentFileMenuItem = pFileMenu->AppendSubMenu(m_pRecentFileMenu, wxT("Recent Files"));
-    }
-    else
-    {
-        m_pRecentFileMenu = new wxMenu();
+	if (m_pRecentFileMenu != NULL)
+	{
+		m_pRecentFileMenuItem = pFileMenu->AppendSubMenu(m_pRecentFileMenu, wxT("Recent Files"));
+	}
+	else
+	{
+		m_pRecentFileMenu = new wxMenu();
 
-        m_pRecentFileMenuItem = pFileMenu->AppendSubMenu(m_pRecentFileMenu, wxT("Recent Files"));
+		m_pRecentFileMenuItem = pFileMenu->AppendSubMenu(m_pRecentFileMenu, wxT("Recent Files"));
 
-        m_pRecentFileMenuItem->Enable(false);
-    }
+		m_pRecentFileMenuItem->Enable(false);
+	}
 
 #ifdef __WXMSW__
-    pFileMenu->AppendSeparator();
-    pFileMenu->Append(IDM_HIDE, wxT("&Hide\tESCAPE"));
+	pFileMenu->AppendSeparator();
+	pFileMenu->Append(IDM_HIDE, wxT("&Hide\tESCAPE"));
 #endif
 
-    pFileMenu->AppendSeparator();
-    pFileMenu->Append(wxID_EXIT, wxT("E&xit\tCTRL+X"));
+	pFileMenu->AppendSeparator();
+	pFileMenu->Append(wxID_EXIT, wxT("E&xit\tCTRL+X"));
 
-    wxMenu * pEditMenu = new wxMenu;
-    pEditMenu->Append(IDM_PREFERENCE, wxT("&Preference..."));
-    pEditMenu->AppendSeparator();
-    pEditMenu->Append(IDM_GOTO, wxT("&Goto...\tCTRL+G"));
+	wxMenu * pEditMenu = new wxMenu;
+	pEditMenu->Append(IDM_PREFERENCE, wxT("&Preference..."));
+	pEditMenu->AppendSeparator();
+	pEditMenu->Append(IDM_GOTO, wxT("&Goto...\tCTRL+G"));
 
 	m_pEncodingMenu = new wxMenu;
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_GB, wxT("GB2312/GB18030"));
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_BIG5, wxT("Big5"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_GB, wxT("GB2312/GB18030"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_BIG5, wxT("Big5"));
 	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UTF7, wxT("UTF7"));
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UTF8, wxT("UTF8"));
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE, wxT("Unicode"));
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_BE, wxT("Unicode Big Endian"));
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32, wxT("Unicode 32"));
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32_BE, wxT("Unicode 32 Big Endian"));
-    m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_WINDOWS_1252, wxT("Windows-1252"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UTF8, wxT("UTF8"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE, wxT("Unicode"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_BE, wxT("Unicode Big Endian"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32, wxT("Unicode 32"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_UNICODE_32_BE, wxT("Unicode 32 Big Endian"));
+	m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_WINDOWS_1252, wxT("Windows-1252"));
 
-    wxMenu * pViewMenu = new wxMenu;
-    pViewMenu->AppendCheckItem(IDM_VIEW_AS_HTML, wxT("View as &Html"));
-    pViewMenu->AppendCheckItem(IDM_VIEW_AS_TEXT, wxT("View as &Text"));
-    pViewMenu->AppendSeparator();
-    pViewMenu->Append(IDM_NEXT_FILE, wxT("Next File"));
-    pViewMenu->Append(IDM_PREV_FILE, wxT("Previous File"));
+	wxMenu * pLangMenu = new wxMenu;
+	wxChar chinese[] = {20013, 25991, ' ', '(','C','H','I','N','E','S','E',')'};
+	wxChar japanese[] = {26085, 26412, 35486, ' ', '(', 'J','A','P','A','N','E','S','E', ')'};
+	wxChar korean[] = {54620,44397,50612,' ', '(', 'K', 'O', 'R', 'E', 'A', 'N', ')'};
+
+	pLangMenu->AppendCheckItem(IDM_LANG_CHINESE, wxString(chinese, sizeof(chinese) / sizeof(wxChar)));
+	pLangMenu->AppendCheckItem(IDM_LANG_JAPANESE, wxString(japanese, sizeof(japanese) / sizeof(wxChar)));
+	pLangMenu->AppendCheckItem(IDM_LANG_KOREAN, wxString(korean, sizeof(korean) / sizeof(wxChar)));
+
+	wxMenu * pViewMenu = new wxMenu;
+	pViewMenu->AppendCheckItem(IDM_VIEW_AS_HTML, wxT("View as &Html"));
+	pViewMenu->AppendCheckItem(IDM_VIEW_AS_TEXT, wxT("View as &Text"));
+	pViewMenu->AppendSeparator();
+	pViewMenu->Append(IDM_NEXT_FILE, wxT("Next File"));
+	pViewMenu->Append(IDM_PREV_FILE, wxT("Previous File"));
 
 	wxMenu * pDisplayMenu = new wxMenu;
 
@@ -208,49 +220,52 @@ void CReadBookMainFrm::Init()
 	wxChar traditional[] = {32321,39636};
 
 	pDisplayMenu->AppendCheckItem(IDM_VIEW_DISPLAY_ORIGINAL, wxString(original, 2));
-    pDisplayMenu->AppendCheckItem(IDM_VIEW_DISPLAY_SIMPLIFY, wxString(simplify, 2));
-    pDisplayMenu->AppendCheckItem(IDM_VIEW_DISPLAY_TRADITIONAL, wxString(traditional, 2));
+	pDisplayMenu->AppendCheckItem(IDM_VIEW_DISPLAY_SIMPLIFY, wxString(simplify, 2));
+	pDisplayMenu->AppendCheckItem(IDM_VIEW_DISPLAY_TRADITIONAL, wxString(traditional, 2));
 
 #if wxUSE_UNICODE
 	pViewMenu->AppendSeparator();
-    pViewMenu->AppendSubMenu(m_pEncodingMenu, wxT("Encoding..."));
+	pViewMenu->AppendSubMenu(m_pEncodingMenu, wxT("Encoding..."));
 
 	pViewMenu->AppendSeparator();
 	pViewMenu->AppendSubMenu(pDisplayMenu, wxT("Display as..."));
+
+	pViewMenu->AppendSeparator();
+	pViewMenu->AppendSubMenu(pLangMenu, wxT("Languages..."));
 #endif
-    pViewMenu->AppendSeparator();
-    pViewMenu->Append(IDM_ADD_BOOKMARK, wxT("&Add Bookmark...\tCTRL+B"));
-    pViewMenu->Append(IDM_CLEAR_BOOKMARKS, wxT("&Clear Bookmarks"));
-    pViewMenu->Append(IDM_BOOKMARKS, wxT("Bookmarks..."));
+	pViewMenu->AppendSeparator();
+	pViewMenu->Append(IDM_ADD_BOOKMARK, wxT("&Add Bookmark...\tCTRL+B"));
+	pViewMenu->Append(IDM_CLEAR_BOOKMARKS, wxT("&Clear Bookmarks"));
+	pViewMenu->Append(IDM_BOOKMARKS, wxT("Bookmarks..."));
 
 #ifndef _WIN32_WCE
-    pViewMenu->AppendSeparator();
-    pViewMenu->Append(IDM_FULL_SCREEN, wxT("FullScreen\tF11"));
+	pViewMenu->AppendSeparator();
+	pViewMenu->Append(IDM_FULL_SCREEN, wxT("FullScreen\tF11"));
 #endif
 
-    wxMenu *pHelpMenu = new wxMenu;
-    pHelpMenu->Append(IDM_ABOUT, wxT("&About"));
+	wxMenu *pHelpMenu = new wxMenu;
+	pHelpMenu->Append(IDM_ABOUT, wxT("&About"));
 
-    wxMenuBar *pMenuBar = new wxMenuBar;
+	wxMenuBar *pMenuBar = new wxMenuBar;
 
-    pMenuBar->Append(pFileMenu, wxT("&File"));
-    pMenuBar->Append(pEditMenu, wxT("&Edit"));
-    pMenuBar->Append(pViewMenu, wxT("&View"));
-    pMenuBar->Append(pHelpMenu, wxT("&Help"));
+	pMenuBar->Append(pFileMenu, wxT("&File"));
+	pMenuBar->Append(pEditMenu, wxT("&Edit"));
+	pMenuBar->Append(pViewMenu, wxT("&View"));
+	pMenuBar->Append(pHelpMenu, wxT("&Help"));
 
-    //// Associate the menu bar with the g_pMainFrm
-    SetMenuBar(pMenuBar);
+	//// Associate the menu bar with the g_pMainFrm
+	SetMenuBar(pMenuBar);
 
 #ifdef _WIN32_WCE
-    CreateToolBar();
+	CreateToolBar();
 #endif
 
-    //Register System wide hot key
+	//Register System wide hot key
 
 #ifdef __WXMSW__
-    m_nHotKeyId = ::GlobalAddAtom(wxT("wxReadBookHotKey_ShowWindow"));
-    RegisterHotKey(m_nHotKeyId, wxMOD_CONTROL | wxMOD_ALT, 'S');
-    Connect(m_nHotKeyId, wxEVT_HOTKEY, wxCharEventHandler(CReadBookMainFrm::OnHotKeyShowWindow));
+	m_nHotKeyId = ::GlobalAddAtom(wxT("wxReadBookHotKey_ShowWindow"));
+	RegisterHotKey(m_nHotKeyId, wxMOD_CONTROL | wxMOD_ALT, 'S');
+	Connect(m_nHotKeyId, wxEVT_HOTKEY, wxCharEventHandler(CReadBookMainFrm::OnHotKeyShowWindow));
 #endif
 	m_pCanvas->SetFocus();
 }
@@ -349,50 +364,50 @@ void CReadBookMainFrm::OnPrevFile(wxCommandEvent& WXUNUSED(event))
 
 wxMenu * CReadBookMainFrm::CreateRecentFilesMenu()
 {
-    const CFileInfoList * pInfoList = wxGetApp().GetPreference()->GetFileInfoMap();
+	const CFileInfoList * pInfoList = wxGetApp().GetPreference()->GetFileInfoMap();
 
-    if (pInfoList->size() == 0)
-    {
-        return NULL;
-    }
+	if (pInfoList->size() == 0)
+	{
+		return NULL;
+	}
 
-    wxMenu * pMenu = new wxMenu();
+	wxMenu * pMenu = new wxMenu();
 
-    wxFileSystem fs;
+	wxFileSystem fs;
 
-    CFileInfoList::const_iterator it;
+	CFileInfoList::const_iterator it;
 
-    int count = 0;
+	int count = 0;
 
 	for(it = pInfoList->begin();it != pInfoList->end(); ++it)
 	{
 		CFileInfo * pInfo = *it;
 
-        wxFSFile * pFile = fs.OpenFile(pInfo->m_strFileName);
+		wxFSFile * pFile = fs.OpenFile(pInfo->m_strFileName);
 
-        if (pFile != NULL)
-        {
-            wxString itemName = wxT("");
+		if (pFile != NULL)
+		{
+			wxString itemName = wxT("");
 
 			wxString location = pFile->GetLocation();
 
-            itemName.Printf(wxT("%d. %s"), count + 1, pInfo->m_strFileName.c_str());
+			itemName.Printf(wxT("%d. %s"), count + 1, pInfo->m_strFileName.c_str());
 
-            wxMenuItem * pItem =
-                pMenu->Append(IDM_RECENT_FILE + count, itemName);
+			wxMenuItem * pItem =
+				pMenu->Append(IDM_RECENT_FILE + count, itemName);
 
-            pItem->SetHelp(pInfo->m_strFileName);
+			pItem->SetHelp(pInfo->m_strFileName);
 
-            count++;
+			count++;
 
-            if (count == RECENT_FILE_SIZE)
-            {
-                delete pFile;
-                break;
-            }
+			if (count == RECENT_FILE_SIZE)
+			{
+				delete pFile;
+				break;
+			}
 
-            delete pFile;
-        }
+			delete pFile;
+		}
 	}
 
 	return pMenu;
@@ -400,92 +415,92 @@ wxMenu * CReadBookMainFrm::CreateRecentFilesMenu()
 
 void CReadBookMainFrm::OnRecentFile(wxCommandEvent& event)
 {
-    wxMenuItem * pItem = m_pRecentFileMenu->FindItem(event.GetId(),NULL);
+	wxMenuItem * pItem = m_pRecentFileMenu->FindItem(event.GetId(),NULL);
 
-    if (pItem != NULL)
-    {
-        wxGetApp().GetDocManager()->CreateDocument(pItem->GetHelp(), wxDOC_SILENT);
-    }
+	if (pItem != NULL)
+	{
+		wxGetApp().GetDocManager()->CreateDocument(pItem->GetHelp(), wxDOC_SILENT);
+	}
 }
 
 void CReadBookMainFrm::AddRecentFile(const wxString & strFileName)
 {
-    if (strFileName.IsEmpty())
-        return;
+	if (strFileName.IsEmpty())
+		return;
 
-    m_pRecentFileMenuItem->Enable(true);
+	m_pRecentFileMenuItem->Enable(true);
 
-    size_t count = m_pRecentFileMenu->GetMenuItemCount();
+	size_t count = m_pRecentFileMenu->GetMenuItemCount();
 
-    for(size_t i = 0; i < count; i++)
-    {
-        wxMenuItem * pItem = m_pRecentFileMenu->FindItemByPosition(i);
-
-        if (pItem->GetHelp().CmpNoCase(strFileName) == 0)
-        {
-            m_pRecentFileMenu->Remove(pItem);
-            m_pRecentFileMenu->Prepend(pItem);
-
-            UpdateRecentFilesLabel();
-            return;
-        }
-    }
-
-    wxString itemName = wxT("");
-    itemName.Printf(wxT("%d. %s"), count, strFileName.c_str());
-
-    wxMenuItem * pNewItem =
-        m_pRecentFileMenu->Prepend(count + IDM_RECENT_FILE,
-            itemName);
-
-    pNewItem->SetHelp(strFileName);
-
-    if (m_pRecentFileMenu->GetMenuItemCount() > (size_t)RECENT_FILE_SIZE)
+	for(size_t i = 0; i < count; i++)
 	{
-        wxMenuItem * pRemovedItem =
+		wxMenuItem * pItem = m_pRecentFileMenu->FindItemByPosition(i);
+
+		if (pItem->GetHelp().CmpNoCase(strFileName) == 0)
+		{
+			m_pRecentFileMenu->Remove(pItem);
+			m_pRecentFileMenu->Prepend(pItem);
+
+			UpdateRecentFilesLabel();
+			return;
+		}
+	}
+
+	wxString itemName = wxT("");
+	itemName.Printf(wxT("%d. %s"), count, strFileName.c_str());
+
+	wxMenuItem * pNewItem =
+		m_pRecentFileMenu->Prepend(count + IDM_RECENT_FILE,
+		itemName);
+
+	pNewItem->SetHelp(strFileName);
+
+	if (m_pRecentFileMenu->GetMenuItemCount() > (size_t)RECENT_FILE_SIZE)
+	{
+		wxMenuItem * pRemovedItem =
 			m_pRecentFileMenu->Remove(m_pRecentFileMenu->FindItemByPosition(RECENT_FILE_SIZE));
 
 		delete pRemovedItem;
 	}
 
-    UpdateRecentFilesLabel();
+	UpdateRecentFilesLabel();
 }
 
 void CReadBookMainFrm::UpdateRecentFilesLabel()
 {
-    size_t count = m_pRecentFileMenu->GetMenuItemCount();
+	size_t count = m_pRecentFileMenu->GetMenuItemCount();
 
-    for(size_t i = 0; i < count; i++)
-    {
-        wxMenuItem * pItem = m_pRecentFileMenu->FindItemByPosition(i);
+	for(size_t i = 0; i < count; i++)
+	{
+		wxMenuItem * pItem = m_pRecentFileMenu->FindItemByPosition(i);
 
-        wxString itemName = wxT("");
-        itemName.Printf(wxT("%d. %s"), i + 1, pItem->GetHelp().c_str());
+		wxString itemName = wxT("");
+		itemName.Printf(wxT("%d. %s"), i + 1, pItem->GetHelp().c_str());
 
-        pItem->SetItemLabel(itemName);
-    }
+		pItem->SetItemLabel(itemName);
+	}
 
-    m_pRecentFileMenu->UpdateUI();
+	m_pRecentFileMenu->UpdateUI();
 }
 
 void CReadBookMainFrm::OnFullScreen(wxCommandEvent& event)
 {
-    this->ShowFullScreen(!this->IsFullScreen());
+	this->ShowFullScreen(!this->IsFullScreen());
 }
 
 void CReadBookMainFrm::OnHide(wxCommandEvent& event)
 {
-    if (IsShown())
-        Hide();
+	if (IsShown())
+		Hide();
 }
 
 void CReadBookMainFrm::OnHotKeyShowWindow(wxKeyEvent& event)
 {
-    if (!IsShown())
-    {
-        Raise();
-        Show();
-    }
+	if (!IsShown())
+	{
+		Raise();
+		Show();
+	}
 }
 
 void CReadBookMainFrm::OnEncoding(wxCommandEvent& event)
@@ -594,17 +609,17 @@ void CReadBookMainFrm::OnViewDisplayTraditionalUpdateUI(wxUpdateUIEvent& event)
 }
 
 wxToolBar* CReadBookMainFrm::OnCreateToolBar(long style,
-                                        wxWindowID id,
-                                        const wxString& name)
+											 wxWindowID id,
+											 const wxString& name)
 {
 #if defined(__WXWINCE__) && defined(__POCKETPC__)
-    return new wxToolMenuBar(this, id,
-                         wxDefaultPosition, wxDefaultSize,
-                         style, name, GetMenuBar());
+	return new wxToolMenuBar(this, id,
+		wxDefaultPosition, wxDefaultSize,
+		style, name, GetMenuBar());
 #else
-    return new wxToolBar(this, id,
-                         wxDefaultPosition, wxDefaultSize,
-                         style, name);
+	return new wxToolBar(this, id,
+		wxDefaultPosition, wxDefaultSize,
+		style, name);
 #endif
 }
 
@@ -620,12 +635,12 @@ void CReadBookMainFrm::UpdateCharsetMenuItemText(const wxString & text)
 	if (m_pEncodingMenu == NULL)
 		return;
 
-    wxMenuItem * pItem = m_pEncodingMenu->FindItem(IDM_ENCODE_CHARSET);
+	wxMenuItem * pItem = m_pEncodingMenu->FindItem(IDM_ENCODE_CHARSET);
 
-    if (pItem != NULL)
-    {
+	if (pItem != NULL)
+	{
 		pItem->SetText(text);
-    }
+	}
 	else
 	{
 		m_pEncodingMenu->AppendCheckItem(IDM_ENCODE_CHARSET, text);
@@ -637,14 +652,38 @@ wxString CReadBookMainFrm::GetCharsetMenuItemText()
 	if (m_pEncodingMenu == NULL)
 		return wxEmptyString;
 
-    wxMenuItem * pItem = m_pEncodingMenu->FindItem(IDM_ENCODE_CHARSET);
+	wxMenuItem * pItem = m_pEncodingMenu->FindItem(IDM_ENCODE_CHARSET);
 
-    if (pItem != NULL)
-    {
+	if (pItem != NULL)
+	{
 		return pItem->GetText();
-    }
+	}
 
 	return wxEmptyString;
+}
+
+void CReadBookMainFrm::OnLang(wxCommandEvent& event)
+{
+	if (m_nLang == event.GetId())
+	{
+		return;
+	}
+
+	m_nLang = event.GetId();
+
+	if (m_pCanvas && m_pCanvas->GetView())
+	{
+		CReadBookView * pView = ((CReadBookView *)m_pCanvas->GetView());
+
+		CReadBookDoc * pDoc = pView->GetReadBookDoc();
+
+		pDoc->ReloadCurrentDocument();
+	}
+}
+
+void CReadBookMainFrm::OnLangUpdateUI(wxUpdateUIEvent& event)
+{
+	event.Check(m_nLang == event.GetId());
 }
 
 void CReadBookMainFrm::OnBookMarks(wxCommandEvent& event)

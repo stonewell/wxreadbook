@@ -15,7 +15,6 @@
 #endif
 
 #include "../../ReadBookApp.h"
-#include "../../ReadBookMainFrm.h"
 
 #include "ReadBookTPLDoc.h"
 
