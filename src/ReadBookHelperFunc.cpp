@@ -341,3 +341,8 @@ wxString GetCharsetMenuItemText()
 {
 	return GetMainFrame()->GetCharsetMenuItemText();
 }
+
+wxInt32 GetCurrentLang()
+{
+	return GetMainFrame()->GetCurrentLang();
+}

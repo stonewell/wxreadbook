@@ -201,6 +201,11 @@ void CReadBookDoc::ReloadByEncoding(wxMBConv * conv)
 	OpenDocument(m_strFileName, conv, false);
 }
 
+void CReadBookDoc::ReloadCurrentDocument()
+{
+	OpenDocument(m_strFileName, GetCurrentMBConv(), true);
+}
+
 bool CReadBookDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess)
 {
 	wxFileSystem fs;
@@ -245,7 +250,7 @@ wxMBConv * CReadBookDoc::GetSuitableMBConv(wxInputStream * pInput, wxMBConv * pD
 
 		wxString charset;
 
-		if (GuessDataEncoding(pInput, charset))
+		if (GuessDataEncoding(pInput, charset, GetCurrentLang()))
 		{
 			UpdateCurrentEncoding(charset);
 			pConv = GetCurrentMBConv();
