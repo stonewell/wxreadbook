@@ -17,7 +17,15 @@ bool ChooseArchiveFile(const wxString & archiveUrl, wxString & choosedArchiveFil
 
 void SetMainFrameTitle(const wxString & strTitle);
 void AddToRecentFile(const wxString & strFileName);
-void UpdateCurrentEncoding(wxUint32 encoding);
+
+void UpdateCurrentEncoding(const wxString & charset);
 
 CReadBookView * GetCurrentView();
 CReadBookCanvas * GetCurrentCanvas();
+
+wxInt32 CharsetToMenuID(const wxString & charsets);
+wxString MenuIDToCharset(wxInt32 id);
+wxMBConv * CreateEncoding(const wxString & charset);
+
+void UpdateCharsetMenuItemText(const wxString & text);
+wxString GetCharsetMenuItemText();

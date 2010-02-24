@@ -44,7 +44,6 @@ public:
 protected:
 	virtual bool OpenDocument(const wxString & filename, wxMBConv * conv, bool bGuess);
 	virtual bool LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess);
-	virtual wxUint32 GuessDataEncoding(wxInputStream * pInputStream);
 
 	virtual wxMBConv * GetSuitableMBConv(wxInputStream * pInput, wxMBConv * pDefaultConv, bool bGuess);
 	virtual wxFileOffset GetRowOffset(wxInt32 nRow);

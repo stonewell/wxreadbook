@@ -20,34 +20,9 @@
 #endif
 
 #include "../ReadBookApp.h"
+#include "../unicode/UnicodeHelper.h"
 #include "ReadBookDoc.h"
 #include "ReadBookView.h"
-
-#if wxUSE_UNICODE
-#include "../ns/nsDetector.h"
-
-class CObserver : public CnsICharsetDetectionObserver
-{
-public:
-	bool m_bDone;
-	String m_Charset;
-
-	CObserver() :
-		m_bDone(false),
-		m_Charset(wxT(""))
-	{
-	}
-
-	virtual void Notify(String charset) 
-	{
-		if (!m_bDone)
-		{
-			m_Charset = charset;
-			m_bDone = true;
-		}
-	}
-};
-#endif
 
 const wxChar EMPTY_STRING_CHARS[] = {'\xA1','\t',' ','\n','\r',0x00};
 
@@ -226,104 +201,6 @@ void CReadBookDoc::ReloadByEncoding(wxMBConv * conv)
 	OpenDocument(m_strFileName, conv, false);
 }
 
-wxUint32 CReadBookDoc::GuessDataEncoding(wxInputStream * pInput)
-{
-	CObserver ob;
-
-	CnsDetector det(CnsPSMDetector::CHINESE);
-
-	det.Init(&ob);
-
-	char buf[1024] = {0};
-
-	pInput->Read(buf, 1024);
-
-	size_t count = pInput->LastRead();
-
-	if (!det.isAscii(buf, count))
-	{
-		bool done = det.DoIt(buf, count, false);
-
-		while(!done && !ob.m_bDone && !pInput->Eof())
-		{
-			pInput->Read(buf, 1024);
-
-			count = pInput->LastRead();
-
-			done = det.DoIt(buf, count, false);
-		}
-		det.DataEnd();
-
-		StringVector ppCharsets;
-		det.GetProbableCharsets(ppCharsets);
-
-		if (ppCharsets.size() > 0 || ob.m_bDone)
-		{
-			String charsets = ob.m_bDone ? ob.m_Charset : ppCharsets[0];
-/*
-			if (charsets.compare(wxT("windows-1252")) == 0)
-			{
-				for(size_t i = 0;i<ppCharsets.size();i++)
-				{
-					if (ppCharsets[i].compare(wxT("windows-1252")) != 0)
-					{
-						charsets = ppCharsets[i];
-						break;
-					}
-				}
-			}
-*/
-			if (charsets.compare(wxT("windows-1252")) == 0)
-			{
-				return IDM_ENCODE_WINDOWS_1252;
-			}
-
-			if (charsets.compare(wxT("Big5")) == 0)
-			{
-				return IDM_ENCODE_BIG5;
-			}
-			else if (charsets.compare(wxT("GB18030")) == 0)
-			{
-				return IDM_ENCODE_GB;
-			}
-			else if (charsets.compare(wxT("GB2312")) == 0)
-			{
-				return IDM_ENCODE_GB;
-			}
-			else if (charsets.compare(wxT("HZ-GB-2312")) == 0)
-			{
-				return IDM_ENCODE_GB;
-			}
-			else if (charsets.compare(wxT("UTF-16BE")) == 0)
-			{
-				return IDM_ENCODE_UNICODE_BE;
-			}
-			else if (charsets.compare(wxT("UTF-16LE")) == 0)
-			{
-				return IDM_ENCODE_UNICODE;
-			}
-			else if (charsets.compare(wxT("UTF-8")) == 0)
-			{
-				return IDM_ENCODE_UTF8;
-			}
-			else
-			{
-				return IDM_ENCODE_UNKNOWN;
-			}
-		}
-		else
-		{
-			return IDM_ENCODE_UNKNOWN;
-		}
-	}
-	else
-	{
-		det.DataEnd();
-
-		return IDM_ENCODE_GB;
-	}
-}
-
 bool CReadBookDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess)
 {
 	wxFileSystem fs;
@@ -366,11 +243,11 @@ wxMBConv * CReadBookDoc::GetSuitableMBConv(wxInputStream * pInput, wxMBConv * pD
 	{
 		wxFileOffset offset = pInput->TellI();
 
-		wxUint32 encoding = GuessDataEncoding(pInput);
+		wxString charset;
 
-		if (encoding != IDM_ENCODE_UNKNOWN)
+		if (GuessDataEncoding(pInput, charset))
 		{
-			UpdateCurrentEncoding(encoding);
+			UpdateCurrentEncoding(charset);
 			pConv = GetCurrentMBConv();
 		}
 
