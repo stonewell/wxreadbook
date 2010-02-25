@@ -1,6 +1,10 @@
 #ifndef READBOOKAPP_H_
 #define READBOOKAPP_H_
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "wx/docview.h"
 #include "wx/filename.h"
 

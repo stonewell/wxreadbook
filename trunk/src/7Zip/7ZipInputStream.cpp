@@ -22,6 +22,10 @@
 #include "7ZipInputStream.h"
 #include "7ZipClassFactory.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 class wxTemporaryFileInputStream : public wxFileInputStream
 {
 public:

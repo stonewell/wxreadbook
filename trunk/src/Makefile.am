@@ -119,12 +119,23 @@ wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	../addons/libportablethread/libportablethread.a \
 	../addons/lib7zip/Lib7Zip/lib7zip.a 
 
+if BUILD_WIN32
+wxReadBook_LDADD += wxReadBook_rc.o
+endif
+
+if BUILD_ANGSTROM
 wxReadBook_LDFLAGS = -lpthread -lrt
+endif
 	
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
+
+if BUILD_WIN32
+wxReadBook_rc.o: $(srcdir)/wxReadBook.rc
+	${WINDRES} --use-temp-file ${CPPFLAGS} -i $< -o $@	
+endif
 
 dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
-all-local: wxReadBook
-	cp wxReadBook ..
+all-local: wxReadBook${PROGRAM_EXT}
+	cp wxReadBook${PROGRAM_EXT} ..
