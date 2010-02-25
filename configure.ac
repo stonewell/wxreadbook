@@ -56,14 +56,31 @@ if test "$WX_CONFIG" = no; then
 	AC_MSG_FAILURE(wx-config not exists)
 fi
 
-CXXFLAGS="`wx-config --cxxflags --static=$static --debug=$debug` ${debug_flag}"
-CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` ${debug_flag}"
-CFLAGS="`wx-config --cflags --static=$static --debug=$debug` ${debug_flag}"
-LIBS="`wx-config --libs --static=$static --debug=$debug`"
+ADDTIONAL_CXX_FLAGS=
 
-if test "${host}" = "arm-angstrom-linux-gnueabi"; then
+AC_SUBST(PROGRAM_EXT, [], [])
+AM_CONDITIONAL(BUILD_ANGSTROM, test x = y)
+AM_CONDITIONAL(BUILD_WIN32, test x = y)
+
+case "${host}" in
+  *-mingw32* | *-cygwin* )
+	AC_DEFINE(BUILD_WIN32, 1, Build Form Win32)
+	ADDTIONAL_CXX_FLAGS="-DWIN32 -D_WIN32 -DWINDOWS -D_WINDOWS -DUNICODE -D_UNICODE"
+	AC_SUBST(PROGRAM_EXT, ".exe", [])
+	AM_CONDITIONAL(BUILD_WIN32, test x = x)
+	AC_CHECK_TOOL(WINDRES, [windres])
+  ;;
+  *-angstrom* )
 	AC_DEFINE([BUILD_ANGSTROM], 1, [Build for angstrom])
-fi
+	AM_CONDITIONAL(BUILD_ANGSTROM, test x = x)
+  ;;
+  *)
+esac
+
+CXXFLAGS="`wx-config --cxxflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
+CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
+CFLAGS="`wx-config --cflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
+LIBS="`wx-config --libs --static=$static --debug=$debug`"
 
 AC_CHECK_HEADERS(["wx/wx.h"],
 	[AC_MSG_RESULT(checking for wx/wx.h... OK)], 

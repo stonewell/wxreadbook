@@ -3,6 +3,9 @@
 /* Build for angstrom */
 #undef BUILD_ANGSTROM
 
+/* Build Form Win32 */
+#undef BUILD_WIN32
+
 /* Define to 1 if you have <algorithm>. */
 #undef HAVE_ALGORITHM
 

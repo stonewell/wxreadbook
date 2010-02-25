@@ -31,6 +31,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 bin_PROGRAMS = wxReadBook$(EXEEXT)
+@BUILD_WIN32_TRUE@am__append_1 = wxReadBook_rc.o
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -74,7 +75,7 @@ wxReadBook_OBJECTS = $(am_wxReadBook_OBJECTS)
 wxReadBook_DEPENDENCIES = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
 	../addons/libportablethread/libportablethread.a \
-	../addons/lib7zip/Lib7Zip/lib7zip.a
+	../addons/lib7zip/Lib7Zip/lib7zip.a $(am__append_1)
 wxReadBook_LINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(wxReadBook_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -148,11 +149,13 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PROGRAM_EXT = @PROGRAM_EXT@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+WINDRES = @WINDRES@
 WX_CONFIG = @WX_CONFIG@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -314,9 +317,8 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
 	../addons/libportablethread/libportablethread.a \
-	../addons/lib7zip/Lib7Zip/lib7zip.a 
-
-wxReadBook_LDFLAGS = -lpthread -lrt
+	../addons/lib7zip/Lib7Zip/lib7zip.a $(am__append_1)
+@BUILD_ANGSTROM_TRUE@wxReadBook_LDFLAGS = -lpthread -lrt
 EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
 all: all-recursive
 
@@ -1337,11 +1339,14 @@ uninstall-am: uninstall-binPROGRAMS
 	uninstall-binPROGRAMS
 
 
+@BUILD_WIN32_TRUE@wxReadBook_rc.o: $(srcdir)/wxReadBook.rc
+@BUILD_WIN32_TRUE@	${WINDRES} --use-temp-file ${CPPFLAGS} -i $< -o $@	
+
 dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
-all-local: wxReadBook
-	cp wxReadBook ..
+all-local: wxReadBook${PROGRAM_EXT}
+	cp wxReadBook${PROGRAM_EXT} ..
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
