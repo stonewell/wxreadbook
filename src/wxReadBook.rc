@@ -4,5 +4,8 @@ file32	BITMAP "res/file32.bmp"
 folder32	BITMAP "res/folder32.bmp"
 BOOK06 ICON "res/BOOK06.ICO"
 
-#include "wx/msw/wx.rc"
+#ifdef _WIN32_WCE
 #include "wx/msw/wince/wince.rc"
+#elif defined(_WIN32)
+#include "wx/msw/wx.rc"
+#endif
