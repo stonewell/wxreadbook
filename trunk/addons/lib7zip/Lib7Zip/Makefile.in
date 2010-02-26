@@ -45,9 +45,10 @@ ARFLAGS = cru
 lib7zip_a_AR = $(AR) $(ARFLAGS)
 lib7zip_a_LIBADD =
 am_lib7zip_a_OBJECTS = 7ZipArchive.$(OBJEXT) 7ZipArchiveItem.$(OBJEXT) \
-	7zipLibrary.$(OBJEXT) HelperFuncs.$(OBJEXT) \
-	MyWindows.$(OBJEXT) PropVariant.$(OBJEXT)
-lib7zip_a_OBJECTS = $(am_lib7zip_a_OBJECTS)
+	7zipLibrary.$(OBJEXT) HelperFuncs.$(OBJEXT)
+nodist_lib7zip_a_OBJECTS = MyWindows.$(OBJEXT) PropVariant.$(OBJEXT)
+lib7zip_a_OBJECTS = $(am_lib7zip_a_OBJECTS) \
+	$(nodist_lib7zip_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -60,7 +61,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(lib7zip_a_SOURCES)
+SOURCES = $(lib7zip_a_SOURCES) $(nodist_lib7zip_a_SOURCES)
 DIST_SOURCES = $(lib7zip_a_SOURCES)
 ETAGS = etags
 CTAGS = ctags
@@ -163,12 +164,13 @@ top_srcdir = @top_srcdir@
 noinst_LIBRARIES = lib7zip.a
 AM_CPPFLAGS = -I../includes -I../includes/CPP -I../includes/CPP/myWindows -I../includes/CPP/include_windows
 lib7zip_a_SOURCES = \
-	7ZipArchive.cpp  7ZipArchiveItem.cpp  7zipLibrary.cpp  HelperFuncs.cpp  HelperFuncs.h  lib7zip.h \
-	../includes/CPP/Common/MyWindows.cpp ../includes/CPP/Common/StdAfx.h \
+	7ZipArchive.cpp  7ZipArchiveItem.cpp  7zipLibrary.cpp  HelperFuncs.cpp  HelperFuncs.h  lib7zip.h 
+
+nodist_lib7zip_a_SOURCES = ../includes/CPP/Common/MyWindows.cpp ../includes/CPP/Common/StdAfx.h \
 	../includes/CPP/Windows/PropVariant.cpp ../inclues/CPP/Windows/StdAfx.h
 
 EXTRA_DIST = ReadMe.txt Lib7Zip.vcproj 
-CLEAN_FILES = ../includes/CPP ../includes/C
+DISTCLEANFILES = ../includes/CPP ../includes/C
 all: all-am
 
 .SUFFIXES:
@@ -365,6 +367,7 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
