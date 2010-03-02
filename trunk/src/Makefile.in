@@ -149,7 +149,6 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PROGRAM_EXT = @PROGRAM_EXT@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -1345,8 +1344,8 @@ uninstall-am: uninstall-binPROGRAMS
 dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
-all-local: wxReadBook${PROGRAM_EXT}
-	cp wxReadBook${PROGRAM_EXT} ..
+all-local: wxReadBook${EXEEXT}
+	cp wxReadBook${EXEEXT} ..
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -137,5 +137,5 @@ endif
 dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.vcproj $(distdir)
 
-all-local: wxReadBook${PROGRAM_EXT}
-	cp wxReadBook${PROGRAM_EXT} ..
+all-local: wxReadBook${EXEEXT}
+	cp wxReadBook${EXEEXT} ..
