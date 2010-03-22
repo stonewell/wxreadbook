@@ -29,6 +29,11 @@ protected:
 	virtual wxInt32 ScrollPosToLine(wxInt32 nPos);
 	virtual wxInt32 ScrollLineToPos(wxInt32 nLine);
 
+    virtual void OnScrollWin(wxScrollWinEvent& event);
+    virtual void OnKeyDown(wxKeyEvent& event);
+    virtual void OnSize(wxSizeEvent& event);
+	virtual void OnMouseWheel(wxMouseEvent & event);
+
 	virtual TextProcess::View::IViewLine * GetPreviousLine(TextProcess::View::IViewLine * pCurViewLine);
 	virtual TextProcess::View::IViewLine * GetNextLine(TextProcess::View::IViewLine * pCurViewLine);
 
