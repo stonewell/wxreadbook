@@ -124,10 +124,34 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 			m_pViewLine = 
 				m_pViewLineManager->FindLine(pMatcher.get(), 0);
 		}
+
+#ifdef _DEBUG
+		printf("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n");
+#endif
 	}
 
 	if (m_pViewLine == NULL)
 		return;
+
+	static int offset = 0;
+	static int doc_offset = 0;
+
+
+#ifdef _DEBUG
+	if (m_pViewLine)
+	{
+		if (offset == m_pViewLine->GetOffset() &&
+			doc_offset == m_pViewLine->GetDocumentLine()->GetOffset()) {
+		fprintf(stderr, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+		printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh:%p, %d %d %d %d\n", m_pViewLine,
+				(wxInt32)m_pViewLine->GetOffset(), (wxInt32)m_pViewLine->GetDocumentLine()->GetOffset(), 
+				(wxInt32)(m_pViewLine->GetOffset() + m_pViewLine->GetDocumentLine()->GetOffset()),
+				GetReadBookDoc() == NULL ? 0 : GetReadBookDoc()->GetCurrentLine());
+		}
+		offset = m_pViewLine->GetOffset();
+		doc_offset = m_pViewLine->GetDocumentLine()->GetOffset();
+	}
+#endif
 
 	TextProcess::View::IViewLine * pViewLine = m_pViewLine;
 
@@ -194,6 +218,12 @@ wxInt32 CReadBookTPLView2::ScrollLine(wxInt16 nDelta)
 	if (!GetReadBookDoc()->IsDocumentLoading() || !m_bViewLineBuilding || nDelta == 0)
 		return GetReadBookDoc()->GetCurrentLine();
 
+#ifdef _DEBUG
+	printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Scroll Line Begin:%d %d %d %d %p\n", 
+			nDelta, GetReadBookDoc()->GetCurrentLine(), 
+			(wxInt32)m_pViewLine->GetOffset(), (wxInt32)(m_pViewLine->GetDocumentLine()->GetOffset()),
+			m_pViewLine);
+#endif
 	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
 	if (nDelta < 0)
 	{
@@ -216,7 +246,12 @@ wxInt32 CReadBookTPLView2::ScrollLine(wxInt16 nDelta)
 			TextProcess::View::IViewLine * pViewLine = GetNextLine(m_pViewLine);
 
 			if (pViewLine == NULL)
+			{
+#ifdef _DEBUG
+				printf("scroll line break out:%d\n", i);
+#endif
 				break;
+			}
 			pViewLine->AccessLine();
 
 			m_pViewLine = pViewLine;
@@ -226,6 +261,12 @@ wxInt32 CReadBookTPLView2::ScrollLine(wxInt16 nDelta)
 	wxFileOffset offset = m_pViewLine->GetDocumentLine()->GetOffset();
 	GetReadBookDoc()->SetCurrentLine(offset + m_pViewLine->GetOffset());
 
+#ifdef _DEBUG
+	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^Scroll Line End:%d %d %d %d %p\n", 
+			nDelta, GetReadBookDoc()->GetCurrentLine(), 
+			(wxInt32)m_pViewLine->GetOffset(), (wxInt32)offset,
+			m_pViewLine);
+#endif
 	return GetReadBookDoc()->GetCurrentLine();
 }
 
@@ -387,7 +428,7 @@ TextProcess::View::IViewLine * CReadBookTPLView2::GetPreviousLine(TextProcess::V
 	{
 		wxFileOffset doc_offset = pCurViewLine->GetDocumentLine()->GetOffset();
 		wxFileOffset view_offset = pCurViewLine->GetOffset();
-		GetReadBookDoc()->SetCurrentLine(doc_offset + view_offset);
+		//GetReadBookDoc()->SetCurrentLine(doc_offset + view_offset);
 
 		StopViewLineBuilder();
 		StartViewLineBuilder(doc_offset, view_offset);
@@ -415,7 +456,7 @@ TextProcess::View::IViewLine * CReadBookTPLView2::GetNextLine(TextProcess::View:
 	{
 		wxFileOffset doc_offset = pCurViewLine->GetDocumentLine()->GetOffset();
 		wxFileOffset view_offset = pCurViewLine->GetOffset();
-		GetReadBookDoc()->SetCurrentLine(doc_offset + view_offset);
+		//GetReadBookDoc()->SetCurrentLine(doc_offset + view_offset);
 
 		wxFileOffset saved_doc_offset = m_pViewLine->GetDocumentLine()->GetOffset();
 		wxFileOffset saved_view_offset = m_pViewLine->GetOffset();
@@ -429,6 +470,11 @@ TextProcess::View::IViewLine * CReadBookTPLView2::GetNextLine(TextProcess::View:
 
 		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher2(TextProcess::View::CViewObjectFactory::CreateLineMatcher(saved_doc_offset, saved_view_offset));
 		m_pViewLine = m_pViewLineManager->FindLine(pMatcher2.get(), 0);
+
+#ifdef _DEBUG
+		if (m_pViewLine == NULL)
+			printf("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk\n");
+#endif
 	}
 
 	return pViewLine;
