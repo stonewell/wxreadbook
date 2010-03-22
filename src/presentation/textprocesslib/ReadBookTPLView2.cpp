@@ -529,3 +529,32 @@ wxInt32 CReadBookTPLView2::ScrollLineToPos(wxInt32 nLine)
 		return nLine;
 	}
 }
+
+void CReadBookTPLView2::OnScrollWin(wxScrollWinEvent& event)
+{
+//	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
+
+	CReadBookView::OnScrollWin(event);
+}
+
+void CReadBookTPLView2::OnKeyDown(wxKeyEvent& event)
+{
+//	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
+
+	CReadBookView::OnKeyDown(event);
+}
+
+void CReadBookTPLView2::OnSize(wxSizeEvent& event)
+{
+//	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
+
+	CReadBookView::OnSize(event);
+}
+
+void CReadBookTPLView2::OnMouseWheel(wxMouseEvent & event)
+{
+//	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
+
+	CReadBookView::OnMouseWheel(event);
+}
+
