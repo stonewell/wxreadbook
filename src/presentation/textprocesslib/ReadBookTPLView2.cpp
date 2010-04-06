@@ -155,9 +155,35 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 
 	TextProcess::View::IViewLine * pViewLine = m_pViewLine;
 
+#ifdef _DEBUG
+	wxFileOffset * offsets = new wxFileOffset[m_nPageSize * 2];
+
+	for(int i=0;i<m_nPageSize; i++)
+	{
+		offsets[i * 2 + 0] = -1;
+		offsets[i * 2 + 1] = -1;
+	}
+#endif
+
 	for (int i=0; i < m_nPageSize; i++)
 	{
-		wxString line = pViewLine->GetDocumentLine()->GetData(pViewLine->GetOffset(), pViewLine->GetLength());
+		
+#ifdef _DEBUG
+		for(int ii = 0; ii < m_nPageSize; ii++)
+		{
+			if (offsets[ii * 2 + 0] == pViewLine->GetDocumentLine()->GetOffset() &&
+				offsets[ii * 2 + 1] == pViewLine->GetOffset())
+			{
+				printf("Show same line:%d %d", offsets[ii * 2 + 0] , offsets[ii * 2 + 1]);
+			}
+		}
+
+		offsets[i * 2 + 0] = pViewLine->GetDocumentLine()->GetOffset();
+		offsets[i * 2 + 1] = pViewLine->GetOffset();
+#endif
+		wxString line = 
+			pViewLine->GetDocumentLine()->GetData(pViewLine->GetOffset(), 
+				pViewLine->GetLength());
 
 		if (GetDisplayAs() != wxReadBook::DisplayAsOriginal)
     	{
@@ -165,8 +191,15 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 
         	for(int i=0;i<gb2big5TableSize;i+=2)
         	{
-            	tmp1[0] = GetDisplayAs() == wxReadBook::DisplayAsSimplify ? gb2big5[i + 1] : gb2big5[i]; tmp1[1] = 0;
-            	tmp2[0] = GetDisplayAs() == wxReadBook::DisplayAsSimplify ? gb2big5[i] : gb2big5[i + 1]; tmp2[1] = 0;
+            	tmp1[0] = 
+					GetDisplayAs() == wxReadBook::DisplayAsSimplify ? 
+						gb2big5[i + 1] : gb2big5[i]; 
+				tmp1[1] = 0;
+            	
+				tmp2[0] = 
+					GetDisplayAs() == wxReadBook::DisplayAsSimplify ? 
+						gb2big5[i] : gb2big5[i + 1]; 
+				tmp2[1] = 0;
 
             	line.Replace(tmp1, tmp2);
         	}
@@ -195,6 +228,10 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 	pDC->SetFont(pOldFont);
 	pDC->SetTextForeground(oldColor);
 	pDC->SetBackground(oldBkColor);
+
+#ifdef _DEBUG
+	delete[] offsets;
+#endif
 }
 
 void CReadBookTPLView2::CalculateViewSize()
