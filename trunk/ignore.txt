@@ -1,0 +1,8 @@
+Makefile.in
+Makefile
+aclocal.m4
+configure
+aclocal.*
+*.ncb
+*.user
+*.suo
