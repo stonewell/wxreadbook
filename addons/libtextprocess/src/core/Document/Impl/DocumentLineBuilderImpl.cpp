@@ -137,6 +137,7 @@ TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pSt
             pchEOL = std::search(pStartPos, pEndPos, pCR, pCREnd);
             pchEOL2 = std::search(pStartPos, pEndPos, pLF, pLFEnd);
 
+			//sequence search, choose the less one
 			if (pchEOL2 < pchEOL)
 			{
 				pchEOL = pchEOL2;
@@ -177,7 +178,8 @@ TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pSt
             pchEOL2 = std::find_end(pStartPos, pEndPos,
                 pLF, pLFEnd);
 
-			if (pchEOL2 < pchEOL)
+			//reverse search, so choose the bigger one.
+			if (pchEOL2 > pchEOL)
 			{
 				cr = false;
 				pchEOL = pchEOL2;
@@ -207,7 +209,21 @@ TPL_PRINTF("DocumentLineBuilder %d started at %ld\n", GetBuilderDirection(), pSt
 				{
 					offset = (pchEOL + m_LFLength) - pFileBegin;
 					length = (pEndPos - (pchEOL + m_LFLength)) + 1;
+					
+				    while (length >= m_CRLength)
+				    {
+				        if (!memcmp(pFileBegin + offset, pCR, m_CRLength))
+				        {
+				            length -= m_LFLength;
+							offset += m_CRLength;
+				        }
+						else 
+						{
+							break;
+						}
+				    }
 				}
+				
 			}
 
             pEndPos = pchEOL - 1;
