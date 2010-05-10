@@ -184,7 +184,9 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 		wxString line = 
 			pViewLine->GetDocumentLine()->GetData(pViewLine->GetOffset(), 
 				pViewLine->GetLength());
-
+#ifdef _DEBUG
+printf("%d:%ls\n", i, line.c_str());
+#endif		
 		if (GetDisplayAs() != wxReadBook::DisplayAsOriginal)
     	{
        		wxChar tmp1[2], tmp2[2];
@@ -461,11 +463,16 @@ TextProcess::View::IViewLine * CReadBookTPLView2::GetPreviousLine(TextProcess::V
 
 	if (pViewLine == NULL && m_pViewLineManager->IsHasAllPreviousLines()) 
 		return NULL;
+	else if (pViewLine == NULL && pCurViewLine == NULL)
+		return NULL;
 	else if (pViewLine == NULL)
 	{
 		wxFileOffset doc_offset = pCurViewLine->GetDocumentLine()->GetOffset();
 		wxFileOffset view_offset = pCurViewLine->GetOffset();
 		//GetReadBookDoc()->SetCurrentLine(doc_offset + view_offset);
+
+		wxFileOffset saved_doc_offset = m_pViewLine->GetDocumentLine()->GetOffset();
+		wxFileOffset saved_view_offset = m_pViewLine->GetOffset();
 
 		StopViewLineBuilder();
 		StartViewLineBuilder(doc_offset, view_offset);
@@ -475,6 +482,9 @@ TextProcess::View::IViewLine * CReadBookTPLView2::GetPreviousLine(TextProcess::V
 
 		pViewLine = m_pViewLineManager->FindLine(pMatcher.get(), 0);
 		pViewLine = m_pViewLineManager->GetPrevLine(pViewLine);
+
+		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher2(TextProcess::View::CViewObjectFactory::CreateLineMatcher(saved_doc_offset, saved_view_offset));
+		m_pViewLine = m_pViewLineManager->FindLine(pMatcher2.get(), 0);
 	}
 
 	return pViewLine;

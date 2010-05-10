@@ -135,10 +135,11 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines()
 
 		if (m_Cancel) break;
 
-		viewLineOffset = 0;
-
 		if (GetBuilderDirection() == TextProcess::Next)
+		{
 			pDocLine = GetDocumentLineManager()->GetNextLine(pDocLine);
+			viewLineOffset = 0;
+		}
 		else
 		{
 			pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);

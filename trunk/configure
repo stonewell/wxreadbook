@@ -5157,10 +5157,10 @@ fi
   *)
 esac
 
-CXXFLAGS="`wx-config --cxxflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
-CPPFLAGS="`wx-config --cppflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
-CFLAGS="`wx-config --cflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
-LIBS="`wx-config --libs --static=$static --debug=$debug`"
+CXXFLAGS+=" `wx-config --cxxflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
+CPPFLAGS+=" `wx-config --cppflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
+CFLAGS+=" `wx-config --cflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
+LIBS+=" `wx-config --libs --static=$static --debug=$debug`"
 
 
 ac_ext=cpp
