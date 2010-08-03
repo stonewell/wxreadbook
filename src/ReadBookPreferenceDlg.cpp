@@ -34,13 +34,15 @@ CReadBookPreferenceDlg::CReadBookPreferenceDlg(wxWindow * pParent) :
 	wxSizer * pSizer = CreateSeparatedButtonSizer(wxOK | wxCANCEL);
 
 	pTopSizer->Insert(0, m_pNoteBook, wxSizerFlags(5).Expand().Border());
-
-	pTopSizer->Add(pSizer, 0, wxEXPAND | wxBOTTOM, 5);
-
 	pTopSizer->Show(m_pNoteBook);
-	pTopSizer->Layout();
+
+#ifndef _WIN32_WCE
+	pTopSizer->Add(pSizer, 0, wxEXPAND | wxBOTTOM, 5);
+#endif
 
 	SetSizer(pTopSizer);
+
+	pTopSizer->Layout();
     pTopSizer->SetSizeHints(this);
     pTopSizer->Fit(this);
 }

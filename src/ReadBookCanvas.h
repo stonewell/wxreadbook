@@ -16,6 +16,7 @@ public:
     void OnKeyDown(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
 	void OnMouseWheel(wxMouseEvent & event);
+	void OnLeftDown(wxMouseEvent & event);
     
     DECLARE_EVENT_TABLE()
     
