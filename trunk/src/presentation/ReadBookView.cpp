@@ -838,6 +838,44 @@ wxString CReadBookView::TransformHtml(const wxString & line)
 	return tmpLine;
 }
 
+void CReadBookView::OnLeftDown(wxMouseEvent & event)
+{
+	wxPoint nPoint = event.GetPosition();
+
+	bool doScroll = true;
+
+	wxInt32 nCurrentLine = GetReadBookDoc()->GetCurrentLine();
+	wxInt32 nDeltaLine = 1;
+
+#ifdef _WIN32_WCE
+	if (nPoint.y >= m_ClientSize.GetHeight() - 30)
+	{
+		if (GetMainFrame()->IsFullScreen())
+		{
+			wxCommandEvent eventCommand(wxEVT_COMMAND_MENU_SELECTED, IDM_FULL_SCREEN);
+
+			GetMainFrame()->GetEventHandler()->ProcessEvent(eventCommand);
+			return;
+		}
+	}
+#endif
+
+	if (nPoint.y <= m_ClientSize.GetHeight() / 2)
+	{
+		nDeltaLine = -1;
+	}
+
+	if (nCurrentLine == ScrollPage(nDeltaLine))
+		doScroll = false;
+
+	if (doScroll)
+	{
+		UpdateScrollPos();
+
+		RefreshCanvas();
+	}
+}
+
 void CReadBookView::OnMouseWheel(wxMouseEvent & event)
 {
 	wxInt32 nDeltaLine = event.GetWheelDelta() /

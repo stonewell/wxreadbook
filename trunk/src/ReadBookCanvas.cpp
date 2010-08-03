@@ -25,6 +25,7 @@ BEGIN_EVENT_TABLE(CReadBookCanvas, wxWindow)
 	EVT_KEY_DOWN(CReadBookCanvas::OnKeyDown)
 	EVT_SIZE(CReadBookCanvas::OnSize)
 	EVT_MOUSEWHEEL(CReadBookCanvas::OnMouseWheel)
+	EVT_LEFT_DOWN(CReadBookCanvas::OnLeftDown)
 END_EVENT_TABLE()
 
 CReadBookCanvas::~CReadBookCanvas()
@@ -75,4 +76,10 @@ void CReadBookCanvas::OnMouseWheel(wxMouseEvent & event)
 {
 	if (m_pView)
 		((CReadBookView *)m_pView)->OnMouseWheel(event);
+}
+
+void CReadBookCanvas::OnLeftDown(wxMouseEvent & event)
+{
+	if (m_pView)
+		((CReadBookView *)m_pView)->OnLeftDown(event);
 }

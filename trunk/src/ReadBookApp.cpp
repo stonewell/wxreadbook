@@ -90,6 +90,8 @@ bool CReadBookApp::OnInit(void)
 
 #ifdef _WIN32
 #ifdef _WIN32_WCE
+//#define DOC_CLASS CReadBookSimpleDoc
+//#define VIEW_CLASS CReadBookSimpleView
 #define DOC_CLASS CReadBookTPLDoc2
 #define VIEW_CLASS CReadBookTPLView2
 #else

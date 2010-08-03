@@ -113,10 +113,18 @@ void CReadBookPreference::Initialize()
 	ClearFileInfoMap();
 
 	m_pLogFont = wxFont::New(
+#ifdef _WIN32_WCE
+		12,
+#else
 		48,
+#endif
 		wxFONTFAMILY_DEFAULT,
 		wxFONTFLAG_BOLD | wxFONTFLAG_ANTIALIASED,
+#ifdef _WIN32_WCE
+		L"Tahoma");
+#else
 		wxEmptyString);
+#endif
 
 	m_nLineMargin = 20;
 	m_nColumnMargin = 5;

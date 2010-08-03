@@ -19,8 +19,12 @@ namespace TextProcess
             CCriticalSection(void)
             {
             #ifdef _WIN32
+#ifdef UNDER_CE
+                InitializeCriticalSection(&this->m_cSection);
+#else
                 if (0 == InitializeCriticalSectionAndSpinCount(&this->m_cSection, 0))
                     throw("Could not create a CriticalSection");
+#endif
             #else
                 if (pthread_mutex_init(&this->m_cSection, NULL) != 0)
 			#ifdef BUILD_ANGSTROM

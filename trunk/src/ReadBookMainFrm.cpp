@@ -29,6 +29,10 @@
 #include "ReadBookPreferenceDlg.h"
 #include "version.h"
 
+#ifdef _WIN32_WCE
+#include "aygshell.h"
+#endif
+
 const wxInt32 RECENT_FILE_SIZE = 20;
 
 IMPLEMENT_CLASS(CReadBookMainFrm, wxDocParentFrame)
@@ -238,10 +242,8 @@ void CReadBookMainFrm::Init()
 	pViewMenu->Append(IDM_CLEAR_BOOKMARKS, wxT("&Clear Bookmarks"));
 	pViewMenu->Append(IDM_BOOKMARKS, wxT("Bookmarks..."));
 
-#ifndef _WIN32_WCE
 	pViewMenu->AppendSeparator();
 	pViewMenu->Append(IDM_FULL_SCREEN, wxT("FullScreen\tF11"));
-#endif
 
 	wxMenu *pHelpMenu = new wxMenu;
 	pHelpMenu->Append(IDM_ABOUT, wxT("&About"));
@@ -485,7 +487,41 @@ void CReadBookMainFrm::UpdateRecentFilesLabel()
 
 void CReadBookMainFrm::OnFullScreen(wxCommandEvent& event)
 {
+#ifndef _WIN32_WCE
 	this->ShowFullScreen(!this->IsFullScreen());
+#else
+	static int menuHeight = 0;
+	wxRect rc = GetRect();
+
+	if (IsFullScreen())
+	{
+		m_fsIsShowing = false;
+		::SHFullScreen((HWND)m_hWnd, SHFS_SHOWTASKBAR | SHFS_SHOWSIPBUTTON);
+		this->GetToolBar()->Show();
+
+		SetSize(rc.GetLeft(), 
+			rc.GetTop()+ menuHeight, 
+			rc.GetWidth(), 
+			rc.GetHeight() - menuHeight);	
+	}
+	else
+	{
+		m_fsIsShowing = true;
+
+		//get window size
+		::SHFullScreen((HWND)m_hWnd, SHFS_HIDETASKBAR | SHFS_HIDESIPBUTTON);
+
+		this->GetToolBar()->Hide();
+
+		//Save the menu height
+		menuHeight = rc.GetTop();
+
+		SetSize(rc.GetLeft(), 
+			0,
+			rc.GetWidth(), 
+			rc.GetHeight() + menuHeight);	
+	}
+#endif
 }
 
 void CReadBookMainFrm::OnHide(wxCommandEvent& event)

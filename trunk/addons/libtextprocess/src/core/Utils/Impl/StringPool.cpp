@@ -14,6 +14,13 @@ TextProcess::Utils::Impl::CStringPool::CStringPool()
 	GetSystemInfo(&si);
 	m_dwGranularity = RoundUp(sizeof(HEADER) + MIN_CBCHUNK,
 		si.dwAllocationGranularity);
+
+#ifdef _WIN32_WCE
+	m_pVirtualMemory = m_pVirtualMemoryCur =
+		VirtualAlloc(NULL, 1024 * 1024 * 64, MEM_RESERVE,
+                        PAGE_NOACCESS);
+#endif
+
 #else
 	m_dwGranularity = RoundUp(sizeof(HEADER) + MIN_CBCHUNK,
 		sysconf(_SC_PAGE_SIZE));
@@ -40,6 +47,8 @@ wxByte * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 		{
 			m_pchNext += cch;
 
+			//On WinCE, it needs to round to 4 for memory direct access
+			m_pchNext = (wxByte *)(((wxUint32)m_pchNext + 3) / 4 * 4);
 			return psz;
 		}
 
@@ -51,9 +60,15 @@ wxByte * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 		cbAlloc = RoundUp(cch + sizeof(HEADER),
 			m_dwGranularity);
 
-#ifdef _WIN32
+#if defined(_WIN32)
+#ifdef _WIN32_WCE
 		pbNext = reinterpret_cast<wxByte*>(
-			VirtualAlloc(NULL, cbAlloc, MEM_COMMIT, PAGE_READWRITE));
+			VirtualAlloc(m_pVirtualMemoryCur, cbAlloc, MEM_COMMIT, PAGE_READWRITE));
+		m_pVirtualMemoryCur = pbNext + cbAlloc;
+#else
+		pbNext = reinterpret_cast<wxByte*>(
+			VirtualAlloc(NULL, cbAlloc, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE));
+#endif
 #else
 		pbNext = reinterpret_cast<wxByte*>(malloc(cbAlloc * sizeof(wxByte)));
 #endif
@@ -99,8 +114,12 @@ void TextProcess::Utils::Impl::CStringPool::Clear()
 	{
 		HEADER hdr = *phdr;
 
-#ifdef _WIN32
+#if defined(_WIN32)
+#ifdef _WIN32_WCE
+		VirtualFree(m_pVirtualMemory, 1024 * 1024 * 64, MEM_RELEASE);
+#else
 		VirtualFree(phdr, hdr.m_cb, MEM_RELEASE);
+#endif
 #else
 		free(phdr);
 #endif
@@ -119,8 +138,8 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocReadOnlyString(wxUint32 cch
 	wxByte * pBuf = AllocBuffer((cch + 1) * sizeof(wxChar) + wxStringDataSize);
 	wxStringData * pStringData = reinterpret_cast<wxStringData *>(pBuf);
 
-	pStringData->nDataLength = cch;
 	pStringData->nRefs = 10000;
+	pStringData->nDataLength = cch;
 	pStringData->nAllocLength = cch + 1;
 	pStringData->data()[cch] = wxT('\0');
 

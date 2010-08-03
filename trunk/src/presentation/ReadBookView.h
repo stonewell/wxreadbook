@@ -39,6 +39,8 @@ public:
     virtual void OnKeyDown(wxKeyEvent& event);
     virtual void OnSize(wxSizeEvent& event);
 	virtual void OnMouseWheel(wxMouseEvent & event);
+	virtual void OnLeftDown(wxMouseEvent & event);
+
 
     wxReadBook::ViewModeEnum GetViewMode() const { return m_ViewMode; }
     void SetViewMode(wxReadBook::ViewModeEnum ViewMode);

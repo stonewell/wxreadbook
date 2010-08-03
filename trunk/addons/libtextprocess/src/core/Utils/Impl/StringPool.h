@@ -38,6 +38,10 @@ namespace TextProcess
 				HEADER*  m_phdrCur;   // current block
 				wxUint32   m_dwGranularity;
 
+#ifdef _WIN32_WCE
+				LPVOID m_pVirtualMemory;
+				LPVOID m_pVirtualMemoryCur;
+#endif
 				CCriticalSection m_Section;
 			};
 		}

@@ -452,7 +452,7 @@
 				Name="VCCLCompilerTool"
 				ExecutionBucket="7"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\evc_armv4_lib\winced&quot;"
+				AdditionalIncludeDirectories="..\addons\libportablethread\includes;..\addons\libtextprocess\src\core;..\addons\lib7Zip\Lib7Zip;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)\lib\evc_armv4_lib\wince\&quot;"
 				PreprocessorDefinitions="_DEBUG;WIN32_PLATFORM_PSPC;_WIN32_WCE=$(CEVER);UNDER_CE;WINCE;$(ARCHFAM);$(_ARCHFAM_);__WXWINCE__;__WXDEBUG__;$(PLATFORMDEFINES);POCKETPC2003_UI_MODEL"
 				MinimalRebuild="true"
 				RuntimeLibrary="1"
@@ -465,7 +465,8 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;"
+				PreprocessorDefinitions="_UNICODE;UNICODE;_WIN32_WCE"
+				AdditionalIncludeDirectories="&quot;$(WXWIN)\include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -475,7 +476,7 @@
 				AdditionalOptions=" /subsystem:windowsce,4.20 /machine:ARM /ARMPADCODE"
 				AdditionalDependencies="coredll.lib wx_monod.lib wx_wxjpegd.lib wx_wxpngd.lib wx_wxzlibd.lib wx_wxexpatd.lib commctrl.lib winsock.lib wininet.lib secchk.lib ccrtrtti.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="D:\wxWidgets-2.8.9\lib\evc_armv4_lib"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\evc_armv4_lib"
 				GenerateManifest="false"
 				DelayLoadDLLs="$(NOINHERIT)"
 				GenerateDebugInformation="true"
@@ -625,7 +626,7 @@
 				Name="VCCLCompilerTool"
 				ExecutionBucket="7"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="..\..\lib7Zip\Lib7Zip;&quot;D:\wxWidgets-2.8.9\include&quot;;&quot;D:\wxWidgets-2.8.9\lib\evc_armv4_lib\wince\&quot;"
+				AdditionalIncludeDirectories="..\addons\libportablethread\includes;..\addons\libtextprocess\src\core;..\addons\lib7Zip\Lib7Zip;&quot;$(WXWIN)\include&quot;;&quot;$(WXWIN)\lib\evc_armv4_lib\wince\&quot;"
 				PreprocessorDefinitions="NDEBUG;WIN32_PLATFORM_PSPC;_WIN32_WCE=$(CEVER);UNDER_CE;WINCE;$(ARCHFAM);$(_ARCHFAM_);WINDOWSCE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -637,7 +638,8 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;D:\wxWidgets-2.8.9\include&quot;"
+				PreprocessorDefinitions="_UNICODE;UNICODE;_WIN32_WCE"
+				AdditionalIncludeDirectories="&quot;$(WXWIN)\include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -647,7 +649,7 @@
 				AdditionalOptions=" /subsystem:windowsce,4.20 /machine:ARM /ARMPADCODE"
 				AdditionalDependencies="coredll.lib wx_mono.lib wx_wxjpeg.lib wx_wxpng.lib wx_wxzlib.lib wx_wxexpat.lib commctrl.lib winsock.lib wininet.lib secchk.lib ccrtrtti.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="D:\wxWidgets-2.8.9\lib\evc_armv4_lib\"
+				AdditionalLibraryDirectories="$(WXWIN)\lib\evc_armv4_lib\"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				SubSystem="0"
@@ -682,7 +684,7 @@
 			/>
 			<DeploymentTool
 				ForceDirty="-1"
-				RemoteDirectory=""
+				RemoteDirectory="\Storage Card\wxReadBook"
 				RegisterOutput="0"
 				AdditionalFiles=""
 			/>
