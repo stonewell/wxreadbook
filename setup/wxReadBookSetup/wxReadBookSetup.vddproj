@@ -33,6 +33,18 @@
         "CertificateHash" = "8:"
         "TimeStampServer" = "8:"
         }
+        "Debug-Unicode-Profiler"
+        {
+        "DisplayName" = "8:Debug-Unicode-Profiler"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Debug-Unicode-Profiler\\wxReadBookSetup.cab"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "SignOutput" = "11:FALSE"
+        "CertificateHash" = "8:"
+        "TimeStampServer" = "8:"
+        }
         "Release"
         {
         "DisplayName" = "8:Release"
@@ -97,7 +109,7 @@
         {
             "{605BE39E-5046-48BD-AEC0-63C3A46626D5}:_000657E4CADD48918A5539B949D925BA"
             {
-            "SourcePath" = "8:..\\..\\Pocket PC 2003 (ARMV4)\\Release - Unicode\\wxReadBook.exe"
+            "SourcePath" = "8:..\\..\\Pocket PC 2003 (ARMV4)\\Debug-Unicode-Profiler\\wxReadBook.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_56067E80C2644106B8F6DFC531631E1F"

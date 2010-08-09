@@ -31,5 +31,5 @@ TextProcess::View::IViewLineManager * TextProcess::View::CViewObjectFactory::Cre
 
 TextProcess::View::IViewLineBuilder * TextProcess::View::CViewObjectFactory::CreateLineBuilder()
 {
-	return new TextProcess::View::Impl::CViewLineBuilderImpl();
+	return new TextProcess::View::Impl::CViewLineBuilderImpl2();
 }

@@ -48,7 +48,7 @@ wxByte * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 			m_pchNext += cch;
 
 			//On WinCE, it needs to round to 4 for memory direct access
-			m_pchNext = (wxByte *)(((wxUint32)m_pchNext + 3) / 4 * 4);
+			m_pchNext = (wxByte *)(((size_t)m_pchNext + 3) / 4 * 4);
 			return psz;
 		}
 
