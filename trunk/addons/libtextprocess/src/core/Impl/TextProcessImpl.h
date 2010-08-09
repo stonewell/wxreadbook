@@ -34,6 +34,7 @@
 #include "LineBuilderImpl.h"
 #include "../Document/Impl/DocumentLineBuilderImpl.h"
 #include "../View/Impl/ViewLineBuilderImpl.h"
+#include "../View/Impl/ViewLineBuilderImpl2.h"
 
 #include "../IO/Impl/MemoryMappedFile.h"
 

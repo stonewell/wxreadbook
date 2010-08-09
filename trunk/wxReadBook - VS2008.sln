@@ -28,6 +28,8 @@ Global
 		Debug - Unicode|Win32 = Debug - Unicode|Win32
 		Debug|Pocket PC 2003 (ARMV4) = Debug|Pocket PC 2003 (ARMV4)
 		Debug|Win32 = Debug|Win32
+		Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4) = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		Debug-Unicode-Profiler|Win32 = Debug-Unicode-Profiler|Win32
 		Release - Unicode - DLL|Pocket PC 2003 (ARMV4) = Release - Unicode - DLL|Pocket PC 2003 (ARMV4)
 		Release - Unicode - DLL|Win32 = Release - Unicode - DLL|Win32
 		Release - Unicode|Pocket PC 2003 (ARMV4) = Release - Unicode|Pocket PC 2003 (ARMV4)
@@ -46,6 +48,11 @@ Global
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug|Pocket PC 2003 (ARMV4).Deploy.0 = Debug|Pocket PC 2003 (ARMV4)
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug|Win32.Build.0 = Debug|Win32
+		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).ActiveCfg = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Build.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Deploy.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug-Unicode-Profiler|Win32.ActiveCfg = Debug-Unicode-Profiler|Win32
+		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Debug-Unicode-Profiler|Win32.Build.0 = Debug-Unicode-Profiler|Win32
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).ActiveCfg = Release - Unicode - DLL|Pocket PC 2003 (ARMV4)
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).Build.0 = Release - Unicode - DLL|Pocket PC 2003 (ARMV4)
 		{D7FA5A91-7078-45F7-8F93-4F58EE14C7AC}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).Deploy.0 = Release - Unicode - DLL|Pocket PC 2003 (ARMV4)
@@ -68,6 +75,11 @@ Global
 		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
 		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug|Win32.ActiveCfg = Debug|Win32
 		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug|Win32.Build.0 = Debug|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).ActiveCfg = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Build.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Deploy.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug-Unicode-Profiler|Win32.ActiveCfg = Debug-Unicode-Profiler|Win32
+		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Debug-Unicode-Profiler|Win32.Build.0 = Debug-Unicode-Profiler|Win32
 		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
 		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode - DLL|Win32.ActiveCfg = Release|Win32
 		{29DFA189-122F-4C96-8DB4-7822BFB543AA}.Release - Unicode - DLL|Win32.Build.0 = Release|Win32
@@ -85,6 +97,11 @@ Global
 		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
 		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug|Win32.ActiveCfg = Debug|Win32
 		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug|Win32.Build.0 = Debug|Win32
+		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).ActiveCfg = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Build.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Deploy.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug-Unicode-Profiler|Win32.ActiveCfg = Debug-Unicode-Profiler|Win32
+		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Debug-Unicode-Profiler|Win32.Build.0 = Debug-Unicode-Profiler|Win32
 		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
 		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Release - Unicode - DLL|Win32.ActiveCfg = Release|Win32
 		{A8314FEF-1897-47FE-BADF-4338B409CE46}.Release - Unicode - DLL|Win32.Build.0 = Release|Win32
@@ -102,6 +119,11 @@ Global
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug|Win32
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug|Win32.ActiveCfg = Debug|Win32
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug|Win32.Build.0 = Debug|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).ActiveCfg = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Build.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).Deploy.0 = Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4)
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug-Unicode-Profiler|Win32.ActiveCfg = Debug-Unicode-Profiler|Win32
+		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Debug-Unicode-Profiler|Win32.Build.0 = Debug-Unicode-Profiler|Win32
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).ActiveCfg = Release|Win32
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode - DLL|Win32.ActiveCfg = Release|Win32
 		{383D73DB-A55D-4677-826F-16F8BB7CD578}.Release - Unicode - DLL|Win32.Build.0 = Release|Win32
@@ -116,6 +138,9 @@ Global
 		{78845F87-3705-4FCB-9844-724B950AF157}.Debug - Unicode|Win32.ActiveCfg = Debug
 		{78845F87-3705-4FCB-9844-724B950AF157}.Debug|Pocket PC 2003 (ARMV4).ActiveCfg = Debug
 		{78845F87-3705-4FCB-9844-724B950AF157}.Debug|Win32.ActiveCfg = Debug
+		{78845F87-3705-4FCB-9844-724B950AF157}.Debug-Unicode-Profiler|Pocket PC 2003 (ARMV4).ActiveCfg = Debug-Unicode-Profiler
+		{78845F87-3705-4FCB-9844-724B950AF157}.Debug-Unicode-Profiler|Win32.ActiveCfg = Debug-Unicode-Profiler
+		{78845F87-3705-4FCB-9844-724B950AF157}.Debug-Unicode-Profiler|Win32.Build.0 = Debug-Unicode-Profiler
 		{78845F87-3705-4FCB-9844-724B950AF157}.Release - Unicode - DLL|Pocket PC 2003 (ARMV4).ActiveCfg = Release
 		{78845F87-3705-4FCB-9844-724B950AF157}.Release - Unicode - DLL|Win32.ActiveCfg = Release
 		{78845F87-3705-4FCB-9844-724B950AF157}.Release - Unicode|Pocket PC 2003 (ARMV4).ActiveCfg = Release
