@@ -43,6 +43,8 @@ libtextprocess_a_SOURCES = ./src/core/Document/DocumentObjectFactory.h \
 	./src/core/Utils/Impl/wxReadOnlyString.h \
 	./src/core/View/Impl/ViewLineBuilderImpl.cpp \
 	./src/core/View/Impl/ViewLineBuilderImpl.h \
+	./src/core/View/Impl/ViewLineBuilderImpl2.h \
+	./src/core/View/Impl/ViewLineBuilderImpl2.cpp \
 	./src/core/View/Impl/ViewLineImpl.cpp \
 	./src/core/View/Impl/ViewLineImpl.h \
 	./src/core/View/Impl/ViewLineManagerImpl.cpp \

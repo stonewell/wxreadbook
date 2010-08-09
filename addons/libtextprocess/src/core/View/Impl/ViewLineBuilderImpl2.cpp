@@ -277,7 +277,7 @@ wxInt32 TextProcess::View::Impl::CViewLineBuilderImpl2::CalculateDefaultLineChar
 	int & unicodeCharWidth,
 	int & asciiCharWidth) {
 		const wxString & asciiString = wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz./,?;'\"`!+-*|}{[]");
-		const wxString & unicodeString = wxT("你我他哈哈哈哈哈萨斯大法师发声法史莱克法计算得分，。！");
+		const wxString & unicodeString = wxT("浣犳垜浠栧搱鍝堝搱鍝堝搱钀ㄦ柉澶ф硶甯堝彂澹版硶鍙茶幈鍏嬫硶璁＄畻寰楀垎锛屻�傦紒");
 
 		wxCoord width, height;
 		GetGraphics()->GetTextExtent(asciiString, &width, &height, GetViewFont());
