@@ -2863,6 +2863,8 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 ac_config_headers="$ac_config_headers config.h"
 
+ac_config_files="$ac_config_files wxreadbook.desktop"
+
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -6310,6 +6312,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
+    "wxreadbook.desktop") CONFIG_FILES="$CONFIG_FILES wxreadbook.desktop" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "p7zip_src_cpp_link") CONFIG_COMMANDS="$CONFIG_COMMANDS p7zip_src_cpp_link" ;;
     "p7zip_src_c_link") CONFIG_COMMANDS="$CONFIG_COMMANDS p7zip_src_c_link" ;;

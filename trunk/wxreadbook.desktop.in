@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.3.0
+Encoding=UTF-8
+Name=EBook Reader
+Name[zh_CN]=电子书阅读器
+Exec=@prefix@/bin/wxReadBook 
+Terminal=false
+Icon=@prefix@/share/pixmaps/wxreadbook.png
+Type=Application
+Categories=Application;Utility;Editor
