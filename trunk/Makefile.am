@@ -4,3 +4,7 @@ EXTRA_DIST = Makefile.msw \
 
 dist-hook:
 	cp -rf $(srcdir)/wxReadBook*.sln $(distdir)
+
+install-data-local:
+	test -z "$(datadir)/applications" || $(MKDIR_P) "$(datadir)/applications"
+	$(INSTALL_DATA) wxreadbook.desktop $(datadir)/applications
