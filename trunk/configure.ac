@@ -3,7 +3,6 @@ AC_CONFIG_SRCDIR(src/ReadBookApp.cpp)
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 AC_CONFIG_HEADERS(config.h)
-AC_CONFIG_FILES(wxreadbook.desktop)
 AC_PROG_CC
 AC_PROG_CXX
 AC_C_CONST
@@ -108,6 +107,7 @@ AC_CHECK_HEADERS([memory],
 	[AC_DEFINE([HAVE_MEMORY], 1, [Define to 1 if you have <memory>.]) ], 
 	[AC_MSG_ERROR([unable to find memory, please install libstdc++])])
 
+AC_SUBST(my_bindir, ${bindir})
 
 AC_CONFIG_FILES([
 	Makefile

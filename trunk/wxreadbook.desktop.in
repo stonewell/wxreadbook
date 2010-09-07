@@ -6,6 +6,6 @@ Name=EBook Reader
 Name[zh_CN]=电子书阅读器
 Exec=@bindir@/wxReadBook 
 Terminal=false
-Icon=@datadir@/pixmaps/wxreadbook.png
+Icon=@datarootdir@/pixmaps/wxreadbook.png
 Type=Application
 Categories=Application;Utility;Editor
