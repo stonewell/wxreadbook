@@ -326,6 +326,9 @@ wxInt32 CReadBookTPLView2::ScrollToLine(wxInt32 nLine)
 
 	if (pDocLine == NULL)
 	{
+#ifdef _DEBUG
+		printf("ScrollToLine &&&&&&&& %d\n", nLine);
+#endif
 		GetReadBookDoc()->ScrollDocumentTo(nLine);
 
 		pDocLine =
