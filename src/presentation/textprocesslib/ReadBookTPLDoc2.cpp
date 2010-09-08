@@ -105,6 +105,10 @@ void CReadBookTPLDoc2::StartDocumentLineBuilder()
 	if (docPos < 0)
 		docPos = 0;
 
+#ifdef _DEBUG
+	printf("&&&&&&&& %d\n", docPos);
+#endif
+
 	m_pDocumentLineBuilderPrev.reset(TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 
 	m_pDocumentLineBuilderPrev->SetBuilderDirection(TextProcess::Prev);
