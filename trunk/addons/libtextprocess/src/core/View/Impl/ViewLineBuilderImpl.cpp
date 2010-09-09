@@ -331,6 +331,8 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 		IViewLine * pLine = CViewObjectFactory::CreateViewLine(viewLineOffset,
 				viewLineSize, pDocLine);
 
+printf("View Line:%d %d, %d \n", (int)viewLineOffset, (int)viewLineSize, (int)pDocLine->GetOffset());
+
 		lines.push_back(pLine);
 
 		viewLineOffset += viewLineSize;
