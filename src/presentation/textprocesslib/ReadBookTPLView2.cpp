@@ -185,7 +185,7 @@ void CReadBookTPLView2::OnDraw(wxDC *pDC)
 			pViewLine->GetDocumentLine()->GetData(pViewLine->GetOffset(), 
 				pViewLine->GetLength());
 #ifdef _DEBUG
-printf("%d:%ls\n", i, line.c_str());
+printf("%d:%ls,%d\n", i, line.c_str(),m_nPageSize);
 #endif		
 		if (GetDisplayAs() != wxReadBook::DisplayAsOriginal)
     	{
@@ -423,6 +423,9 @@ void CReadBookTPLView2::StartViewLineBuilder(wxFileOffset docOffset, wxFileOffse
 			if (pNextDocLine == pLastLine->GetDocumentLine())
 			{
 				build_next = false;
+#ifdef _DEBUG
+printf("build_next false\n");
+#endif
 			}
 		}
 	}

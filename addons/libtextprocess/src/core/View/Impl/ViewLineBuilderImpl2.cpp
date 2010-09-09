@@ -116,14 +116,20 @@ int TextProcess::View::Impl::CViewLineBuilderImpl2::BuildLines() {
 			nBuildLineCount = GetBuildLineCount();
 		}
 
+TPL_PRINTF("pDocLine = %d, %d\n", pDocLine == NULL, m_Cancel);
+
 		if (m_Cancel)
 			break;
 
 		if (GetBuilderDirection() == TextProcess::Next) {
+void * p = pDocLine;
 			pDocLine = GetDocumentLineManager()->GetNextLine(pDocLine);
+TPL_PRINTF("same line:%d=%d\n", p == pDocLine, (int)pDocLine->GetOffset());
 			viewLineOffset = 0;
 		} else {
+void * p = pDocLine;
 			pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
+TPL_PRINTF("same line:%d=%d\n", p == pDocLine, (int)pDocLine->GetOffset());
 
 			if (pDocLine != NULL)
 				viewLineOffset = pDocLine->GetDecodedLength();
@@ -135,9 +141,11 @@ int TextProcess::View::Impl::CViewLineBuilderImpl2::BuildLines() {
 			std::auto_ptr<IViewLineMatcher> pMatcher(
 				CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
 			if (GetViewLineManager()->FindLine(pMatcher.get(), 0) != NULL) {
+TPL_PRINTF("pDocLine 2= %d, %d, %d\n", pDocLine == NULL, m_Cancel, (int)pDocLine->GetOffset());
 				break;
 			}
 		}
+TPL_PRINTF("pDocLine = %d\n", pDocLine == NULL);
 
 	}
 
@@ -257,6 +265,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl2::InternalBuildLines(
 
 			IViewLine * pLine = CViewObjectFactory::CreateViewLine(viewLineOffset,
 				viewLineSize, pDocLine);
+TPL_PRINTF("View Line:%d %d, %d =%d %d %d\n", (int)viewLineOffset, (int)viewLineSize, (int)pDocLine->GetOffset(), nBuildCount, (int)endOffset, (int)m_Cancel);
 
 			lines.push_back(pLine);
 
