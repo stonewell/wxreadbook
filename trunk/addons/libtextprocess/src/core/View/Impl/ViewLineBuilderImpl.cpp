@@ -10,6 +10,8 @@
 #include <memory>
 #endif
 
+
+#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
 TextProcess::View::Impl::CViewLineBuilderImpl::CViewLineBuilderImpl(void) :
 			INIT_PROPERTY(ClientArea, NULL),INIT_PROPERTY(ViewFont, NULL),INIT_PROPERTY(DocumentLineOffset, 0),INIT_PROPERTY(ViewLineOffset, 0),INIT_PROPERTY(DocumentLineManager, NULL),INIT_PROPERTY(ViewLineManager, NULL),INIT_PROPERTY(Graphics, NULL),INIT_PROPERTY(Cancel, 0)
 {
@@ -374,3 +376,5 @@ wxInt32 TextProcess::View::Impl::CViewLineBuilderImpl::CalculateDefaultLineCharS
 
 	return GetClientArea()->GetWidth() * length / width;
 }
+
+#endif
