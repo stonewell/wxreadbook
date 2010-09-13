@@ -20,7 +20,6 @@
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
 #endif
 
-#include "wx/generic/filedlgg.h"
 #include "wx/docview.h"
 
 #include "wx/filename.h"
@@ -202,7 +201,20 @@ wxInt32 CharsetToMenuID(const wxString & charset)
 }
 
 #if !defined(_WIN32) || !defined(WINDOWSCE)
+#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
 extern wxMBConv* new_wxMBConv_iconv( const wxChar* name );
+#else
+extern wxMBConv* new_wxMBConv_iconv( const char* name );
+#endif
+
+wxMBConv * CreateWXMBConvIconv(const wxString & charset) {
+#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
+	return new_wxMBConv_iconv(charset);
+#else
+	return new_wxMBConv_iconv((const char *)charset.c_str());
+#endif
+}
+
 #endif
 
 wxMBConv * CreateEncoding(const wxString & charset)
@@ -217,7 +229,7 @@ wxMBConv * CreateEncoding(const wxString & charset)
 #if defined(_WIN32) || defined(WINDOWSCE)
 			pMBConv = new wxCSConv(wxFONTENCODING_CP1252);
 #else
-			pMBConv = new_wxMBConv_iconv(wxT("WINDOWS-1252"));
+			pMBConv = CreateWXMBConvIconv(wxT("WINDOWS-1252"));
 #endif
 			break;
 		}
@@ -226,7 +238,7 @@ wxMBConv * CreateEncoding(const wxString & charset)
 #if defined(_WIN32) || defined(WINDOWSCE)
 			pMBConv = new wxCSConv(wxFONTENCODING_CP936);
 #else
-			pMBConv = new_wxMBConv_iconv(wxT("GB18030"));
+			pMBConv = CreateWXMBConvIconv(wxT("GB18030"));
 #endif
 			break;
 		}
@@ -235,7 +247,7 @@ wxMBConv * CreateEncoding(const wxString & charset)
 #if defined(_WIN32) || defined(WINDOWSCE)
 			pMBConv = new wxCSConv(wxFONTENCODING_CP950);
 #else
-			pMBConv = new_wxMBConv_iconv(wxT("BIG5"));
+			pMBConv = CreateWXMBConvIconv(wxT("BIG5"));
 #endif
 			break;
 		}
@@ -274,7 +286,7 @@ wxMBConv * CreateEncoding(const wxString & charset)
 #if defined(_WIN32) || defined(WINDOWSCE)
 			pMBConv = new wxCSConv(charset);
 #else
-			pMBConv = new_wxMBConv_iconv(charset);
+			pMBConv = CreateWXMBConvIconv(charset);
 #endif
 		}
 	default:

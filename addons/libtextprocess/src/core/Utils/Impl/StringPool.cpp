@@ -41,7 +41,6 @@ wxByte * TextProcess::Utils::Impl::CStringPool::AllocBuffer(wxUint32 cch)
 		wxUint32 cbAlloc = 0;
 		wxByte * pbNext = NULL;
 		HEADER* phdrCur = NULL;
-		const int wxStringDataSize = sizeof(wxStringData);
 
 		if (m_pchNext + cch <= m_pchLimit)
 		{
@@ -133,9 +132,15 @@ void TextProcess::Utils::Impl::CStringPool::Clear()
 
 wxChar * TextProcess::Utils::Impl::CStringPool::AllocReadOnlyString(wxUint32 cch)
 {
+#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
 	const int wxStringDataSize = sizeof(wxStringData);
+#else
+	const int wxStringDataSize = 0;
+#endif
 
 	wxByte * pBuf = AllocBuffer((cch + 1) * sizeof(wxChar) + wxStringDataSize);
+
+#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
 	wxStringData * pStringData = reinterpret_cast<wxStringData *>(pBuf);
 
 	pStringData->nRefs = 10000;
@@ -144,4 +149,7 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocReadOnlyString(wxUint32 cch
 	pStringData->data()[cch] = wxT('\0');
 
 	return pStringData->data();
+#else
+	return (wxChar *)pBuf;
+#endif
 }

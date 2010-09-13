@@ -489,7 +489,7 @@ void CReadBookView::CalculateViewSize()
 
 				for(size_t i=0; i<line.Length(); i++)
 				{
-					if ((0xFF80 & line[i]) == 0)
+					if ((0xFF80 & (wxChar)line[i]) == 0)
 					{
 						totalLength += m_FontSize.GetWidth();
 					}
@@ -502,7 +502,7 @@ void CReadBookView::CalculateViewSize()
 					{
 						delta++;
 
-						if ((0xFF80 & line[i]) == 0)
+						if ((0xFF80 & (wxChar)line[i]) == 0)
 						{
 							totalLength = m_FontSize.GetWidth();
 						}

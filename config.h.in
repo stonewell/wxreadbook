@@ -66,9 +66,6 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 
-/* Define to 1 if you have the <"wx/wx.h"> header file. */
-#undef HAVE__WX_WX_H_
-
 /* Name of package */
 #undef PACKAGE
 

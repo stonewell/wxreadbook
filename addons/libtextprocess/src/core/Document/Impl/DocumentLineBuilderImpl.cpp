@@ -309,6 +309,10 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(
 
 void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers() {
 	size_t size = 0;
+	
+	#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
+	#define wxStrlen_ wxStrlen
+	#endif
 	wxMBConv * pEncoding = GetDocumentFile()->GetEncoding();
 	m_SpaceBuffer = pEncoding->cWC2MB(wxT(" "), wxStrlen_(wxT(" ")), &size);
 	m_SpaceLength = size;
@@ -322,4 +326,8 @@ void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers() {
 	m_CRLength = size;
 	m_LFBuffer = pEncoding->cWC2MB(wxT("\r"), 1, &size);
 	m_LFLength = size;
+
+	#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
+	#undef wxStrlen_
+	#endif
 }

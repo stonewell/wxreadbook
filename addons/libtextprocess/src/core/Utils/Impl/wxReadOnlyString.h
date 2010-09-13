@@ -1,5 +1,6 @@
 #pragma once
 
+#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
 namespace TextProcess
 {
 	namespace Utils
@@ -50,3 +51,6 @@ namespace TextProcess
 		}
 	}
 }
+
+#endif
+

@@ -20,7 +20,6 @@
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
 #endif
 
-#include "wx/generic/filedlgg.h"
 #include "wx/docview.h"
 
 #include "wx/filename.h"
