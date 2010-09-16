@@ -34,125 +34,108 @@
 
 static wxWindow* wxFindSuitableParent();
 
-wxDocTemplate *CReadBookDocManager::SelectDocumentPath(wxDocTemplate **templates,
+wxDocTemplate *CReadBookDocManager::SelectDocumentPath(
+		wxDocTemplate **templates,
 #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
-                                                int noTemplates,
+		int noTemplates,
 #else
-                                                int WXUNUSED(noTemplates),
+		int WXUNUSED(noTemplates),
 #endif
-                                                wxString& path,
-                                                long WXUNUSED(flags),
-                                                bool WXUNUSED(save))
-{
-    // We can only have multiple filters in Windows and GTK
+		wxString& path, long WXUNUSED(flags), bool WXUNUSED(save)) {
+	// We can only have multiple filters in Windows and GTK
 #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
-    wxString descrBuf;
+	wxString descrBuf;
 
-    int i;
-    for (i = 0; i < noTemplates; i++)
-    {
-        if (templates[i]->IsVisible())
-        {
-            // add a '|' to separate this filter from the previous one
-            if ( !descrBuf.empty() )
-                descrBuf << wxT('|');
+	int i;
+	for (i = 0; i < noTemplates; i++) {
+		if (templates[i]->IsVisible()) {
+			// add a '|' to separate this filter from the previous one
+			if (!descrBuf.empty())
+				descrBuf << wxT('|');
 
-            descrBuf << templates[i]->GetDescription()
-                << wxT(" |")
-                //<< wxT(" (") << templates[i]->GetFileFilter() << wxT(") |")
-                << templates[i]->GetFileFilter();
-        }
-    }
+			descrBuf << templates[i]->GetDescription() << wxT(" |")
+			//<< wxT(" (") << templates[i]->GetFileFilter() << wxT(") |")
+					<< templates[i]->GetFileFilter();
+		}
+	}
 #else
-    wxString descrBuf = wxT("*.*");
+	wxString descrBuf = wxT("*.*");
 #endif
 
-    int FilterIndex = -1;
+	int FilterIndex = -1;
 
-    wxWindow* parent = wxFindSuitableParent();
+	wxWindow* parent = wxFindSuitableParent();
+
 
 #ifdef _WIN32_WCE
-    wxGenericFileDialog fileDialog(parent,
-                            _("Select a file"),
-                            m_lastDirectory,
-                            wxEmptyString,
-                            descrBuf);
+	wxGenericFileDialog fileDialog(parent,
+			_("Select a file"),
+			m_lastDirectory,
+			wxEmptyString,
+			descrBuf);
 
-    wxString pathTmp;
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-        FilterIndex = fileDialog.GetFilterIndex();
+	wxString pathTmp;
+	if ( fileDialog.ShowModal() == wxID_OK )
+	{
+		FilterIndex = fileDialog.GetFilterIndex();
 
-        pathTmp = fileDialog.GetPath();
-    }
+		pathTmp = fileDialog.GetPath();
+	}
 #else
-    wxString pathTmp = wxFileSelectorEx(_("Select a file"),
-                                        m_lastDirectory,
-                                        wxEmptyString,
-                                        &FilterIndex,
-                                        descrBuf,
-                                        0,
-                                        parent);
+	wxString pathTmp = wxFileSelectorEx(_("Select a file"), m_lastDirectory,
+			wxEmptyString, &FilterIndex, descrBuf, 0, parent);
 #endif
-    wxDocTemplate *theTemplate = (wxDocTemplate *)NULL;
-    if (!pathTmp.empty())
-    {
-        if (!wxFileExists(pathTmp))
-        {
-            wxString msgTitle;
-            if (!wxTheApp->GetAppName().empty())
-                msgTitle = wxTheApp->GetAppName();
-            else
-                msgTitle = wxString(_("File error"));
+	wxDocTemplate *theTemplate = (wxDocTemplate *) NULL;
+	if (!pathTmp.empty()) {
+		if (!wxFileExists(pathTmp)) {
+			wxString msgTitle;
+			if (!wxTheApp->GetAppName().empty())
+				msgTitle = wxTheApp->GetAppName();
+			else
+				msgTitle = wxString(_("File error"));
 
-            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
-                parent);
+			(void) wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK
+					| wxICON_EXCLAMATION, parent);
 
-            path = wxEmptyString;
-            return (wxDocTemplate *) NULL;
-        }
-        m_lastDirectory = wxPathOnly(pathTmp);
+			path = wxEmptyString;
+			return (wxDocTemplate *) NULL;
+		}
+		m_lastDirectory = wxPathOnly(pathTmp);
 
-        path = pathTmp;
+		path = pathTmp;
 
-        // first choose the template using the extension, if this fails (i.e.
-        // wxFileSelectorEx() didn't fill it), then use the path
-        if ( FilterIndex != -1 )
-            theTemplate = templates[FilterIndex];
-        if ( !theTemplate )
-            theTemplate = FindTemplateForPath(path);
-        if ( !theTemplate )
-        {
-            // Since we do not add files with non-default extensions to the FileHistory this
-            // can only happen if the application changes the allowed templates in runtime.
-            (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
-                                _("Open File"),
-                                wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
-        }
-    }
-    else
-    {
-        path = wxEmptyString;
-    }
 
-    return theTemplate;
+		// first choose the template using the extension, if this fails (i.e.
+		// wxFileSelectorEx() didn't fill it), then use the path
+		if (FilterIndex != -1)
+			theTemplate = templates[FilterIndex];
+		if (!theTemplate)
+			theTemplate = FindTemplateForPath(path);
+		if (!theTemplate) {
+			// Since we do not add files with non-default extensions to the FileHistory this
+			// can only happen if the application changes the allowed templates in runtime.
+			(void) wxMessageBox(_("Sorry, the format for this file is unknown."),
+					_("Open File"), wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
+		}
+	} else {
+		path = wxEmptyString;
+	}
+
+	return theTemplate;
 }
 
-static wxWindow* wxFindSuitableParent()
-{
-    wxWindow* parent = wxTheApp->GetTopWindow();
+static wxWindow* wxFindSuitableParent() {
+	wxWindow* parent = wxTheApp->GetTopWindow();
 
-    wxWindow* focusWindow = wxWindow::FindFocus();
-    if (focusWindow)
-    {
-        while (focusWindow &&
-                !focusWindow->IsKindOf(CLASSINFO(wxDialog)) &&
-                !focusWindow->IsKindOf(CLASSINFO(wxFrame)))
+	wxWindow* focusWindow = wxWindow::FindFocus();
+	if (focusWindow) {
+		while (focusWindow && !focusWindow->IsKindOf(CLASSINFO(wxDialog))
+				&& !focusWindow->IsKindOf(CLASSINFO(wxFrame)))
 
-            focusWindow = focusWindow->GetParent();
+			focusWindow = focusWindow->GetParent();
 
-        if (focusWindow)
-            parent = focusWindow;
-    }
-    return parent;
+		if (focusWindow)
+			parent = focusWindow;
+	}
+	return parent;
 }

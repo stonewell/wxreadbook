@@ -120,7 +120,7 @@ void CReadBookMainFrm::OnAbout(wxCommandEvent& WXUNUSED(event) )
 	info.SetName(_T("wxReadBook"));
 	info.SetVersion(VERSION_NUM_DOT_STRING_T);
 	info.SetDescription(_T("a Book reader created using wxWidget"));
-	info.SetCopyright(_T("(C) 2008-2009 Angel & Stone"));
+	info.SetCopyright(_T("(C) 2008-2010 Angel & Stone"));
 	info.AddDeveloper(_T("Jingnan Si"));
 	info.SetWebSite(_T("http://code.google.com/p/wxreadbook/"), 
 		_T("Support site: http://code.google.com/p/wxreadbook/"));
