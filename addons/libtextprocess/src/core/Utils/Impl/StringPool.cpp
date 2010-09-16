@@ -132,7 +132,7 @@ void TextProcess::Utils::Impl::CStringPool::Clear()
 
 wxChar * TextProcess::Utils::Impl::CStringPool::AllocReadOnlyString(wxUint32 cch)
 {
-#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
+#if wxMAJOR_VERSION <= 2 && wxMINOR_VERSION < 9
 	const int wxStringDataSize = sizeof(wxStringData);
 #else
 	const int wxStringDataSize = 0;
@@ -140,7 +140,7 @@ wxChar * TextProcess::Utils::Impl::CStringPool::AllocReadOnlyString(wxUint32 cch
 
 	wxByte * pBuf = AllocBuffer((cch + 1) * sizeof(wxChar) + wxStringDataSize);
 
-#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
+#if wxMAJOR_VERSION <= 2 && wxMINOR_VERSION < 9
 	wxStringData * pStringData = reinterpret_cast<wxStringData *>(pBuf);
 
 	pStringData->nRefs = 10000;

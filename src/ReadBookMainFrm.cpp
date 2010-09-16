@@ -385,7 +385,15 @@ wxMenu * CReadBookMainFrm::CreateRecentFilesMenu()
 	{
 		CFileInfo * pInfo = *it;
 
-		wxFSFile * pFile = fs.OpenFile(pInfo->m_strFileName);
+		wxString key = pInfo->m_strFileName;
+
+		bool tmp = false;
+
+		if (!key.Contains(wxT(":"))) {
+			key = FileNameToUrl(key, tmp);
+		}
+
+		wxFSFile * pFile = fs.OpenFile(key);
 
 		if (pFile != NULL)
 		{
@@ -448,8 +456,8 @@ void CReadBookMainFrm::AddRecentFile(const wxString & strFileName)
 		}
 	}
 
-	wxString itemName = wxT("");
-	itemName.Printf(wxT("%d. %s"), count, strFileName.c_str());
+	wxString itemName = wxString::Format(wxT("%d. "), (int)count);
+	itemName.Append(strFileName);
 
 	wxMenuItem * pNewItem =
 		m_pRecentFileMenu->Prepend(count + IDM_RECENT_FILE,
@@ -477,8 +485,12 @@ void CReadBookMainFrm::UpdateRecentFilesLabel()
 		wxMenuItem * pItem = m_pRecentFileMenu->FindItemByPosition(i);
 
 		wxString itemName = wxT("");
-		itemName.Printf(wxT("%d. %s"), i + 1, pItem->GetHelp().c_str());
-
+		wxString help = pItem->GetHelp();
+#if wxUSE_UNICODE
+		itemName.Printf(wxT("%d. %ls"), (int)(i + 1), (const wchar_t *)help.c_str());
+#else
+		itemName.Printf(wxT("%d. %s"), (int)(i + 1), (const char *)help.c_str());
+#endif
 		pItem->SetItemLabel(itemName);
 	}
 
@@ -675,7 +687,11 @@ void CReadBookMainFrm::UpdateCharsetMenuItemText(const wxString & text)
 
 	if (pItem != NULL)
 	{
+#if wxMAJOR_VERSION <= 2 && wxMINOR_VERSION < 9
 		pItem->SetText(text);
+#else
+		pItem->SetItemLabel(text);
+#endif
 	}
 	else
 	{
@@ -692,7 +708,11 @@ wxString CReadBookMainFrm::GetCharsetMenuItemText()
 
 	if (pItem != NULL)
 	{
+#if wxMAJOR_VERSION <= 2 && wxMINOR_VERSION < 9
 		return pItem->GetText();
+#else
+		return pItem->GetItemLabelText();
+#endif
 	}
 
 	return wxEmptyString;

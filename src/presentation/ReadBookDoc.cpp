@@ -24,76 +24,64 @@
 #include "ReadBookDoc.h"
 #include "ReadBookView.h"
 
-const wxChar EMPTY_STRING_CHARS[] = {'\xA1','\t',' ','\n','\r',0x00};
+const wxChar EMPTY_STRING_CHARS[] = { '\xA1', '\t', ' ', '\n', '\r', 0x00 };
 
 const wxString EMPTY_STRING = wxEmptyString;
-
 IMPLEMENT_DYNAMIC_CLASS(CReadBookDoc, wxDocument)
 
-CReadBookDoc::CReadBookDoc()  :
-m_nCurrentLine(0)
-{
+CReadBookDoc::CReadBookDoc() :
+	m_nCurrentLine(0) {
 }
 
-CReadBookDoc::~CReadBookDoc()
-{
+CReadBookDoc::~CReadBookDoc() {
 }
 
 // Since text windows have their own method for saving to/loading from files,
 // we override OnSave/OpenDocument instead of Save/LoadObject
-bool CReadBookDoc::OnSaveDocument(const wxString& WXUNUSED(filename))
-{
+bool CReadBookDoc::OnSaveDocument(const wxString& WXUNUSED(filename)) {
 	Modify(false);
 
+
 #ifdef __WXMAC__
-	wxFileName fn(filename) ;
-	fn.MacSetDefaultTypeAndCreator() ;
+	wxFileName fn(filename);
+	fn.MacSetDefaultTypeAndCreator();
 #endif
 
 	return true;
 }
 
-bool CReadBookDoc::OnOpenDocument(const wxString& filename)
-{
+bool CReadBookDoc::OnOpenDocument(const wxString& filename) {
 	return OpenDocument(filename, GetCurrentMBConv(), true);
 }
 
-bool CReadBookDoc::IsModified(void) const
-{
+bool CReadBookDoc::IsModified(void) const {
 	return wxDocument::IsModified();
 }
 
-void CReadBookDoc::Modify(bool mod)
-{
+void CReadBookDoc::Modify(bool mod) {
 	wxDocument::Modify(mod);
 }
 
-const wxString & CReadBookDoc::GetLine(wxInt32 nRow)
-{
-	if (nRow >= static_cast<wxInt32>(m_Buffer.GetCount()))
-	{
+const wxString & CReadBookDoc::GetLine(wxInt32 nRow) {
+	if (nRow >= static_cast<wxInt32> (m_Buffer.GetCount())) {
 		return EMPTY_STRING;
 	}
 
 	return m_Buffer.Item(nRow);
 }
 
-wxFileOffset CReadBookDoc::GetBufferSize(void) const
-{
+wxFileOffset CReadBookDoc::GetBufferSize(void) const {
 	return m_Buffer.GetCount();
 }
 
-void CReadBookDoc::SetCurrentLine(wxInt32 nCurrentLine)
-{
+void CReadBookDoc::SetCurrentLine(wxInt32 nCurrentLine) {
 	m_nCurrentLine = nCurrentLine;
 
-	::wxGetApp().GetPreference()->SetFileInfo(m_strFileName, 
-		m_nCurrentLine, 
-		GetRowOffset(m_nCurrentLine));
+	::wxGetApp().GetPreference()->SetFileInfo(m_strFileName, m_nCurrentLine,
+			GetRowOffset(m_nCurrentLine));
 }
 
-bool CReadBookDoc::IsEmptyLine(const wxString & line) const
-{
+bool CReadBookDoc::IsEmptyLine(const wxString & line) const {
 	if (line.Length() == 0)
 		return true;
 
@@ -103,8 +91,7 @@ bool CReadBookDoc::IsEmptyLine(const wxString & line) const
 	return false;
 }
 
-bool CReadBookDoc::OnNewDocument()
-{
+bool CReadBookDoc::OnNewDocument() {
 	if (!wxDocument::OnNewDocument())
 		return false;
 
@@ -112,62 +99,55 @@ bool CReadBookDoc::OnNewDocument()
 
 	m_strFileName = wxGetApp().GetPreference()->GetLastFile();
 
-	if (m_strFileName.Length() > 0)
-	{
+	if (m_strFileName.Length() > 0) {
 		return OnOpenDocument(m_strFileName);
 	}
 
 	return true;
 }
 
-bool CReadBookDoc::OnCreate(const wxString& path, long flags)
-{
-	if (!wxDocument::OnCreate(path,flags))
+bool CReadBookDoc::OnCreate(const wxString& path, long flags) {
+	if (!wxDocument::OnCreate(path, flags))
 		return false;
 
 	return true;
 }
 
-bool CReadBookDoc::OnCloseDocument()
-{
+bool CReadBookDoc::OnCloseDocument() {
 	return wxDocument::OnCloseDocument();
 }
 
-bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool bGuess)
-{
+bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv,
+		bool bGuess) {
 	m_Buffer.Clear();
 
 	bool isDir = true;
 
 	wxString url = FileNameToUrl(filename, isDir);
 
-	if (isDir)
-	{
+	if (isDir) {
 		wxString archiveFile;
 
-		if (ChooseArchiveFile(url, archiveFile))
-		{
+		if (ChooseArchiveFile(url, archiveFile)) {
 			url = FileNameToUrl(archiveFile, isDir);
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 	}
 
 	CFileInfo * pFileInfo = NULL;
 
-	m_nCurrentLine = wxGetApp().GetPreference()->GetFileInfo(m_strFileName, &pFileInfo);
+	m_strFileName = wxFileSystem::URLToFileName(url).GetFullPath();
+
+	m_nCurrentLine = wxGetApp().GetPreference()->GetFileInfo(m_strFileName,
+			&pFileInfo);
 
 	if (!LoadBuffer(url, conv, bGuess))
 		return true;
 
-	m_strFileName = url;
-
 	SetFilename(m_strFileName, true);
 
-	if (pFileInfo == NULL)
-	{
+	if (pFileInfo == NULL) {
 		m_nCurrentLine = 0;
 		wxGetApp().GetPreference()->SetFileInfo(m_strFileName, m_nCurrentLine, 0);
 	}
@@ -178,15 +158,14 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 	SetMainFrameTitle(m_strFileName);
 	AddToRecentFile(m_strFileName);
 
-	if (pFileInfo != NULL)
-	{
+	if (pFileInfo != NULL) {
 		CReadBookView * pView = GetCurrentView();
 
-		if (pView != NULL)
-		{
+		if (pView != NULL) {
 			wxReadBook::DisplayAsEnum displayAs = pFileInfo->m_nDisplayAs;
 
 			pView->SetViewMode(pFileInfo->m_nViewMode);
+
 
 			//UpdateViewMode will replace display as, so use the saved display as
 			pView->SetDisplayAs(displayAs);
@@ -196,18 +175,16 @@ bool CReadBookDoc::OpenDocument(const wxString & filename, wxMBConv * conv, bool
 	return true;
 }
 
-void CReadBookDoc::ReloadByEncoding(wxMBConv * conv)
-{
+void CReadBookDoc::ReloadByEncoding(wxMBConv * conv) {
 	OpenDocument(m_strFileName, conv, false);
 }
 
-void CReadBookDoc::ReloadCurrentDocument()
-{
+void CReadBookDoc::ReloadCurrentDocument() {
 	OpenDocument(m_strFileName, GetCurrentMBConv(), true);
 }
 
-bool CReadBookDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess)
-{
+bool CReadBookDoc::LoadBuffer(const wxString & url, wxMBConv * conv,
+		bool bGuess) {
 	wxFileSystem fs;
 
 	fs.ChangePathTo(url, false);
@@ -219,16 +196,16 @@ bool CReadBookDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess
 
 	wxInputStream * pInput = pFile->GetStream();
 
+
 #if wxUSE_UNICODE
 	wxMBConv * pConv = GetSuitableMBConv(pInput, conv, bGuess);
 
-	wxTextInputStream text( *pInput, wxT("\t"), *pConv);
+	wxTextInputStream text(*pInput, wxT("\t"), *pConv);
 #else
 	wxTextInputStream text( *pInput );
 #endif
 
-	while (!pInput->Eof())
-	{
+	while (!pInput->Eof()) {
 		wxString line = text.ReadLine();
 
 		if (!IsEmptyLine(line))
@@ -240,18 +217,16 @@ bool CReadBookDoc::LoadBuffer(const wxString & url, wxMBConv * conv, bool bGuess
 	return true;
 }
 
-wxMBConv * CReadBookDoc::GetSuitableMBConv(wxInputStream * pInput, wxMBConv * pDefaultConv, bool bGuess)
-{
+wxMBConv * CReadBookDoc::GetSuitableMBConv(wxInputStream * pInput,
+		wxMBConv * pDefaultConv, bool bGuess) {
 	wxMBConv * pConv = pDefaultConv;
 	
-	if (bGuess)
-	{
+	if (bGuess) {
 		wxFileOffset offset = pInput->TellI();
 
 		wxString charset;
 
-		if (GuessDataEncoding(pInput, charset, GetCurrentLang()))
-		{
+		if (GuessDataEncoding(pInput, charset, GetCurrentLang())) {
 			UpdateCurrentEncoding(charset);
 			pConv = GetCurrentMBConv();
 		}
@@ -262,21 +237,17 @@ wxMBConv * CReadBookDoc::GetSuitableMBConv(wxInputStream * pInput, wxMBConv * pD
 	return pConv;
 }
 
-wxFileOffset CReadBookDoc::GetRowOffset(wxInt32 nRow)
-{
+wxFileOffset CReadBookDoc::GetRowOffset(wxInt32 nRow) {
 	return -1;
 }
 
 void CReadBookDoc::UpdateDisplay(wxReadBook::DisplayAsEnum displayAs,
-								 wxReadBook::ViewModeEnum viewMode)
-{
-    CFileInfo * pFileInfo = NULL;
+		wxReadBook::ViewModeEnum viewMode) {
+	CFileInfo * pFileInfo = NULL;
 
-    ::wxGetApp().GetPreference()->GetFileInfo(m_strFileName, &pFileInfo);
+	::wxGetApp().GetPreference()->GetFileInfo(m_strFileName, &pFileInfo);
 
-	::wxGetApp().GetPreference()->SetFileInfo(m_strFileName, 
-		m_nCurrentLine, 
-        pFileInfo == NULL ? GetRowOffset(m_nCurrentLine) : pFileInfo->m_nFilePos,
-		displayAs,
-		viewMode);
+	::wxGetApp().GetPreference()->SetFileInfo(m_strFileName, m_nCurrentLine,
+			pFileInfo == NULL ? GetRowOffset(m_nCurrentLine) : pFileInfo->m_nFilePos,
+			displayAs, viewMode);
 }

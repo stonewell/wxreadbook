@@ -110,7 +110,10 @@ INIT_PROPERTY(Encoding, pEncoding)
 	TPL_WPRINTF(wxT("shm open %ld\n"), pa_offset);
 	m_cb = pInput->GetLength();
 
-	ftruncate(m_hf, m_cb);
+	if (ftruncate(m_hf, m_cb)) {
+		TPL_WPRINTF(wxT("ftruncate fail\n"));
+		return;
+	}
 
 	m_p = reinterpret_cast<wxByte *>(mmap(NULL, m_cb + 0 - pa_offset, PROT_READ | PROT_WRITE,
 		MAP_PRIVATE, m_hf, 0));
