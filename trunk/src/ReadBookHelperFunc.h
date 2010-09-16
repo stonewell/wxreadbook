@@ -31,3 +31,6 @@ void UpdateCharsetMenuItemText(const wxString & text);
 wxString GetCharsetMenuItemText();
 
 wxInt32 GetCurrentLang();
+
+wxString RemoveUrlEncoding(const wxString & str);
+wxString AddUrlEncoding(const wxString & str);

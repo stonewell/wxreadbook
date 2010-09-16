@@ -1,6 +1,6 @@
 #pragma once
 
-#if wxMAJOR_VERSION < 2 || wxMINOR_VERSION < 9
+#if wxMAJOR_VERSION <= 2 && wxMINOR_VERSION < 9
 #include <vector>
 
 namespace TextProcess
