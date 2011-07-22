@@ -112,6 +112,8 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	presentation/textprocesslib/ReadBookTPLDoc2.cpp \
 	presentation/textprocesslib/ReadBookTPLView2.cpp \
 	presentation/textprocesslib/ReadBookTPLView2.h \
+	richtextfontdlg.cpp \
+	richtextfontdlg.h \
 	version.h
 	
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \

@@ -157,7 +157,17 @@ bool GuessDataEncoding(wxInputStream * pInput, wxString & charsets, int lang)
 
 	if (ppCharsets.size() > 0 || ob.m_bDone)
 	{
+#ifdef __WXMAC__
+		wxString tmp(ppCharsets[0].c_str());
+		wxString tmp1(ob.m_Charset.c_str());
+
+		if (ob.m_bDone)
+			charsets = tmp1;
+		else
+			charsets = tmp;
+#else
 		charsets = ob.m_bDone ? ob.m_Charset : ppCharsets[0];
+#endif
 
 		return true;
 	}

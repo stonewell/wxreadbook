@@ -78,7 +78,11 @@ public:
 		{
 			for(WStringArray::iterator it = exts.begin(); it != exts.end(); it++)
 			{
+#ifdef __WXMAC__
+				wxString ext((*it).c_str());
+#else
 				wxString ext = *it;
+#endif
 
 				C7ZipClassFactory * pFactory = new C7ZipClassFactory(ext);
 

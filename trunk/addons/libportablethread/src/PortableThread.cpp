@@ -61,7 +61,7 @@ namespace PortableThread
 			m_dwThreadId = 0;
 			InitializeCriticalSection(&m_Section);
 #else
-			m_hThreadHandle = -1;
+			m_hThreadHandle = (pthread_t)-1;
 			pthread_mutex_init(&m_Section, NULL);
 #endif
 		}
@@ -132,14 +132,14 @@ void PortableThread::CPortableThread::Start()
 		0,                 // use default creation flags 
 		&m_pThreadHandle->m_dwThreadId);   // returns the thread identifier 
 #else
-	if (m_pThreadHandle->m_hThreadHandle != -1)
+	if (m_pThreadHandle->m_hThreadHandle != (pthread_t)-1)
 		return;
 
 	if (pthread_create(&m_pThreadHandle->m_hThreadHandle, NULL, 
 		PortableThread::CPortableThreadHandle::PortableThreadFunc,
 		this))
 	{
-		m_pThreadHandle->m_hThreadHandle = -1;
+		m_pThreadHandle->m_hThreadHandle = (pthread_t)-1;
 	}
 #endif
 }
@@ -157,12 +157,12 @@ void PortableThread::CPortableThread::Abort()
 		m_pThreadHandle->m_hThreadHandle = INVALID_HANDLE_VALUE;
 	}
 #else
-	if (m_pThreadHandle->m_hThreadHandle != -1)
+	if (m_pThreadHandle->m_hThreadHandle != (pthread_t)-1)
 	{
 		void * val = 0;
 		pthread_cancel(m_pThreadHandle->m_hThreadHandle);
 		pthread_join(m_pThreadHandle->m_hThreadHandle, &val);
-		m_pThreadHandle->m_hThreadHandle = -1;
+		m_pThreadHandle->m_hThreadHandle = (pthread_t)-1;
 	}
 #endif
 }
@@ -188,11 +188,11 @@ bool PortableThread::CPortableThread::Join(int nTimeout)
 		m_pThreadHandle->m_hThreadHandle = INVALID_HANDLE_VALUE;
 	}
 #else
-	if (m_pThreadHandle->m_hThreadHandle != -1)
+	if (m_pThreadHandle->m_hThreadHandle != (pthread_t)-1)
 	{
 		void * val = 0;
 		pthread_join(m_pThreadHandle->m_hThreadHandle, &val);
-		m_pThreadHandle->m_hThreadHandle = -1;
+		m_pThreadHandle->m_hThreadHandle = (pthread_t)-1;
 	}
 #endif
 	return true;
