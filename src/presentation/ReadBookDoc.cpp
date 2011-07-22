@@ -41,12 +41,6 @@ CReadBookDoc::~CReadBookDoc() {
 bool CReadBookDoc::OnSaveDocument(const wxString& WXUNUSED(filename)) {
 	Modify(false);
 
-
-#ifdef __WXMAC__
-	wxFileName fn(filename);
-	fn.MacSetDefaultTypeAndCreator();
-#endif
-
 	return true;
 }
 

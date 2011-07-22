@@ -122,14 +122,10 @@ TPL_PRINTF("pDocLine = %d, %d\n", pDocLine == NULL, m_Cancel);
 			break;
 
 		if (GetBuilderDirection() == TextProcess::Next) {
-void * p = pDocLine;
 			pDocLine = GetDocumentLineManager()->GetNextLine(pDocLine);
-TPL_PRINTF("same line:%d=%d\n", p == pDocLine, (int)pDocLine->GetOffset());
 			viewLineOffset = 0;
 		} else {
-void * p = pDocLine;
 			pDocLine = GetDocumentLineManager()->GetPrevLine(pDocLine);
-TPL_PRINTF("same line:%d=%d\n", p == pDocLine, (int)pDocLine->GetOffset());
 
 			if (pDocLine != NULL)
 				viewLineOffset = pDocLine->GetDecodedLength();

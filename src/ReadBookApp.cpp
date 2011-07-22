@@ -57,6 +57,10 @@
 #include "res/BOOK06.xpm"
 #endif
 
+#ifdef __WXMAC__
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 CReadBookMainFrm * g_pMainFrm = NULL;
 
 IMPLEMENT_APP(CReadBookApp)
@@ -69,6 +73,15 @@ extern void Initialize7ZipClassFactories();
 extern void Deinitialize7ZipClassFactories();
 
 bool CReadBookApp::OnInit(void) {
+#ifdef __WXMAC__
+	ProcessSerialNumber PSN;
+	GetCurrentProcess(&PSN);
+	TransformProcessType(&PSN,kProcessTransformToForegroundApplication);
+
+	wxApp::s_macPreferencesMenuItemId = IDM_PREFERENCE;
+	wxApp::s_macAboutMenuItemId = IDM_ABOUT;
+#endif
+
 	wxFileSystem::AddHandler(new wxArchiveFSHandler());
 	wxFileSystem::AddHandler(new wxFilterFSHandler);
 	Initialize7ZipClassFactories();

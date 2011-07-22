@@ -39,7 +39,9 @@ IMPLEMENT_CLASS(CReadBookMainFrm, wxDocParentFrame)
 
 BEGIN_EVENT_TABLE(CReadBookMainFrm, wxDocParentFrame)
 EVT_MENU(IDM_ABOUT, CReadBookMainFrm::OnAbout)
+EVT_MENU(wxID_ABOUT, CReadBookMainFrm::OnAbout)
 EVT_MENU(IDM_PREFERENCE, CReadBookMainFrm::OnPreference)
+EVT_MENU(wxID_PREFERENCES, CReadBookMainFrm::OnPreference)
 EVT_MENU(IDM_GOTO, CReadBookMainFrm::OnGoto)
 EVT_MENU(IDM_VIEW_AS_HTML, CReadBookMainFrm::OnViewAsHtml)
 EVT_MENU(IDM_VIEW_AS_TEXT, CReadBookMainFrm::OnViewAsText)
@@ -186,6 +188,7 @@ void CReadBookMainFrm::Init()
 	pFileMenu->Append(wxID_EXIT, wxT("E&xit\tCTRL+X"));
 
 	wxMenu * pEditMenu = new wxMenu;
+
 	pEditMenu->Append(IDM_PREFERENCE, wxT("&Preference..."));
 	pEditMenu->AppendSeparator();
 	pEditMenu->Append(IDM_GOTO, wxT("&Goto...\tCTRL+G"));

@@ -356,7 +356,12 @@ wxInt32 CReadBookPreference::GetFileInfo(const wxString & strFileName,
 
 bool CReadBookPreference::IsArchiveExt(const wxString & ext) const {
 	for (WStringArray::const_iterator it = m_Exts.begin(); it != m_Exts.end(); it++) {
-		if (ext.CmpNoCase(*it) == 0)
+#ifdef __WXMAC__
+		wxString tmp((*it).c_str());
+#else
+		wxString tmp = *it;
+#endif
+		if (ext.CmpNoCase(tmp) == 0)
 			return true;
 	}
 
@@ -367,7 +372,12 @@ wxString CReadBookPreference::GetArchiveFileFilters() {
 	wxString filters = wxEmptyString;
 
 	for (WStringArray::const_iterator it = m_Exts.begin(); it != m_Exts.end(); it++) {
-		filters.Append(wxT("*.")).Append(*it).Append(wxT(";"));
+#ifdef __WXMAC__
+		wxString tmp((*it).c_str());
+#else
+		wxString tmp = *it;
+#endif
+		filters.Append(wxT("*.")).Append(tmp).Append(wxT(";"));
 	}
 
 	return filters.SubString(0, filters.Len() - 2);

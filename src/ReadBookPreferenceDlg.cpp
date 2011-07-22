@@ -15,6 +15,7 @@
 
 #include "ReadBookApp.h"
 #include "ReadBookPreferenceDlg.h"
+#include "richtextfontdlg.h"
 
 BEGIN_EVENT_TABLE(CReadBookPreferenceDlg, wxDialog)
     EVT_BUTTON(wxID_ANY, CReadBookPreferenceDlg::OnButton)
@@ -173,9 +174,18 @@ void CReadBookPreferenceDlg::OnButton(wxCommandEvent& event)
     	wxFont * pOldFont = 
     		wxGetApp().GetPreference()->GetFont();
     	
-    	wxFont newFont =
-    		wxGetFontFromUser(this,*pOldFont);
-    	
+		wxFontData data;
+		data.SetChosenFont(*pOldFont);
+		data.SetInitialFont(*pOldFont);
+
+		wxRichTextFontDialog dlg(this, data);
+
+		if (dlg.ShowModal() != wxID_OK)
+			return;
+
+		wxFontData dataNew = dlg.GetFontData();
+		wxFont newFont = dataNew.GetChosenFont();
+		
     	if (newFont.IsOk())
     	{
     		m_pStaticText->SetFont(newFont);
