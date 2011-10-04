@@ -135,7 +135,7 @@ bool CReadBookApp::OnInit(void) {
 
 
 #ifdef __WXMAC__
-	wxFileName::MacRegisterDefaultTypeAndCreator( wxT("rbk") , 'WXMB' , 'WXMA' );
+	//wxFileName::MacRegisterDefaultTypeAndCreator( wxT("rbk") , 'WXMB' , 'WXMA' );
 #endif
 
 	m_pDocManager->SetMaxDocsOpen(1);
