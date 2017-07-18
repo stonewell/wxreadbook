@@ -11,7 +11,7 @@
 #endif
 
 TextProcess::View::Impl::CViewLineBuilderImpl2::CViewLineBuilderImpl2(void) :
-INIT_PROPERTY(ClientArea, NULL),INIT_PROPERTY(ViewFont, NULL),INIT_PROPERTY(DocumentLineOffset, 0),INIT_PROPERTY(ViewLineOffset, 0),INIT_PROPERTY(DocumentLineManager, NULL),INIT_PROPERTY(ViewLineManager, NULL),INIT_PROPERTY(Graphics, NULL),INIT_PROPERTY(Cancel, 0)
+    INIT_PROPERTY(ClientArea, NULL),INIT_PROPERTY(ViewFont, NULL),INIT_PROPERTY(DocumentLineOffset, 0),INIT_PROPERTY(ViewLineOffset, 0),INIT_PROPERTY(DocumentLineManager, NULL),INIT_PROPERTY(ViewLineManager, NULL),INIT_PROPERTY(Graphics, NULL),INIT_PROPERTY(Cancel, 0)
 {
 }
 
@@ -19,11 +19,11 @@ TextProcess::View::Impl::CViewLineBuilderImpl2::~CViewLineBuilderImpl2(void) {
 }
 
 int TextProcess::View::Impl::CViewLineBuilderImpl2::BuildLines() {
-	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
+	std::shared_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
 		TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(
-		GetDocumentLineOffset()));
+            GetDocumentLineOffset()));
 	TextProcess::Document::IDocumentLine * pDocLine =
-		GetDocumentLineManager()->FindLine(pMatcher.get());
+            GetDocumentLineManager()->FindLine(pMatcher.get());
 
 	if (pDocLine == NULL) {
 		return 1;
@@ -35,7 +35,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl2::BuildLines() {
 	int asciiCharWidth = 0;
 
 	int defaultLineCharSize = 
-		CalculateDefaultLineCharSize(unicodeCharWidth, asciiCharWidth);
+            CalculateDefaultLineCharSize(unicodeCharWidth, asciiCharWidth);
 
 	IViewLine * pLastLine = NULL;
 
@@ -59,12 +59,12 @@ int TextProcess::View::Impl::CViewLineBuilderImpl2::BuildLines() {
 		std::vector<TextProcess::View::IViewLine *> lines;
 
 		InternalBuildLines(pDocLine, 
-			startOffset, endOffset, 
-			nBuildLineCount, 
-			lines,
-			defaultLineCharSize,
-			unicodeCharWidth,
-			asciiCharWidth);
+                           startOffset, endOffset, 
+                           nBuildLineCount, 
+                           lines,
+                           defaultLineCharSize,
+                           unicodeCharWidth,
+                           asciiCharWidth);
 
 		if (m_Cancel) {
 			std::vector<TextProcess::View::IViewLine *>::reverse_iterator it;
@@ -116,7 +116,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl2::BuildLines() {
 			nBuildLineCount = GetBuildLineCount();
 		}
 
-TPL_PRINTF("pDocLine = %d, %d\n", pDocLine == NULL, m_Cancel);
+        TPL_PRINTF("pDocLine = %d, %d\n", pDocLine == NULL, m_Cancel);
 
 		if (m_Cancel)
 			break;
@@ -134,14 +134,14 @@ TPL_PRINTF("pDocLine = %d, %d\n", pDocLine == NULL, m_Cancel);
 		if (pDocLine != NULL) {
 			pDocLine->AccessLine();
 
-			std::auto_ptr<IViewLineMatcher> pMatcher(
+			std::shared_ptr<IViewLineMatcher> pMatcher(
 				CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
 			if (GetViewLineManager()->FindLine(pMatcher.get(), 0) != NULL) {
-TPL_PRINTF("pDocLine 2= %d, %d, %d\n", pDocLine == NULL, m_Cancel, (int)pDocLine->GetOffset());
+                TPL_PRINTF("pDocLine 2= %d, %d, %d\n", pDocLine == NULL, m_Cancel, (int)pDocLine->GetOffset());
 				break;
 			}
 		}
-TPL_PRINTF("pDocLine = %d\n", pDocLine == NULL);
+        TPL_PRINTF("pDocLine = %d\n", pDocLine == NULL);
 
 	}
 
@@ -236,68 +236,68 @@ int TextProcess::View::Impl::CViewLineBuilderImpl2::InternalBuildLines(
 	int defaultLineCharSize,
 	int unicodeCharWidth,
 	int asciiCharWidth) {
-		wxChar * pBuf = NULL;
-		wxFileOffset pBufLen = 0;
-		bool use_readonly_string = true;
-		wxInt32 decodedLength = pDocLine->GetDecodedLength();
+    wxChar * pBuf = NULL;
+    wxFileOffset pBufLen = 0;
+    bool use_readonly_string = true;
+    wxInt32 decodedLength = pDocLine->GetDecodedLength();
 
-		pDocLine->GetData(0, decodedLength, &pBuf, &pBufLen);
+    pDocLine->GetData(0, decodedLength, &pBuf, &pBufLen);
 
-		wxFileOffset viewLineOffset = startOffset;
+    wxFileOffset viewLineOffset = startOffset;
 
-		while (!m_Cancel && viewLineOffset < endOffset) {
-			wxFileOffset viewLineSize = defaultLineCharSize;
+    while (!m_Cancel && viewLineOffset < endOffset) {
+        wxFileOffset viewLineSize = defaultLineCharSize;
 
-			if (viewLineSize + viewLineOffset > decodedLength) {
-				viewLineSize = decodedLength - viewLineOffset;
-			}
+        if (viewLineSize + viewLineOffset > decodedLength) {
+            viewLineSize = decodedLength - viewLineOffset;
+        }
 
-			FixViewLineSize(pBuf, decodedLength,
-				viewLineOffset, viewLineSize,
-				unicodeCharWidth, asciiCharWidth);
+        FixViewLineSize(pBuf, decodedLength,
+                        viewLineOffset, viewLineSize,
+                        unicodeCharWidth, asciiCharWidth);
 
-			if (m_Cancel)
-				break;
+        if (m_Cancel)
+            break;
 
-			IViewLine * pLine = CViewObjectFactory::CreateViewLine(viewLineOffset,
-				viewLineSize, pDocLine);
-TPL_PRINTF("View Line:%d %d, %d =%d %d %d\n", (int)viewLineOffset, (int)viewLineSize, (int)pDocLine->GetOffset(), nBuildCount, (int)endOffset, (int)m_Cancel);
+        IViewLine * pLine = CViewObjectFactory::CreateViewLine(viewLineOffset,
+                                                               viewLineSize, pDocLine);
+        TPL_PRINTF("View Line:%d %d, %d =%d %d %d\n", (int)viewLineOffset, (int)viewLineSize, (int)pDocLine->GetOffset(), nBuildCount, (int)endOffset, (int)m_Cancel);
 
-			lines.push_back(pLine);
+        lines.push_back(pLine);
 
-			viewLineOffset += viewLineSize;
+        viewLineOffset += viewLineSize;
 
-			nBuildCount--;
+        nBuildCount--;
 
-			if (!nBuildCount && GetBuilderDirection() == TextProcess::Next)
-				break;
-		}
+        if (!nBuildCount && GetBuilderDirection() == TextProcess::Next)
+            break;
+    }
 
-		endOffset = viewLineOffset;
+    endOffset = viewLineOffset;
 
-		return 1;
+    return 1;
 }
 
 wxInt32 TextProcess::View::Impl::CViewLineBuilderImpl2::CalculateDefaultLineCharSize(
 	int & unicodeCharWidth,
 	int & asciiCharWidth) {
-		const wxString & asciiString = wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz./,?;'\"`!+-*|}{[]");
-		const wxString & unicodeString = wxT("你我他哈哈哈哈哈萨斯大法师发声法史莱克法计算得分，。！");
+    const wxString & asciiString = wxT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz./,?;'\"`!+-*|}{[]");
+    const wxString & unicodeString = wxT("你我他哈哈哈哈哈萨斯大法师发声法史莱克法计算得分，。！");
 
-		wxCoord width, height;
-		GetGraphics()->GetTextExtent(asciiString, &width, &height, GetViewFont());
+    wxCoord width, height;
+    GetGraphics()->GetTextExtent(asciiString, &width, &height, GetViewFont());
 
-		if (width == 0)
-			asciiCharWidth = GetViewFont()->GetPointSize();
-		else
-			asciiCharWidth = width / asciiString.Length();
+    if (width == 0)
+        asciiCharWidth = GetViewFont()->GetPointSize();
+    else
+        asciiCharWidth = width / asciiString.Length();
 
-		GetGraphics()->GetTextExtent(unicodeString, &width, &height, GetViewFont());
+    GetGraphics()->GetTextExtent(unicodeString, &width, &height, GetViewFont());
 
-		if (width == 0)
-			unicodeCharWidth = GetViewFont()->GetPointSize();
-		else
-			unicodeCharWidth = width / unicodeString.Length();
+    if (width == 0)
+        unicodeCharWidth = GetViewFont()->GetPointSize();
+    else
+        unicodeCharWidth = width / unicodeString.Length();
 
-		return GetClientArea()->GetWidth() / asciiCharWidth;
+    return GetClientArea()->GetWidth() / asciiCharWidth;
 }

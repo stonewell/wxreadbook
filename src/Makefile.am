@@ -115,25 +115,30 @@ wxReadBook_SOURCES = ArchiveExplorerDlg.cpp \
 	richtextfontdlg.cpp \
 	richtextfontdlg.h \
 	version.h
-	
+
 wxReadBook_LDADD = 7Zip/libwxreadbook7zip.a \
 	../addons/libtextprocess/libtextprocess.a \
 	../addons/libportablethread/libportablethread.a \
-	../addons/lib7zip/Lib7Zip/lib7zip.a 
+	../addons/lib7zip/Lib7Zip/lib7zip.a \
+	-ldl -lrt
 
 if BUILD_WIN32
 wxReadBook_LDADD += wxReadBook_rc.o
 endif
 
+wxReadBook_LDFLAGS =
+
 if BUILD_ANGSTROM
-wxReadBook_LDFLAGS = -lpthread -lrt
+wxReadBook_LDFLAGS += -lpthread -lrt
 endif
-	
-EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc 
+
+wxReadBook_LDFLAGS += -lpthread -lrt -ldl
+
+EXTRA_DIST = wxReadBook.vcproj wxReadBook.rc
 
 if BUILD_WIN32
 wxReadBook_rc.o: $(srcdir)/wxReadBook.rc
-	${WINDRES} --use-temp-file ${CPPFLAGS} -i $< -o $@	
+	${WINDRES} --use-temp-file ${CPPFLAGS} -i $< -o $@
 endif
 
 dist-hook:

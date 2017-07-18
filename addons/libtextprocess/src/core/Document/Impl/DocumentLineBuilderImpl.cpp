@@ -16,7 +16,7 @@
 #endif
 
 TextProcess::Document::Impl::CDocumentLineBuilderImpl::CDocumentLineBuilderImpl(
-		void) :
+    void) :
 	INIT_PROPERTY(DocumentOffset, 0),
 	INIT_PROPERTY(DocumentLineManager, NULL),
 	INIT_PROPERTY(DocumentFile, NULL),
@@ -25,7 +25,7 @@ TextProcess::Document::Impl::CDocumentLineBuilderImpl::CDocumentLineBuilderImpl(
 }
 
 TextProcess::Document::Impl::CDocumentLineBuilderImpl::~CDocumentLineBuilderImpl(
-		void) {
+    void) {
 }
 
 int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines() {
@@ -48,8 +48,8 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines() {
 	if (pStartPos < pFileBegin)
 		pStartPos = pFileBegin;
 
-	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
-			CDocumentObjectFactory::CreateLineMatcher(GetDocumentOffset()));
+	std::shared_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
+        CDocumentObjectFactory::CreateLineMatcher(GetDocumentOffset()));
 
 	TPL_PRINTF("&&&&&&&& %d %x\n", GetDocumentOffset(),GetDocumentOffset());
 
@@ -62,15 +62,15 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines() {
 		TPL_PRINTF("last line is not null 2:%d\n", pStartPos - pFileBegin);
 	} else {
 		TPL_PRINTF("last line is null 1:%d %x %x %d %d\n",
-				pStartPos - pFileBegin,
-				*pCR, *pLF, m_CRLength, m_LFLength);
+                   pStartPos - pFileBegin,
+                   *pCR, *pLF, m_CRLength, m_LFLength);
 
 		bool cr = true;
 		pchEOL = std::find_end(pFileBegin, pStartPos, pCR, pCREnd);
 		pchEOL2 = std::find_end(pFileBegin, pStartPos, pLF, pLFEnd);
 
 		TPL_PRINTF("last line is null 2:%d, %d %d\n", pStartPos - pFileBegin,
-				pchEOL - pFileBegin, pchEOL2 - pFileBegin);
+                   pchEOL - pFileBegin, pchEOL2 - pFileBegin);
 
 		if (pchEOL2 < pStartPos && pchEOL2 > pchEOL) {
 			pchEOL = pchEOL2;
@@ -78,14 +78,14 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines() {
 		}
 
 		TPL_PRINTF("last line is null 2:%d, %d %d\n", pStartPos - pFileBegin,
-				pchEOL - pFileBegin, pchEOL2 - pFileBegin);
+                   pchEOL - pFileBegin, pchEOL2 - pFileBegin);
 
 		if (pStartPos != pchEOL) {
 			if (GetBuilderDirection() == TextProcess::Next) {
 				if (cr)
 					pStartPos = pchEOL + m_CRLength;
 				else if (pchEOL + m_LFLength + m_CRLength < pFileEnd && !memcmp(pchEOL
-						+ m_LFLength, pCR, m_CRLength)) {
+                                                                                + m_LFLength, pCR, m_CRLength)) {
 					pStartPos = pchEOL + m_LFLength + m_CRLength;
 				} else {
 					pStartPos = pchEOL + m_LFLength;
@@ -143,7 +143,7 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines() {
 				pStartPos = pchEOL + m_CRLength;
 			} else {
 				pStartPos = pchEOL + m_LFLength;
-				
+
 				if (pStartPos + m_CRLength <= pEndPos) {
 					if (!memcmp(pStartPos, pCR, m_CRLength))
 						pStartPos += m_CRLength;
@@ -160,7 +160,7 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::BuildLines() {
 			pchEOL = std::find_end(pStartPos, pEndPos, pCR, pCREnd);
 			pchEOL2 = std::find_end(pStartPos, pEndPos, pLF, pLFEnd);
 
-TPL_PRINTF("cr. offset = %p %p %p %d %d\n", pEndPos, pchEOL, pchEOL2, pEndPos - pchEOL, m_CRLength);
+            TPL_PRINTF("cr. offset = %p %p %p %d %d\n", pEndPos, pchEOL, pchEOL2, pEndPos - pchEOL, m_CRLength);
 
 
 			//reverse search, so choose the bigger one.
@@ -176,11 +176,11 @@ TPL_PRINTF("cr. offset = %p %p %p %d %d\n", pEndPos, pchEOL, pchEOL2, pEndPos - 
 				if (cr) {
 					offset = (pchEOL + m_CRLength) - pFileBegin;
 					length = (pEndPos - (pchEOL + m_CRLength)) + 1;
-int ll = length;
-TPL_PRINTF("length=%d,%d\n", ll, pEndPos - (pchEOL + m_CRLength) + 1);
+                    int ll = length;
+                    TPL_PRINTF("length=%d,%d\n", ll, pEndPos - (pchEOL + m_CRLength) + 1);
 
-TPL_PRINTF("cr. @@@@@@@ offset = %p %p %p %d %d\n", pEndPos, pchEOL, pchEOL2, pEndPos - pchEOL, m_CRLength);
-TPL_PRINTF("cr. offset = %d %d %d\n", offset, length, (pEndPos - (pchEOL + m_CRLength)) + 1);
+                    TPL_PRINTF("cr. @@@@@@@ offset = %p %p %p %d %d\n", pEndPos, pchEOL, pchEOL2, pEndPos - pchEOL, m_CRLength);
+                    TPL_PRINTF("cr. offset = %d %d %d\n", offset, length, (pEndPos - (pchEOL + m_CRLength)) + 1);
 
 					if (pchEOL - m_LFLength >= pStartPos) {
 						if (!memcmp(pchEOL - m_LFLength, pLF, m_LFLength)) {
@@ -190,8 +190,8 @@ TPL_PRINTF("cr. offset = %d %d %d\n", offset, length, (pEndPos - (pchEOL + m_CRL
 				} else {
 					offset = (pchEOL + m_LFLength) - pFileBegin;
 					length = (pEndPos - (pchEOL + m_LFLength)) + 1;
-TPL_PRINTF("lf. offset = %d %d\n", offset, length);
-					
+                    TPL_PRINTF("lf. offset = %d %d\n", offset, length);
+
 					while (length >= m_CRLength) {
 						if (!memcmp(pFileBegin + offset, pCR, m_CRLength)) {
 							length -= m_LFLength;
@@ -201,7 +201,7 @@ TPL_PRINTF("lf. offset = %d %d\n", offset, length);
 						}
 					}
 				}
-				
+
 			}
 
 			pEndPos = pchEOL - 1;
@@ -210,21 +210,21 @@ TPL_PRINTF("lf. offset = %d %d\n", offset, length);
 		if (!m_Cancel && !IsEmptyLine(offset, length)) {
 			TextProcess::Document::IDocumentLine * pDocLine = NULL;
 
-		        std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcherTmp(
-               		         CDocumentObjectFactory::CreateLineMatcher(offset));
-			
+            std::shared_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcherTmp(
+                CDocumentObjectFactory::CreateLineMatcher(offset));
+
 			pDocLine = GetDocumentLineManager()->FindLine(pMatcherTmp.get(), 0);
 
 			if (pDocLine == NULL) {
-			pDocLine = CDocumentObjectFactory::CreateDocumentLine(offset, length,
-							GetDocumentFile());
+                pDocLine = CDocumentObjectFactory::CreateDocumentLine(offset, length,
+                                                                      GetDocumentFile());
 
-			TPL_PRINTF("Add Next Line &&&&&&&& %d.%d %d\n", GetBuilderDirection(), GetDocumentOffset(), offset);
+                TPL_PRINTF("Add Next Line &&&&&&&& %d.%d %d\n", GetBuilderDirection(), GetDocumentOffset(), offset);
 
-			if (GetBuilderDirection() == TextProcess::Next)
-				GetDocumentLineManager()->AddNextLine(pDocLine, pLastLine);
-			else
-				GetDocumentLineManager()->AddPrevLine(pDocLine, pLastLine);
+                if (GetBuilderDirection() == TextProcess::Next)
+                    GetDocumentLineManager()->AddNextLine(pDocLine, pLastLine);
+                else
+                    GetDocumentLineManager()->AddPrevLine(pDocLine, pLastLine);
 			}
 
 			pLastLine = pDocLine;
@@ -279,7 +279,7 @@ void TextProcess::Document::Impl::CDocumentLineBuilderImpl::Cancel() {
 }
 
 int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(
-		wxFileOffset offset, wxFileOffset length) {
+    wxFileOffset offset, wxFileOffset length) {
 	if (length == 0)
 		return 1;
 
@@ -309,17 +309,17 @@ int TextProcess::Document::Impl::CDocumentLineBuilderImpl::IsEmptyLine(
 
 void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers() {
 	size_t size = 0;
-	
-	#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
-	#define wxStrlen_ wxStrlen
-	#endif
+
+#if (wxMAJOR_VERSION > 2) || (wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9)
+#define wxStrlen_ wxStrlen
+#endif
 	wxMBConv * pEncoding = GetDocumentFile()->GetEncoding();
 	m_SpaceBuffer = pEncoding->cWC2MB(wxT(" "), wxStrlen_(wxT(" ")), &size);
 	m_SpaceLength = size;
 	m_TabBuffer = pEncoding->cWC2MB(wxT("\t"), wxStrlen_(wxT("\t")), &size);
 	m_TabLength = size;
 	m_Space2Buffer = pEncoding->cWC2MB(wxT("\xe380\x800a"), wxStrlen_(
-			wxT("\xe380\x800a")), &size);
+        wxT("\xe380\x800a")), &size);
 	m_Space2Length = size;
 
 	m_CRBuffer = pEncoding->cWC2MB(wxT("\n"), 1, &size);
@@ -327,7 +327,7 @@ void TextProcess::Document::Impl::CDocumentLineBuilderImpl::InitBuffers() {
 	m_LFBuffer = pEncoding->cWC2MB(wxT("\r"), 1, &size);
 	m_LFLength = size;
 
-	#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
-	#undef wxStrlen_
-	#endif
-}
+#if wxMAJOR_VERSION >= 2 && wxMINOR_VERSION >= 9
+    p	#undef wxStrlen_
+#endif
+            }

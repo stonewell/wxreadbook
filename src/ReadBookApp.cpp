@@ -203,7 +203,7 @@ void CReadBookApp::SavePreference() {
 }
 
 const wxString CReadBookApp::GetConfigFileName() {
-	wxStandardPaths stdPath;
+	wxStandardPaths & stdPath = wxStandardPaths::Get();
 
 	wxString dataDir = stdPath.GetUserDataDir();
 

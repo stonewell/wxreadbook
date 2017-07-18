@@ -1,6 +1,10 @@
 AC_INIT([wxReadBook], [1.3.0], [jingnan.si@gmail.com])
 AC_CONFIG_SRCDIR(src/ReadBookApp.cpp)
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
+
+AM_PROG_AR
+
+LT_INIT
 
 AC_CONFIG_HEADERS(config.h)
 AC_PROG_CC
@@ -60,12 +64,14 @@ ADDTIONAL_CXX_FLAGS=
 
 AM_CONDITIONAL(BUILD_ANGSTROM, test x = y)
 AM_CONDITIONAL(BUILD_WIN32, test x = y)
+AM_CONDITIONAL(WIN32, test x = y)
 
 case "${host}" in
   *-mingw32* | *-cygwin* )
 	AC_DEFINE(BUILD_WIN32, 1, Build Form Win32)
 	ADDTIONAL_CXX_FLAGS="-DWIN32 -D_WIN32 -DWINDOWS -D_WINDOWS -DUNICODE -D_UNICODE"
 	AM_CONDITIONAL(BUILD_WIN32, test x = x)
+	AM_CONDITIONAL(WIN32, test x = x)
 	AC_CHECK_TOOL(WINDRES, [windres])
   ;;
   *-angstrom* )
@@ -78,7 +84,7 @@ esac
 CXXFLAGS+=" `wx-config --cxxflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
 CPPFLAGS+=" `wx-config --cppflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
 CFLAGS+=" `wx-config --cflags --static=$static --debug=$debug` ${debug_flag} ${ADDTIONAL_CXX_FLAGS}"
-LIBS+=" `wx-config --libs --static=$static --debug=$debug`"
+LIBS+=" `wx-config --libs std,richtext --static=$static --debug=$debug`"
 
 AC_CHECK_HEADERS(["wx/wx.h"],
 	[AC_MSG_RESULT(checking for wx/wx.h... OK)], 

@@ -23,7 +23,7 @@ public:
 	unsigned long Run(void * pArgument) {
 		TextProcess::Document::IDocumentLineBuilder
 				* pLineBuilder =
-						reinterpret_cast<TextProcess::Document::IDocumentLineBuilder *> (pArgument);
+                reinterpret_cast<TextProcess::Document::IDocumentLineBuilder *> (pArgument);
 
 		return pLineBuilder->BuildLines();
 	}
@@ -31,8 +31,8 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(CReadBookTPLDoc2, CReadBookDoc)
 
 CReadBookTPLDoc2::CReadBookTPLDoc2(void) :
-	m_BuildPrevThread(new CDocumentBuilderRunnable()), m_BuildNextThread(
-			new CDocumentBuilderRunnable()), m_bDocumentLoading(false) {
+m_BuildPrevThread(new CDocumentBuilderRunnable()), m_BuildNextThread(
+    new CDocumentBuilderRunnable()), m_bDocumentLoading(false) {
 }
 
 CReadBookTPLDoc2::~CReadBookTPLDoc2(void) {
@@ -43,14 +43,14 @@ CReadBookTPLDoc2::~CReadBookTPLDoc2(void) {
 }
 
 bool CReadBookTPLDoc2::LoadBuffer(const wxString & url, wxMBConv * conv,
-		bool bGuess) {
+                                  bool bGuess) {
 	StopDocumentLineBuilder();
 
 	wxFileSystem fs;
 
 	fs.ChangePathTo(url, false);
 
-	std::auto_ptr<wxFSFile> pFile(fs.OpenFile(url, wxFS_READ | wxFS_SEEKABLE));
+	std::shared_ptr<wxFSFile> pFile(fs.OpenFile(url, wxFS_READ | wxFS_SEEKABLE));
 
 	if (pFile.get() == NULL)
 		return false;
@@ -61,12 +61,12 @@ bool CReadBookTPLDoc2::LoadBuffer(const wxString & url, wxMBConv * conv,
 
 	if (IsArchiveFileUrl(url)) {
 		m_pMemoryMappedFile.reset(
-				TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(pInput,
-						pConv));
+            TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(pInput,
+                                                                       pConv));
 	} else {
 		m_pMemoryMappedFile.reset(
-				TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(
-						wxFileSystem::URLToFileName(url).GetFullPath(), pConv));
+            TextProcess::IO::IMemoryMappedFile::CreateMemoryMappedFile(
+                wxFileSystem::URLToFileName(url).GetFullPath(), pConv));
 	}
 
 	TextProcess::Document::IDocumentLineManager * pDocumentLineManager =
@@ -105,24 +105,24 @@ void CReadBookTPLDoc2::StartDocumentLineBuilder() {
 #endif
 
 	m_pDocumentLineBuilderPrev.reset(
-			TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+        TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 
 	m_pDocumentLineBuilderPrev->SetBuilderDirection(TextProcess::Prev);
 	m_pDocumentLineBuilderPrev->SetDocumentFile(m_pMemoryMappedFile.get());
 	m_pDocumentLineBuilderPrev->SetDocumentLineManager(
-			m_pDocumentLineManager.get());
+        m_pDocumentLineManager.get());
 	m_pDocumentLineBuilderPrev->SetDocumentOffset(docPos);
 
 	m_BuildPrevThread.SetRunningArgument(m_pDocumentLineBuilderPrev.get());
 	m_BuildPrevThread.Start();
 
 	m_pDocumentLineBuilderNext.reset(
-			TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+        TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 
 	m_pDocumentLineBuilderNext->SetBuilderDirection(TextProcess::Next);
 	m_pDocumentLineBuilderNext->SetDocumentFile(m_pMemoryMappedFile.get());
 	m_pDocumentLineBuilderNext->SetDocumentLineManager(
-			m_pDocumentLineManager.get());
+        m_pDocumentLineManager.get());
 	m_pDocumentLineBuilderNext->SetDocumentOffset(docPos);
 
 	m_BuildNextThread.SetRunningArgument(m_pDocumentLineBuilderNext.get());
@@ -155,29 +155,29 @@ void CReadBookTPLDoc2::ScrollDocumentTo(wxFileOffset nOffset) {
 	StopDocumentLineBuilder();
 
 	m_pDocumentLineManager.reset(
-			TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+        TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
 	m_pMemoryMappedFile->Reset();
 	StartDocumentLineBuilder();
 }
 
 bool CReadBookTPLDoc2::GetDocumentLineInfo(wxInt32 nPos, wxInt32 & nOffset,
-		wxInt32 & nLength, wxInt32 & nDecodedLength) {
+                                           wxInt32 & nLength, wxInt32 & nDecodedLength) {
 	if (!m_bDocumentLoading)
 		return false;
-	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
-			TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(nPos));
+	std::shared_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
+        TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(nPos));
 
 	TextProcess::Document::IDocumentLine * pLine =
 			m_pDocumentLineManager->FindLine(pMatcher.get(), 0);
 
 	if (pLine == NULL) {
-		std::auto_ptr<TextProcess::Document::IDocumentLineManager>
+		std::shared_ptr<TextProcess::Document::IDocumentLineManager>
 				pDocumentLineManager(
-						TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+                    TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
 
-		std::auto_ptr<TextProcess::Document::IDocumentLineBuilder>
+		std::shared_ptr<TextProcess::Document::IDocumentLineBuilder>
 				pDocumentLineBuilder(
-						TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+                    TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 
 		pDocumentLineBuilder->SetBuilderDirection(TextProcess::Next);
 		pDocumentLineBuilder->SetDocumentFile(m_pMemoryMappedFile.get());
@@ -191,10 +191,10 @@ bool CReadBookTPLDoc2::GetDocumentLineInfo(wxInt32 nPos, wxInt32 & nOffset,
 
 		if (pLine == NULL) {
 			pDocumentLineManager.reset(
-					TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
+                TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
 
 			pDocumentLineBuilder.reset(
-					TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
+                TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 
 			pDocumentLineBuilder->SetBuilderDirection(TextProcess::Prev);
 			pDocumentLineBuilder->SetDocumentFile(m_pMemoryMappedFile.get());

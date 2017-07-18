@@ -50,7 +50,7 @@ bool CReadBookTPLDoc::LoadBuffer(const wxString & url, wxMBConv * conv,
 
 	fs.ChangePathTo(url, false);
 
-	std::auto_ptr<wxFSFile> pFile(fs.OpenFile(url, wxFS_READ | wxFS_SEEKABLE));
+	std::shared_ptr<wxFSFile> pFile(fs.OpenFile(url, wxFS_READ | wxFS_SEEKABLE));
 
 	if (pFile.get() == NULL)
 		return false;
@@ -156,18 +156,18 @@ bool CReadBookTPLDoc::GetDocumentLineInfo(wxInt32 nPos, wxInt32 & nOffset,
 		wxInt32 & nLength, wxInt32 & nDecodedLength) {
 	if (!m_bDocumentLoading)
 		return false;
-	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
+	std::shared_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
 			TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(nPos));
 
 	TextProcess::Document::IDocumentLine * pLine =
 			m_pDocumentLineManager->FindLine(pMatcher.get(), 0);
 
 	if (pLine == NULL) {
-		std::auto_ptr<TextProcess::Document::IDocumentLineManager>
+		std::shared_ptr<TextProcess::Document::IDocumentLineManager>
 				pDocumentLineManager(
 						TextProcess::Document::CDocumentObjectFactory::CreateLineManager());
 
-		std::auto_ptr<TextProcess::Document::IDocumentLineBuilder>
+		std::shared_ptr<TextProcess::Document::IDocumentLineBuilder>
 				pDocumentLineBuilder(
 						TextProcess::Document::CDocumentObjectFactory::CreateLineBuilder());
 

@@ -61,14 +61,14 @@ private:
 	void StartViewLineBuilder();
 	void StopViewLineBuilder();
 
-	std::auto_ptr<TextProcess::View::IViewLineManager> m_pViewLineManager;
-	std::auto_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderPrev;
-	std::auto_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderNext;
+	std::shared_ptr<TextProcess::View::IViewLineManager> m_pViewLineManager;
+	std::shared_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderPrev;
+	std::shared_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderNext;
 	PortableThread::CPortableThread m_BuildPrevThread;
 	PortableThread::CPortableThread m_BuildNextThread;
 	TextProcess::View::IViewLine * m_pViewLine;
-	std::auto_ptr<CViewBuilderGraphic> m_pGraphic;
-	std::auto_ptr<wxRect> m_pClientRect;
+	std::shared_ptr<CViewBuilderGraphic> m_pGraphic;
+	std::shared_ptr<wxRect> m_pClientRect;
 	bool m_bViewLineBuilding;
 	TextProcess::Utils::IReadWriteLock * m_pLineManagerLock;
 };

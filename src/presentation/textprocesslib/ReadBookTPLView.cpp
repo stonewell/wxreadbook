@@ -87,7 +87,7 @@ TPL_PRINTF("OnDraw Enter\n");
 
 	if (m_pViewLine == NULL)
 	{
-		std::auto_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(currentLine, 0));
+		std::shared_ptr<TextProcess::View::IViewLineMatcher> pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(currentLine, 0));
 
 		m_pViewLine = 
 			m_pViewLineManager->FindLine(pMatcher.get());
@@ -210,7 +210,7 @@ wxInt32 CReadBookTPLView::ScrollToLine(wxInt32 nLine)
 		return GetReadBookDoc()->GetCurrentLine();
 
 	TextProcess::Utils::CReadWriteLockAccessor a(m_pLineManagerLock, 0);
-	std::auto_ptr<TextProcess::View::IViewLineMatcher> 
+	std::shared_ptr<TextProcess::View::IViewLineMatcher> 
 		pMatcher(TextProcess::View::CViewObjectFactory::CreateLineMatcher(nLine, 0));
 
 	TextProcess::View::IViewLine * pViewLine = NULL;

@@ -42,10 +42,10 @@ private:
 	void StartViewLineBuilder(wxFileOffset docOffset, wxFileOffset viewOffset);
 	void StopViewLineBuilder();
 
-	std::auto_ptr<TextProcess::View::IViewLineManager> m_pViewLineManager;
-	std::auto_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderPrev;
-	std::auto_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderNext;
-	std::auto_ptr<wxRect> m_pClientRect;
+	std::shared_ptr<TextProcess::View::IViewLineManager> m_pViewLineManager;
+	std::shared_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderPrev;
+	std::shared_ptr<TextProcess::View::IViewLineBuilder> m_pViewLineBuilderNext;
+	std::shared_ptr<wxRect> m_pClientRect;
 	bool m_bViewLineBuilding;
 	TextProcess::Utils::IReadWriteLock * m_pLineManagerLock;
 	TextProcess::View::IViewLine * m_pViewLine;

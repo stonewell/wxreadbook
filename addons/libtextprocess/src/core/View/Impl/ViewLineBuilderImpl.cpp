@@ -13,7 +13,7 @@
 
 #if wxMAJOR_VERSION <= 2 && wxMINOR_VERSION < 9
 TextProcess::View::Impl::CViewLineBuilderImpl::CViewLineBuilderImpl(void) :
-			INIT_PROPERTY(ClientArea, NULL),INIT_PROPERTY(ViewFont, NULL),INIT_PROPERTY(DocumentLineOffset, 0),INIT_PROPERTY(ViewLineOffset, 0),INIT_PROPERTY(DocumentLineManager, NULL),INIT_PROPERTY(ViewLineManager, NULL),INIT_PROPERTY(Graphics, NULL),INIT_PROPERTY(Cancel, 0)
+    INIT_PROPERTY(ClientArea, NULL),INIT_PROPERTY(ViewFont, NULL),INIT_PROPERTY(DocumentLineOffset, 0),INIT_PROPERTY(ViewLineOffset, 0),INIT_PROPERTY(DocumentLineManager, NULL),INIT_PROPERTY(ViewLineManager, NULL),INIT_PROPERTY(Graphics, NULL),INIT_PROPERTY(Cancel, 0)
 {
 }
 
@@ -21,9 +21,9 @@ TextProcess::View::Impl::CViewLineBuilderImpl::~CViewLineBuilderImpl(void) {
 }
 
 int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines() {
-	std::auto_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
-			TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(
-					GetDocumentLineOffset()));
+	std::shared_ptr<TextProcess::Document::IDocumentLineMatcher> pMatcher(
+        TextProcess::Document::CDocumentObjectFactory::CreateLineMatcher(
+            GetDocumentLineOffset()));
 	TextProcess::Document::IDocumentLine * pDocLine =
 			GetDocumentLineManager()->FindLine(pMatcher.get());
 
@@ -125,8 +125,8 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::BuildLines() {
 		if (pDocLine != NULL) {
 			pDocLine->AccessLine();
 
-			std::auto_ptr<IViewLineMatcher> pMatcher(
-					CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
+			std::shared_ptr<IViewLineMatcher> pMatcher(
+                CViewObjectFactory::CreateLineMatcher(pDocLine->GetOffset(), 0));
 			if (GetViewLineManager()->FindLine(pMatcher.get(), 0) != NULL) {
 				break;
 			}
@@ -152,8 +152,8 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::Cancel() {
 }
 
 void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
-		TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
-		wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth) {
+    TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
+    wxFileOffset offset, wxFileOffset & size, long & curAllViewLineWidth) {
 
 	wxCoord width = 0;
 	wxCoord height = 0;
@@ -179,11 +179,11 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
 
 			last_width = width;
 			GetGraphics()->GetTextExtent(*pDocLineData, &width, &height,
-					GetViewFont());
+                                         GetViewFont());
 
 			while (!m_Cancel && (width - curAllViewLineWidth)
-					< GetClientArea()->GetWidth() && (size_t) (offset + size)
-					<= pDocLineData->GetPchDataLength()) {
+                   < GetClientArea()->GetWidth() && (size_t) (offset + size)
+                   <= pDocLineData->GetPchDataLength()) {
 
 				size++;
 				newSize = pDocLineData->ReadOnlyResize(offset + size + 1);
@@ -193,7 +193,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
 
 				last_width = width;
 				GetGraphics()->GetTextExtent(*pDocLineData, &width, &height,
-						GetViewFont());
+                                             GetViewFont());
 
 			}
 		} else if (width - curAllViewLineWidth > GetClientArea()->GetWidth()) {
@@ -206,10 +206,10 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
 
 			last_width = width;
 			GetGraphics()->GetTextExtent(*pDocLineData, &width, &height,
-					GetViewFont());
+                                         GetViewFont());
 
 			while (!m_Cancel && (width - curAllViewLineWidth)
-					> GetClientArea()->GetWidth() && size > 0) {
+                   > GetClientArea()->GetWidth() && size > 0) {
 
 				size--;
 				newSize = pDocLineData->ReadOnlyResize(offset + size);
@@ -219,7 +219,7 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
 
 				last_width = width;
 				GetGraphics()->GetTextExtent(*pDocLineData, &width, &height,
-						GetViewFont());
+                                             GetViewFont());
 
 			}
 		}//
@@ -232,8 +232,8 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
 }
 
 void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
-		TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
-		wxFileOffset offset, wxFileOffset & size) {
+    TextProcess::Utils::Impl::wxReadOnlyString * pDocLineData,
+    wxFileOffset offset, wxFileOffset & size) {
 	wxCoord width = 0;
 	wxCoord height = 0;
 
@@ -282,9 +282,9 @@ void TextProcess::View::Impl::CViewLineBuilderImpl::FixViewLineSize(
 }
 
 int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
-		TextProcess::Document::IDocumentLine * pDocLine, wxFileOffset startOffset,
-		wxFileOffset & endOffset, wxInt32 nBuildCount, std::vector<
-				TextProcess::View::IViewLine *> & lines) {
+    TextProcess::Document::IDocumentLine * pDocLine, wxFileOffset startOffset,
+    wxFileOffset & endOffset, wxInt32 nBuildCount, std::vector<
+    TextProcess::View::IViewLine *> & lines) {
 	wxChar * pBuf = NULL;
 	wxFileOffset pBufLen = 0;
 	long cur_all_line_width = 0;
@@ -322,7 +322,7 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 
 		if (use_readonly_string) {
 			FixViewLineSize(&docLineData, viewLineOffset, viewLineSize,
-					cur_all_line_width);
+                            cur_all_line_width);
 		} else {
 			FixViewLineSize(&docLineData, viewLineOffset, viewLineSize);
 		}
@@ -331,9 +331,9 @@ int TextProcess::View::Impl::CViewLineBuilderImpl::InternalBuildLines(
 			break;
 
 		IViewLine * pLine = CViewObjectFactory::CreateViewLine(viewLineOffset,
-				viewLineSize, pDocLine);
+                                                               viewLineSize, pDocLine);
 
-printf("View Line:%d %d, %d \n", (int)viewLineOffset, (int)viewLineSize, (int)pDocLine->GetOffset());
+        printf("View Line:%d %d, %d \n", (int)viewLineOffset, (int)viewLineSize, (int)pDocLine->GetOffset());
 
 		lines.push_back(pLine);
 
@@ -351,7 +351,7 @@ printf("View Line:%d %d, %d \n", (int)viewLineOffset, (int)viewLineSize, (int)pD
 }
 
 wxInt32 TextProcess::View::Impl::CViewLineBuilderImpl::CalculateDefaultLineCharSize(
-		TextProcess::Document::IDocumentLine * pDocLine) {
+    TextProcess::Document::IDocumentLine * pDocLine) {
 	wxChar * pBuf = NULL;
 	wxFileOffset pBufLen = 0;
 	wxInt32 length = pDocLine->GetDecodedLength();
